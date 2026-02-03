@@ -1,33 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Navbar } from "./components/Navbar";
+import { LoginPage } from "./pages/LoginPage";
+import { StudentDashboard } from "./pages/student/StudentDashboard";
+import { ProfilePage } from "./pages/student/ProfilePage";
+import { ChefDashboard } from "./pages/chef/ChefDashboard";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
 
-// Страницы авторизации
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-
-// Страницы ученика
-import { Menu } from "./pages/student/Menu";
-import { Orders } from "./pages/student/Orders";
-import { Profile } from "./pages/student/Profile";
-
-// Страницы повара
-import { ChefOrders } from "./pages/chef/ChefOrders";
-import { ChefDishes } from "./pages/chef/ChefDishes";
-import { PurchaseRequests } from "./pages/chef/PurchaseRequests";
-
-// Страницы администратора
-import { Statistics } from "./pages/admin/Statistics";
-import { AdminRequests } from "./pages/admin/AdminRequests";
-import { AdminDishes } from "./pages/admin/AdminDishes";
-import { Reports } from "./pages/admin/Reports";
-
-function HomeRedirect() {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen flex items-center justify-center">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
@@ -37,119 +22,86 @@ function HomeRedirect() {
     return <Navigate to="/login" replace />;
   }
 
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+const DashboardRouter = () => {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" replace />;
+
   switch (user.role) {
     case "student":
-      return <Navigate to="/menu" replace />;
+      return <StudentDashboard />;
     case "chef":
-      return <Navigate to="/chef/orders" replace />;
+      return <ChefDashboard />;
     case "admin":
-      return <Navigate to="/admin/statistics" replace />;
+      return <AdminDashboard />;
     default:
       return <Navigate to="/login" replace />;
   }
-}
+};
+
+const Layout = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-base-200">
+      <Navbar />
+      <main>{children}</main>
+    </div>
+  );
+};
+
+const AppRoutes = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/" replace /> : <LoginPage />}
+      />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <DashboardRouter />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+};
 
 export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Публичные маршруты */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Главная страница - редирект в зависимости от роли */}
-          <Route path="/" element={<HomeRedirect />} />
-
-          {/* Маршруты ученика */}
-          <Route
-            path="/menu"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <Menu />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Маршруты повара */}
-          <Route
-            path="/chef/orders"
-            element={
-              <ProtectedRoute allowedRoles={["chef"]}>
-                <ChefOrders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/chef/dishes"
-            element={
-              <ProtectedRoute allowedRoles={["chef"]}>
-                <ChefDishes />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/chef/requests"
-            element={
-              <ProtectedRoute allowedRoles={["chef"]}>
-                <PurchaseRequests />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Маршруты администратора */}
-          <Route
-            path="/admin/statistics"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <Statistics />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/requests"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminRequests />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/dishes"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminDishes />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/reports"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AppRoutes />
       </AuthProvider>
     </BrowserRouter>
   );
