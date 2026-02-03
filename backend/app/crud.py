@@ -156,7 +156,7 @@ def get_today_orders(db: Session):
 def create_purchase_request(db: Session, request: schemas.PurchaseRequestCreate, chef_id: int):
     """Создать заявку на закупку"""
     db_request = models.PurchaseRequest(
-        **request.dict(),
+        **request.model_dump(),
         chef_id=chef_id
     )
     db.add(db_request)
