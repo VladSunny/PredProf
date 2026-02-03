@@ -18,7 +18,11 @@ class User(UserBase):
     created_at: datetime
     
     class Config:
-        from_attributes = True  # Работает с ORM объектами
+        from_attributes = True
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
 
 # Схемы для токенов
 class Token(BaseModel):
@@ -36,6 +40,10 @@ class ItemBase(BaseModel):
 
 class ItemCreate(ItemBase):
     pass
+
+class ItemUpdate(ItemBase):
+    title: Optional[str] = None
+    description: Optional[str] = None
 
 class Item(ItemBase):
     id: int

@@ -46,7 +46,7 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 # Авторизация и получение токена
 @app.post("/login", response_model=schemas.Token)
-def login(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     """Авторизация и получение JWT токена"""
     # Ищем пользователя
     db_user = crud.get_user_by_username(db, username=user.username)
@@ -106,27 +106,56 @@ def create_item(
     """Создать новый предмет"""
     return crud.create_user_item(db=db, item=item, user_id=current_user.id)
 
+@app.get("/items/{item_id}", response_model=schemas.Item)
+def read_item(
+    item_id: int,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.get_current_user)
+):
+    """Получить один предмет (только свой или админ)"""
+    item = crud.get_item_by_id(db, item_id=item_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Предмет не найден")
+    if item.owner_id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Недостаточно прав")
+    return item
+
+@app.patch("/items/{item_id}", response_model=schemas.Item)
+def update_item(
+    item_id: int,
+    item_update: schemas.ItemUpdate,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.get_current_user)
+):
+    """Обновить свой предмет (или админ любой)"""
+    item = crud.get_item_by_id(db, item_id=item_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Предмет не найден")
+    if item.owner_id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Недостаточно прав")
+    
+    update_data = item_update.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(item, key, value)
+    
+    db.commit()
+    db.refresh(item)
+    return item
+
 @app.delete("/items/{item_id}")
 def delete_item(
     item_id: int,
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(dependencies.get_current_user)
 ):
-    """Удалить свой предмет"""
+    """Удалить свой предмет (или админ любой)"""
     item = crud.get_item_by_id(db, item_id=item_id)
     
-    # Проверяем, существует ли предмет и принадлежит ли он пользователю
     if not item:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Предмет не найден"
-        )
+        raise HTTPException(status_code=404, detail="Предмет не найден")
     
     if item.owner_id != current_user.id and not current_user.is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Недостаточно прав для удаления этого предмета"
-        )
+        raise HTTPException(status_code=403, detail="Недостаточно прав для удаления этого предмета")
     
     crud.delete_item(db, item_id=item_id)
     return {"message": "Предмет удален"}
