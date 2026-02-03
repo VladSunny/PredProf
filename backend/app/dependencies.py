@@ -31,11 +31,40 @@ def get_current_user(
     
     return user
 
-def get_current_admin(current_user: schemas.User = Depends(get_current_user)):
-    """Проверяет, является ли пользователь админом"""
-    if not current_user.is_admin:
+def require_role(required_role: schemas.UserRole):
+    """Декоратор для проверки роли пользователя"""
+    def role_checker(current_user: schemas.User = Depends(get_current_user)):
+        if current_user.role != required_role and current_user.role != schemas.UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Требуется роль {required_role.value}",
+            )
+        return current_user
+    return role_checker
+
+def require_student(current_user: schemas.User = Depends(get_current_user)):
+    """Проверяет, является ли пользователь учеником"""
+    if current_user.role != schemas.UserRole.STUDENT and current_user.role != schemas.UserRole.ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Недостаточно прав",
+            detail="Требуется роль ученика",
+        )
+    return current_user
+
+def require_chef(current_user: schemas.User = Depends(get_current_user)):
+    """Проверяет, является ли пользователь поваром"""
+    if current_user.role != schemas.UserRole.CHEF and current_user.role != schemas.UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Требуется роль повара",
+        )
+    return current_user
+
+def require_admin(current_user: schemas.User = Depends(get_current_user)):
+    """Проверяет, является ли пользователь администратором"""
+    if current_user.role != schemas.UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Требуется роль администратора",
         )
     return current_user

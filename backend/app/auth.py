@@ -38,11 +38,11 @@ def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
-        is_admin: bool = payload.get("is_admin", False)
+        role: str = payload.get("role", "student")
         
         if username is None:
             return None
         
-        return {"username": username, "is_admin": is_admin}
+        return {"username": username, "role": role}
     except JWTError:
         return None
