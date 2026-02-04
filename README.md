@@ -149,7 +149,7 @@ docker compose up
 
 Сервисы:
 - `backend`  → http://localhost:8000
-- `postgres` → localhost:5432
+- `postgres` → http://localhost:5432
 - `pgadmin`  → http://localhost:5050
 
 Данные для входа и подключения к БД есть в .env в корне проекта
