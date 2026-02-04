@@ -72,7 +72,7 @@ const RegisterPage = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
@@ -87,7 +87,7 @@ const RegisterPage = () => {
               />
             </div>
 
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Имя пользователя</span>
               </label>
@@ -102,7 +102,7 @@ const RegisterPage = () => {
               />
             </div>
 
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Пароль</span>
               </label>
@@ -111,7 +111,7 @@ const RegisterPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Минимум 8 символов"
-                  className="input input-bordered w-full pr-10"
+                  className="input input-bordered pr-10"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -130,7 +130,7 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Подтверждение пароля</span>
               </label>

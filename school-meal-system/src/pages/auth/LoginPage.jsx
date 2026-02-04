@@ -44,7 +44,7 @@ const LoginPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Имя пользователя</span>
               </label>
@@ -58,7 +58,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="form-control">
+            <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Пароль</span>
               </label>
@@ -66,7 +66,7 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Введите пароль"
-                  className="input input-bordered w-full pr-10"
+                  className="input input-bordered pr-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
