@@ -1,108 +1,148 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { Navbar } from "./components/Navbar";
-import { LoginPage } from "./pages/LoginPage";
-import { StudentDashboard } from "./pages/student/StudentDashboard";
-import { ProfilePage } from "./pages/student/ProfilePage";
-import { ChefDashboard } from "./pages/chef/ChefDashboard";
-import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
+// Layouts
+import MainLayout from "./components/layout/MainLayout";
+
+// Auth Pages
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+
+// Student Pages
+import StudentDashboard from "./pages/student/StudentDashboard";
+import MenuPage from "./pages/student/MenuPage";
+import OrdersPage from "./pages/student/OrdersPage";
+import ProfilePage from "./pages/student/ProfilePage";
+
+// Chef Pages
+import ChefDashboard from "./pages/chef/ChefDashboard";
+import StockPage from "./pages/chef/StockPage";
+import PurchaseRequestsPage from "./pages/chef/PurchaseRequestsPage";
+
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageDishesPage from "./pages/admin/ManageDishesPage";
+import ManageRequestsPage from "./pages/admin/ManageRequestsPage";
+import ReportsPage from "./pages/admin/ReportsPage";
+
+// Protected Route Components
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return <Navigate to="/" replace />;
   }
 
   return children;
 };
 
-const DashboardRouter = () => {
-  const { user } = useAuth();
-
-  if (!user) return <Navigate to="/login" replace />;
-
-  switch (user.role) {
-    case "student":
-      return <StudentDashboard />;
-    case "chef":
-      return <ChefDashboard />;
-    case "admin":
-      return <AdminDashboard />;
-    default:
-      return <Navigate to="/login" replace />;
-  }
-};
-
-const Layout = ({ children }) => {
-  return (
-    <div className="min-h-screen bg-base-200">
-      <Navbar />
-      <main>{children}</main>
-    </div>
-  );
-};
-
-const AppRoutes = () => {
-  const { user, loading } = useAuth();
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
+  if (isAuthenticated) {
+    switch (user?.role) {
+      case "admin":
+        return <Navigate to="/admin" replace />;
+      case "chef":
+        return <Navigate to="/chef" replace />;
+      default:
+        return <Navigate to="/student" replace />;
+    }
+  }
+
+  return children;
+};
+
+const App = () => {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route
         path="/login"
-        element={user ? <Navigate to="/" replace /> : <LoginPage />}
-      />
-      <Route
-        path="/"
         element={
-          <ProtectedRoute>
-            <Layout>
-              <DashboardRouter />
-            </Layout>
-          </ProtectedRoute>
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
         }
       />
       <Route
-        path="/profile"
+        path="/register"
+        element={
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        }
+      />
+
+      {/* Student Routes */}
+      <Route
+        path="/student"
         element={
           <ProtectedRoute allowedRoles={["student"]}>
-            <Layout>
-              <ProfilePage />
-            </Layout>
+            <MainLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<StudentDashboard />} />
+        <Route path="menu" element={<MenuPage />} />
+        <Route path="orders" element={<OrdersPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Route>
+
+      {/* Chef Routes */}
+      <Route
+        path="/chef"
+        element={
+          <ProtectedRoute allowedRoles={["chef"]}>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<ChefDashboard />} />
+        <Route path="stock" element={<StockPage />} />
+        <Route path="requests" element={<PurchaseRequestsPage />} />
+      </Route>
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="dishes" element={<ManageDishesPage />} />
+        <Route path="requests" element={<ManageRequestsPage />} />
+        <Route path="reports" element={<ReportsPage />} />
+      </Route>
+
+      {/* Default Route */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
 
-export function App() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </BrowserRouter>
-  );
-}
+export default App;

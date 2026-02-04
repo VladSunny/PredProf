@@ -1,112 +1,225 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import * as api from "../../api";
+import { studentApi } from "../../api/student";
+import toast from "react-hot-toast";
+import { User, Wallet, AlertTriangle, Heart, Save } from "lucide-react";
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const { user, refreshUser } = useAuth();
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState(false);
+  const [topUpAmount, setTopUpAmount] = useState("");
+  const [profileData, setProfileData] = useState({
     allergies: user?.allergies || "",
     preferences: user?.preferences || "",
   });
-  const [message, setMessage] = useState({ type: "", text: "" });
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleTopUp = async () => {
+    const amount = parseFloat(topUpAmount);
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Введите корректную сумму");
+      return;
+    }
+
     setLoading(true);
     try {
-      await api.updateProfile(formData);
+      await studentApi.addBalance(amount);
+      toast.success(`Баланс пополнен на ${amount} ₽`);
       await refreshUser();
-      setMessage({ type: "success", text: "Профиль успешно обновлен!" });
-    } catch (err) {
-      setMessage({ type: "error", text: err.message });
+      setTopUpAmount("");
+    } catch (error) {
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleProfileUpdate = async () => {
+    setLoading(true);
+    try {
+      await studentApi.updateProfile(profileData);
+      toast.success("Профиль обновлен");
+      await refreshUser();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const quickAmounts = [100, 200, 500, 1000];
+
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-2xl mb-4">👤 Мой профиль</h2>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold">Профиль</h1>
+        <p className="text-base-content/60">
+          Управление аккаунтом и настройками
+        </p>
+      </div>
 
-          {message.text && (
-            <div
-              className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}
-            >
-              <span>{message.text}</span>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <span className="text-sm opacity-70">Имя пользователя</span>
-              <p className="font-medium">{user?.username}</p>
-            </div>
-            <div>
-              <span className="text-sm opacity-70">Email</span>
-              <p className="font-medium">{user?.email}</p>
-            </div>
-            <div>
-              <span className="text-sm opacity-70">Баланс</span>
-              <p className="font-medium text-lg text-primary">
-                {user?.balance?.toFixed(2)} ₽
-              </p>
-            </div>
-            <div>
-              <span className="text-sm opacity-70">Дата регистрации</span>
-              <p className="font-medium">
-                {user?.created_at
-                  ? new Date(user.created_at).toLocaleDateString("ru")
-                  : "-"}
-              </p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* User Info */}
+        <div className="card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title">
+              <User className="h-5 w-5" />
+              Информация об аккаунте
+            </h2>
+            <div className="space-y-4 mt-4">
+              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                <span className="text-base-content/60">Имя пользователя</span>
+                <span className="font-semibold">{user?.username}</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                <span className="text-base-content/60">Email</span>
+                <span className="font-semibold">{user?.email}</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                <span className="text-base-content/60">Роль</span>
+                <span className="badge badge-primary">Ученик</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+                <span className="text-base-content/60">Дата регистрации</span>
+                <span className="font-semibold">
+                  {user?.created_at &&
+                    new Date(user.created_at).toLocaleDateString("ru-RU")}
+                </span>
+              </div>
             </div>
           </div>
-
-          <div className="divider">Пищевые особенности</div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">🚫 Аллергии</span>
-              </label>
-              <textarea
-                className="textarea textarea-bordered"
-                placeholder="Укажите продукты, на которые у вас аллергия (например: орехи, молоко, глютен)"
-                value={formData.allergies}
-                onChange={(e) =>
-                  setFormData({ ...formData, allergies: e.target.value })
-                }
-                rows={3}
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">❤️ Предпочтения</span>
-              </label>
-              <textarea
-                className="textarea textarea-bordered"
-                placeholder="Укажите ваши пищевые предпочтения (например: вегетарианец, без свинины)"
-                value={formData.preferences}
-                onChange={(e) =>
-                  setFormData({ ...formData, preferences: e.target.value })
-                }
-                rows={3}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
-              disabled={loading}
-            >
-              {loading ? "Сохранение..." : "Сохранить изменения"}
-            </button>
-          </form>
         </div>
+
+        {/* Balance Top-up */}
+        <div className="card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title">
+              <Wallet className="h-5 w-5" />
+              Пополнение баланса
+            </h2>
+            <div className="stat bg-linear-to-r from-primary to-secondary text-primary-content rounded-box mt-4">
+              <div className="stat-title text-primary-content/70">
+                Текущий баланс
+              </div>
+              <div className="stat-value">{user?.balance?.toFixed(2)} ₽</div>
+            </div>
+
+            <div className="form-control mt-4">
+              <label className="label">
+                <span className="label-text">Сумма пополнения</span>
+              </label>
+              <div className="join">
+                <input
+                  type="number"
+                  className="input input-bordered join-item flex-1"
+                  placeholder="Введите сумму"
+                  value={topUpAmount}
+                  onChange={(e) => setTopUpAmount(e.target.value)}
+                  min="1"
+                />
+                <button
+                  className={`btn btn-primary join-item ${loading ? "loading" : ""}`}
+                  onClick={handleTopUp}
+                  disabled={loading}
+                >
+                  Пополнить
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              {quickAmounts.map((amount) => (
+                <button
+                  key={amount}
+                  className="btn btn-outline btn-sm"
+                  onClick={() => setTopUpAmount(amount.toString())}
+                >
+                  +{amount} ₽
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Allergies */}
+        <div className="card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title text-warning">
+              <AlertTriangle className="h-5 w-5" />
+              Пищевые аллергии
+            </h2>
+            <p className="text-sm text-base-content/60">
+              Укажите продукты, на которые у вас аллергия
+            </p>
+            <div className="form-control mt-4">
+              <textarea
+                className="textarea textarea-bordered h-24"
+                placeholder="Например: молоко, орехи, глютен..."
+                value={profileData.allergies}
+                onChange={(e) =>
+                  setProfileData({ ...profileData, allergies: e.target.value })
+                }
+              />
+            </div>
+            {user?.allergies && (
+              <div className="alert alert-warning mt-2">
+                <AlertTriangle className="h-4 w-4" />
+                <span className="text-sm">
+                  Текущие аллергии: {user.allergies}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Preferences */}
+        <div className="card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title text-success">
+              <Heart className="h-5 w-5" />
+              Предпочтения в еде
+            </h2>
+            <p className="text-sm text-base-content/60">
+              Укажите ваши пищевые предпочтения
+            </p>
+            <div className="form-control mt-4">
+              <textarea
+                className="textarea textarea-bordered h-24"
+                placeholder="Например: вегетарианство, без свинины..."
+                value={profileData.preferences}
+                onChange={(e) =>
+                  setProfileData({
+                    ...profileData,
+                    preferences: e.target.value,
+                  })
+                }
+              />
+            </div>
+            {user?.preferences && (
+              <div className="alert alert-success mt-2">
+                <Heart className="h-4 w-4" />
+                <span className="text-sm">
+                  Текущие предпочтения: {user.preferences}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex justify-end">
+        <button
+          className={`btn btn-primary ${loading ? "loading" : ""}`}
+          onClick={handleProfileUpdate}
+          disabled={loading}
+        >
+          <Save className="h-5 w-5" />
+          Сохранить изменения
+        </button>
       </div>
     </div>
   );
 };
+
+export default ProfilePage;

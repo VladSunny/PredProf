@@ -1,0 +1,226 @@
+import { useState, useEffect } from "react";
+import { adminApi } from "../../api/admin";
+import toast from "react-hot-toast";
+import { Clock, CheckCircle, XCircle, ClipboardList } from "lucide-react";
+
+const ManageRequestsPage = () => {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [processing, setProcessing] = useState(null);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [filter]);
+
+  const fetchRequests = async () => {
+    try {
+      const status = filter === "all" ? null : filter;
+      const data = await adminApi.getAllPurchaseRequests(status);
+      setRequests(data);
+    } catch (error) {
+      toast.error("Ошибка загрузки заявок");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusUpdate = async (requestId, status) => {
+    setProcessing(requestId);
+    try {
+      await adminApi.updatePurchaseRequestStatus(requestId, status);
+      toast.success(
+        status === "approved" ? "Заявка одобрена!" : "Заявка отклонена!",
+      );
+      fetchRequests();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "pending":
+        return {
+          label: "На рассмотрении",
+          color: "badge-warning",
+          icon: Clock,
+        };
+      case "approved":
+        return { label: "Одобрено", color: "badge-success", icon: CheckCircle };
+      case "rejected":
+        return { label: "Отклонено", color: "badge-error", icon: XCircle };
+      default:
+        return { label: status, color: "badge-ghost", icon: Clock };
+    }
+  };
+
+  const pendingCount = requests.filter((r) => r.status === "pending").length;
+  const approvedCount = requests.filter((r) => r.status === "approved").length;
+  const rejectedCount = requests.filter((r) => r.status === "rejected").length;
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold">Заявки на закупку</h1>
+        <p className="text-base-content/60">
+          Рассмотрение и согласование заявок от поваров
+        </p>
+      </div>
+
+      {/* Stats */}
+      <div className="stats shadow w-full">
+        <div className="stat">
+          <div className="stat-figure text-primary">
+            <ClipboardList className="h-8 w-8" />
+          </div>
+          <div className="stat-title">Всего заявок</div>
+          <div className="stat-value text-primary">{requests.length}</div>
+        </div>
+        <div className="stat">
+          <div className="stat-figure text-warning">
+            <Clock className="h-8 w-8" />
+          </div>
+          <div className="stat-title">На рассмотрении</div>
+          <div className="stat-value text-warning">{pendingCount}</div>
+        </div>
+        <div className="stat">
+          <div className="stat-figure text-success">
+            <CheckCircle className="h-8 w-8" />
+          </div>
+          <div className="stat-title">Одобрено</div>
+          <div className="stat-value text-success">{approvedCount}</div>
+        </div>
+        <div className="stat">
+          <div className="stat-figure text-error">
+            <XCircle className="h-8 w-8" />
+          </div>
+          <div className="stat-title">Отклонено</div>
+          <div className="stat-value text-error">{rejectedCount}</div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="tabs tabs-boxed bg-base-100 w-fit">
+        <button
+          className={`tab ${filter === "all" ? "tab-active" : ""}`}
+          onClick={() => setFilter("all")}
+        >
+          Все ({requests.length})
+        </button>
+        <button
+          className={`tab ${filter === "pending" ? "tab-active" : ""}`}
+          onClick={() => setFilter("pending")}
+        >
+          На рассмотрении ({pendingCount})
+        </button>
+        <button
+          className={`tab ${filter === "approved" ? "tab-active" : ""}`}
+          onClick={() => setFilter("approved")}
+        >
+          Одобренные ({approvedCount})
+        </button>
+        <button
+          className={`tab ${filter === "rejected" ? "tab-active" : ""}`}
+          onClick={() => setFilter("rejected")}
+        >
+          Отклоненные ({rejectedCount})
+        </button>
+      </div>
+
+      {/* Requests List */}
+      {requests.length === 0 ? (
+        <div className="text-center py-12 bg-base-100 rounded-box">
+          <ClipboardList className="h-16 w-16 mx-auto text-base-content/30 mb-4" />
+          <p className="text-base-content/60">Заявок нет</p>
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {requests.map((request) => {
+            const status = getStatusBadge(request.status);
+            const StatusIcon = status.icon;
+            const isPending = request.status === "pending";
+
+            return (
+              <div
+                key={request.id}
+                className={`card bg-base-100 shadow ${
+                  isPending ? "border-l-4 border-warning" : ""
+                }`}
+              >
+                <div className="card-body">
+                  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl">📦</div>
+                      <div>
+                        <h3 className="font-bold text-lg">
+                          {request.item_name}
+                        </h3>
+                        <p className="text-base-content/60">
+                          Количество: {request.quantity}
+                        </p>
+                        <p className="text-sm text-base-content/60">
+                          Повар ID: {request.chef_id} | Создано:{" "}
+                          {new Date(request.created_at).toLocaleString("ru-RU")}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className={`badge ${status.color} gap-2 p-3`}>
+                        <StatusIcon className="h-4 w-4" />
+                        {status.label}
+                      </div>
+
+                      {isPending && (
+                        <div className="flex gap-2">
+                          <button
+                            className={`btn btn-success btn-sm ${
+                              processing === request.id ? "loading" : ""
+                            }`}
+                            onClick={() =>
+                              handleStatusUpdate(request.id, "approved")
+                            }
+                            disabled={processing === request.id}
+                          >
+                            <CheckCircle className="h-4 w-4" />
+                            Одобрить
+                          </button>
+                          <button
+                            className={`btn btn-error btn-sm ${
+                              processing === request.id ? "loading" : ""
+                            }`}
+                            onClick={() =>
+                              handleStatusUpdate(request.id, "rejected")
+                            }
+                            disabled={processing === request.id}
+                          >
+                            <XCircle className="h-4 w-4" />
+                            Отклонить
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ManageRequestsPage;
