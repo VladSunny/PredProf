@@ -32,7 +32,9 @@ export const ProfilePage = () => {
           <h2 className="card-title text-2xl mb-4">👤 Мой профиль</h2>
 
           {message.text && (
-            <div className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}>
+            <div
+              className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}
+            >
               <span>{message.text}</span>
             </div>
           )}
@@ -48,12 +50,16 @@ export const ProfilePage = () => {
             </div>
             <div>
               <span className="text-sm opacity-70">Баланс</span>
-              <p className="font-medium text-lg text-primary">{user?.balance?.toFixed(2)} ₽</p>
+              <p className="font-medium text-lg text-primary">
+                {user?.balance?.toFixed(2)} ₽
+              </p>
             </div>
             <div>
               <span className="text-sm opacity-70">Дата регистрации</span>
               <p className="font-medium">
-                {user?.created_at ? new Date(user.created_at).toLocaleDateString("ru") : "-"}
+                {user?.created_at
+                  ? new Date(user.created_at).toLocaleDateString("ru")
+                  : "-"}
               </p>
             </div>
           </div>
@@ -69,7 +75,9 @@ export const ProfilePage = () => {
                 className="textarea textarea-bordered"
                 placeholder="Укажите продукты, на которые у вас аллергия (например: орехи, молоко, глютен)"
                 value={formData.allergies}
-                onChange={(e) => setFormData({ ...formData, allergies: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, allergies: e.target.value })
+                }
                 rows={3}
               />
             </div>
@@ -82,7 +90,9 @@ export const ProfilePage = () => {
                 className="textarea textarea-bordered"
                 placeholder="Укажите ваши пищевые предпочтения (например: вегетарианец, без свинины)"
                 value={formData.preferences}
-                onChange={(e) => setFormData({ ...formData, preferences: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, preferences: e.target.value })
+                }
                 rows={3}
               />
             </div>

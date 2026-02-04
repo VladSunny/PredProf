@@ -44,7 +44,10 @@ export const AdminDashboard = () => {
   const handleUpdateRequestStatus = async (id, status) => {
     try {
       await api.updatePurchaseRequestStatus(id, status);
-      setMessage({ type: "success", text: `Заявка ${status === "approved" ? "одобрена" : "отклонена"}!` });
+      setMessage({
+        type: "success",
+        text: `Заявка ${status === "approved" ? "одобрена" : "отклонена"}!`,
+      });
       fetchData();
     } catch (err) {
       setMessage({ type: "error", text: err.message });
@@ -60,7 +63,13 @@ export const AdminDashboard = () => {
         stock_quantity: parseInt(newDish.stock_quantity),
       });
       setMessage({ type: "success", text: "Блюдо успешно создано!" });
-      setNewDish({ name: "", description: "", price: "", is_breakfast: true, stock_quantity: "" });
+      setNewDish({
+        name: "",
+        description: "",
+        price: "",
+        is_breakfast: true,
+        stock_quantity: "",
+      });
       fetchData();
     } catch (err) {
       setMessage({ type: "error", text: err.message });
@@ -95,8 +104,16 @@ export const AdminDashboard = () => {
   };
 
   const getStatusBadge = (status) => {
-    const badges = { pending: "badge-warning", approved: "badge-success", rejected: "badge-error" };
-    const labels = { pending: "На рассмотрении", approved: "Одобрено", rejected: "Отклонено" };
+    const badges = {
+      pending: "badge-warning",
+      approved: "badge-success",
+      rejected: "badge-error",
+    };
+    const labels = {
+      pending: "На рассмотрении",
+      approved: "Одобрено",
+      rejected: "Отклонено",
+    };
     return <span className={`badge ${badges[status]}`}>{labels[status]}</span>;
   };
 
@@ -111,22 +128,38 @@ export const AdminDashboard = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {message.text && (
-        <div className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}>
+        <div
+          className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}
+        >
           <span>{message.text}</span>
-          <button className="btn btn-sm btn-ghost" onClick={() => setMessage({ type: "", text: "" })}>✕</button>
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => setMessage({ type: "", text: "" })}
+          >
+            ✕
+          </button>
         </div>
       )}
 
       <h1 className="text-3xl font-bold mb-6">🔧 Панель администратора</h1>
 
       <div className="tabs tabs-boxed mb-6">
-        <button className={`tab ${activeTab === "stats" ? "tab-active" : ""}`} onClick={() => setActiveTab("stats")}>
+        <button
+          className={`tab ${activeTab === "stats" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("stats")}
+        >
           📊 Статистика
         </button>
-        <button className={`tab ${activeTab === "requests" ? "tab-active" : ""}`} onClick={() => setActiveTab("requests")}>
+        <button
+          className={`tab ${activeTab === "requests" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("requests")}
+        >
           📝 Заявки на закупку
         </button>
-        <button className={`tab ${activeTab === "dishes" ? "tab-active" : ""}`} onClick={() => setActiveTab("dishes")}>
+        <button
+          className={`tab ${activeTab === "dishes" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("dishes")}
+        >
           🍽️ Управление меню
         </button>
       </div>
@@ -141,15 +174,21 @@ export const AdminDashboard = () => {
                 <div className="stats stats-vertical shadow">
                   <div className="stat">
                     <div className="stat-title">Общий доход</div>
-                    <div className="stat-value text-primary">{paymentStats?.total_revenue?.toFixed(2)} ₽</div>
+                    <div className="stat-value text-primary">
+                      {paymentStats?.total_revenue?.toFixed(2)} ₽
+                    </div>
                   </div>
                   <div className="stat">
                     <div className="stat-title">Количество заказов</div>
-                    <div className="stat-value">{paymentStats?.orders_count}</div>
+                    <div className="stat-value">
+                      {paymentStats?.orders_count}
+                    </div>
                   </div>
                   <div className="stat">
                     <div className="stat-title">Средний чек</div>
-                    <div className="stat-value text-secondary">{paymentStats?.average_order_value?.toFixed(2)} ₽</div>
+                    <div className="stat-value text-secondary">
+                      {paymentStats?.average_order_value?.toFixed(2)} ₽
+                    </div>
                   </div>
                 </div>
               </div>
@@ -161,15 +200,23 @@ export const AdminDashboard = () => {
                 <div className="stats stats-vertical shadow">
                   <div className="stat">
                     <div className="stat-title">Уникальных пользователей</div>
-                    <div className="stat-value text-primary">{attendanceStats?.unique_users}</div>
+                    <div className="stat-value text-primary">
+                      {attendanceStats?.unique_users}
+                    </div>
                   </div>
                   <div className="stat">
                     <div className="stat-title">Всего заказов</div>
-                    <div className="stat-value">{attendanceStats?.total_orders}</div>
+                    <div className="stat-value">
+                      {attendanceStats?.total_orders}
+                    </div>
                   </div>
                   <div className="stat">
-                    <div className="stat-title">Среднее заказов на пользователя</div>
-                    <div className="stat-value text-secondary">{attendanceStats?.average_orders_per_user?.toFixed(2)}</div>
+                    <div className="stat-title">
+                      Среднее заказов на пользователя
+                    </div>
+                    <div className="stat-value text-secondary">
+                      {attendanceStats?.average_orders_per_user?.toFixed(2)}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -207,19 +254,25 @@ export const AdminDashboard = () => {
                         <td>{req.quantity}</td>
                         <td>{req.chef_id}</td>
                         <td>{getStatusBadge(req.status)}</td>
-                        <td>{new Date(req.created_at).toLocaleDateString("ru")}</td>
+                        <td>
+                          {new Date(req.created_at).toLocaleDateString("ru")}
+                        </td>
                         <td>
                           {req.status === "pending" && (
                             <div className="flex gap-2">
                               <button
                                 className="btn btn-sm btn-success"
-                                onClick={() => handleUpdateRequestStatus(req.id, "approved")}
+                                onClick={() =>
+                                  handleUpdateRequestStatus(req.id, "approved")
+                                }
                               >
                                 ✓
                               </button>
                               <button
                                 className="btn btn-sm btn-error"
-                                onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
+                                onClick={() =>
+                                  handleUpdateRequestStatus(req.id, "rejected")
+                                }
                               >
                                 ✕
                               </button>
@@ -242,13 +295,18 @@ export const AdminDashboard = () => {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">➕ Добавить блюдо</h2>
-              <form onSubmit={handleCreateDish} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form
+                onSubmit={handleCreateDish}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
                 <input
                   type="text"
                   placeholder="Название"
                   className="input input-bordered"
                   value={newDish.name}
-                  onChange={(e) => setNewDish({ ...newDish, name: e.target.value })}
+                  onChange={(e) =>
+                    setNewDish({ ...newDish, name: e.target.value })
+                  }
                   required
                 />
                 <input
@@ -256,14 +314,18 @@ export const AdminDashboard = () => {
                   placeholder="Описание"
                   className="input input-bordered"
                   value={newDish.description}
-                  onChange={(e) => setNewDish({ ...newDish, description: e.target.value })}
+                  onChange={(e) =>
+                    setNewDish({ ...newDish, description: e.target.value })
+                  }
                 />
                 <input
                   type="number"
                   placeholder="Цена"
                   className="input input-bordered"
                   value={newDish.price}
-                  onChange={(e) => setNewDish({ ...newDish, price: e.target.value })}
+                  onChange={(e) =>
+                    setNewDish({ ...newDish, price: e.target.value })
+                  }
                   required
                   min="0"
                   step="0.01"
@@ -273,14 +335,21 @@ export const AdminDashboard = () => {
                   placeholder="Количество"
                   className="input input-bordered"
                   value={newDish.stock_quantity}
-                  onChange={(e) => setNewDish({ ...newDish, stock_quantity: e.target.value })}
+                  onChange={(e) =>
+                    setNewDish({ ...newDish, stock_quantity: e.target.value })
+                  }
                   required
                   min="0"
                 />
                 <select
                   className="select select-bordered"
                   value={newDish.is_breakfast}
-                  onChange={(e) => setNewDish({ ...newDish, is_breakfast: e.target.value === "true" })}
+                  onChange={(e) =>
+                    setNewDish({
+                      ...newDish,
+                      is_breakfast: e.target.value === "true",
+                    })
+                  }
                 >
                   <option value="true">🌅 Завтрак</option>
                   <option value="false">🌞 Обед</option>
@@ -314,7 +383,9 @@ export const AdminDashboard = () => {
                         <td>#{dish.id}</td>
                         <td>{dish.is_breakfast ? "🌅" : "🌞"}</td>
                         <td>{dish.name}</td>
-                        <td className="max-w-xs truncate">{dish.description}</td>
+                        <td className="max-w-xs truncate">
+                          {dish.description}
+                        </td>
                         <td>{dish.price} ₽</td>
                         <td>{dish.stock_quantity}</td>
                         <td>
@@ -354,39 +425,62 @@ export const AdminDashboard = () => {
                 placeholder="Название"
                 className="input input-bordered w-full"
                 value={editingDish.name}
-                onChange={(e) => setEditingDish({ ...editingDish, name: e.target.value })}
+                onChange={(e) =>
+                  setEditingDish({ ...editingDish, name: e.target.value })
+                }
               />
               <input
                 type="text"
                 placeholder="Описание"
                 className="input input-bordered w-full"
                 value={editingDish.description || ""}
-                onChange={(e) => setEditingDish({ ...editingDish, description: e.target.value })}
+                onChange={(e) =>
+                  setEditingDish({
+                    ...editingDish,
+                    description: e.target.value,
+                  })
+                }
               />
               <input
                 type="number"
                 placeholder="Цена"
                 className="input input-bordered w-full"
                 value={editingDish.price}
-                onChange={(e) => setEditingDish({ ...editingDish, price: e.target.value })}
+                onChange={(e) =>
+                  setEditingDish({ ...editingDish, price: e.target.value })
+                }
               />
               <input
                 type="number"
                 placeholder="Количество"
                 className="input input-bordered w-full"
                 value={editingDish.stock_quantity}
-                onChange={(e) => setEditingDish({ ...editingDish, stock_quantity: e.target.value })}
+                onChange={(e) =>
+                  setEditingDish({
+                    ...editingDish,
+                    stock_quantity: e.target.value,
+                  })
+                }
               />
               <select
                 className="select select-bordered w-full"
                 value={editingDish.is_breakfast}
-                onChange={(e) => setEditingDish({ ...editingDish, is_breakfast: e.target.value === "true" })}
+                onChange={(e) =>
+                  setEditingDish({
+                    ...editingDish,
+                    is_breakfast: e.target.value === "true",
+                  })
+                }
               >
                 <option value="true">🌅 Завтрак</option>
                 <option value="false">🌞 Обед</option>
               </select>
               <div className="modal-action">
-                <button type="button" className="btn" onClick={() => setEditingDish(null)}>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => setEditingDish(null)}
+                >
                   Отмена
                 </button>
                 <button type="submit" className="btn btn-primary">

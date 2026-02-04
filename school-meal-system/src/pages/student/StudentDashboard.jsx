@@ -37,7 +37,10 @@ export const StudentDashboard = () => {
   const handleOrder = async () => {
     if (!selectedDish) return;
     try {
-      await api.createOrder({ dish_id: selectedDish.id, payment_type: paymentType });
+      await api.createOrder({
+        dish_id: selectedDish.id,
+        payment_type: paymentType,
+      });
       setMessage({ type: "success", text: "Заказ успешно создан!" });
       setSelectedDish(null);
       fetchData();
@@ -94,21 +97,35 @@ export const StudentDashboard = () => {
     return true;
   });
 
-  if (loading) return <div className="flex justify-center p-8"><span className="loading loading-spinner loading-lg"></span></div>;
+  if (loading)
+    return (
+      <div className="flex justify-center p-8">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {message.text && (
-        <div className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}>
+        <div
+          className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}
+        >
           <span>{message.text}</span>
-          <button className="btn btn-sm btn-ghost" onClick={() => setMessage({ type: "", text: "" })}>✕</button>
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => setMessage({ type: "", text: "" })}
+          >
+            ✕
+          </button>
         </div>
       )}
 
       {/* Баланс */}
       <div className="card bg-base-100 shadow-xl mb-6">
         <div className="card-body">
-          <h2 className="card-title">💰 Баланс: {user?.balance?.toFixed(2)} ₽</h2>
+          <h2 className="card-title">
+            💰 Баланс: {user?.balance?.toFixed(2)} ₽
+          </h2>
           <div className="flex gap-2">
             <input
               type="number"
@@ -129,13 +146,22 @@ export const StudentDashboard = () => {
         <div className="card-body">
           <h2 className="card-title">📋 Меню</h2>
           <div className="tabs tabs-boxed mb-4">
-            <button className={`tab ${filter === "all" ? "tab-active" : ""}`} onClick={() => setFilter("all")}>
+            <button
+              className={`tab ${filter === "all" ? "tab-active" : ""}`}
+              onClick={() => setFilter("all")}
+            >
               Все
             </button>
-            <button className={`tab ${filter === "breakfast" ? "tab-active" : ""}`} onClick={() => setFilter("breakfast")}>
+            <button
+              className={`tab ${filter === "breakfast" ? "tab-active" : ""}`}
+              onClick={() => setFilter("breakfast")}
+            >
               🌅 Завтраки
             </button>
-            <button className={`tab ${filter === "lunch" ? "tab-active" : ""}`} onClick={() => setFilter("lunch")}>
+            <button
+              className={`tab ${filter === "lunch" ? "tab-active" : ""}`}
+              onClick={() => setFilter("lunch")}
+            >
               🌞 Обеды
             </button>
           </div>
@@ -198,13 +224,21 @@ export const StudentDashboard = () => {
                   {orders.map((order) => (
                     <tr key={order.id}>
                       <td>#{order.id}</td>
-                      <td>{order.payment_type === "one-time" ? "Разовый" : "Абонемент"}</td>
                       <td>
-                        <span className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}>
+                        {order.payment_type === "one-time"
+                          ? "Разовый"
+                          : "Абонемент"}
+                      </td>
+                      <td>
+                        <span
+                          className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
+                        >
                           {order.is_received ? "Получено" : "Ожидает"}
                         </span>
                       </td>
-                      <td>{new Date(order.created_at).toLocaleDateString("ru")}</td>
+                      <td>
+                        {new Date(order.created_at).toLocaleDateString("ru")}
+                      </td>
                       <td>
                         {!order.is_received && (
                           <button
@@ -259,7 +293,9 @@ export const StudentDashboard = () => {
       {reviewModal.open && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Отзыв: {reviewModal.dish?.name}</h3>
+            <h3 className="font-bold text-lg">
+              Отзыв: {reviewModal.dish?.name}
+            </h3>
             <div className="form-control mt-4">
               <label className="label">
                 <span className="label-text">Оценка</span>
@@ -272,7 +308,9 @@ export const StudentDashboard = () => {
                     name="rating"
                     className="mask mask-star-2 bg-orange-400"
                     checked={reviewData.rating === star}
-                    onChange={() => setReviewData({ ...reviewData, rating: star })}
+                    onChange={() =>
+                      setReviewData({ ...reviewData, rating: star })
+                    }
                   />
                 ))}
               </div>
@@ -285,11 +323,16 @@ export const StudentDashboard = () => {
                 className="textarea textarea-bordered"
                 placeholder="Ваш отзыв..."
                 value={reviewData.comment}
-                onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+                onChange={(e) =>
+                  setReviewData({ ...reviewData, comment: e.target.value })
+                }
               />
             </div>
             <div className="modal-action">
-              <button className="btn" onClick={() => setReviewModal({ open: false, dish: null })}>
+              <button
+                className="btn"
+                onClick={() => setReviewModal({ open: false, dish: null })}
+              >
                 Отмена
               </button>
               <button className="btn btn-primary" onClick={handleReview}>

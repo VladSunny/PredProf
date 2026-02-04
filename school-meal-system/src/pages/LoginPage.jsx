@@ -47,15 +47,15 @@ export const LoginPage = () => {
           <h2 className="card-title text-2xl justify-center mb-4">
             🍽️ Школьная столовая
           </h2>
-          
+
           <div className="tabs tabs-boxed mb-4">
-            <button 
+            <button
               className={`tab flex-1 ${!isRegister ? "tab-active" : ""}`}
               onClick={() => setIsRegister(false)}
             >
               Вход
             </button>
-            <button 
+            <button
               className={`tab flex-1 ${isRegister ? "tab-active" : ""}`}
               onClick={() => setIsRegister(true)}
             >
@@ -171,7 +171,11 @@ export const LoginPage = () => {
               className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
               disabled={loading}
             >
-              {loading ? "Загрузка..." : isRegister ? "Зарегистрироваться" : "Войти"}
+              {loading
+                ? "Загрузка..."
+                : isRegister
+                  ? "Зарегистрироваться"
+                  : "Войти"}
             </button>
           </form>
         </div>

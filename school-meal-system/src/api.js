@@ -25,11 +25,15 @@ const request = async (endpoint, options = {}) => {
 };
 
 // Auth
-export const register = (data) => request("/register", { method: "POST", body: JSON.stringify(data) });
-export const login = (data) => request("/login", { method: "POST", body: JSON.stringify(data) });
+export const register = (data) =>
+  request("/register", { method: "POST", body: JSON.stringify(data) });
+export const login = (data) =>
+  request("/login", { method: "POST", body: JSON.stringify(data) });
 export const getMe = () => request("/me");
-export const updateProfile = (data) => request("/me/profile", { method: "PATCH", body: JSON.stringify(data) });
-export const addBalance = (amount) => request("/me/balance", { method: "POST", body: JSON.stringify({ amount }) });
+export const updateProfile = (data) =>
+  request("/me/profile", { method: "PATCH", body: JSON.stringify(data) });
+export const addBalance = (amount) =>
+  request("/me/balance", { method: "POST", body: JSON.stringify({ amount }) });
 
 // Menu
 export const getMenu = (isBreakfast = null) => {
@@ -38,19 +42,26 @@ export const getMenu = (isBreakfast = null) => {
 };
 
 // Orders (Student)
-export const createOrder = (data) => request("/orders", { method: "POST", body: JSON.stringify(data) });
+export const createOrder = (data) =>
+  request("/orders", { method: "POST", body: JSON.stringify(data) });
 export const getMyOrders = () => request("/orders/my");
-export const markOrderReceived = (orderId) => request(`/orders/${orderId}/receive`, { method: "POST" });
+export const markOrderReceived = (orderId) =>
+  request(`/orders/${orderId}/receive`, { method: "POST" });
 
 // Reviews
-export const createReview = (data) => request("/reviews", { method: "POST", body: JSON.stringify(data) });
+export const createReview = (data) =>
+  request("/reviews", { method: "POST", body: JSON.stringify(data) });
 export const getDishReviews = (dishId) => request(`/dishes/${dishId}/reviews`);
 
 // Chef
 export const getChefOrders = () => request("/chef/orders");
 export const getTodayOrders = () => request("/chef/orders/today");
 export const getChefDishes = () => request("/chef/dishes");
-export const createPurchaseRequest = (data) => request("/chef/purchase-requests", { method: "POST", body: JSON.stringify(data) });
+export const createPurchaseRequest = (data) =>
+  request("/chef/purchase-requests", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 export const getMyPurchaseRequests = (status = null) => {
   const params = status ? `?status=${status}` : "";
   return request(`/chef/purchase-requests/my${params}`);
@@ -76,12 +87,21 @@ export const getAllPurchaseRequests = (status = null) => {
   return request(`/admin/purchase-requests${params}`);
 };
 
-export const updatePurchaseRequestStatus = (id, status) => 
-  request(`/admin/purchase-requests/${id}`, { method: "PATCH", body: JSON.stringify({ status }) });
+export const updatePurchaseRequestStatus = (id, status) =>
+  request(`/admin/purchase-requests/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
 
-export const createDish = (data) => request("/admin/dishes", { method: "POST", body: JSON.stringify(data) });
-export const updateDish = (id, data) => request(`/admin/dishes/${id}`, { method: "PATCH", body: JSON.stringify(data) });
-export const deleteDish = (id) => request(`/admin/dishes/${id}`, { method: "DELETE" });
+export const createDish = (data) =>
+  request("/admin/dishes", { method: "POST", body: JSON.stringify(data) });
+export const updateDish = (id, data) =>
+  request(`/admin/dishes/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+export const deleteDish = (id) =>
+  request(`/admin/dishes/${id}`, { method: "DELETE" });
 
 export const getPaymentReport = (startDate, endDate) => {
   const params = new URLSearchParams();

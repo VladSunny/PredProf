@@ -72,9 +72,14 @@ export const ChefDashboard = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {message.text && (
-        <div className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}>
+        <div
+          className={`alert ${message.type === "error" ? "alert-error" : "alert-success"} mb-4`}
+        >
           <span>{message.text}</span>
-          <button className="btn btn-sm btn-ghost" onClick={() => setMessage({ type: "", text: "" })}>
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => setMessage({ type: "", text: "" })}
+          >
             ✕
           </button>
         </div>
@@ -107,7 +112,9 @@ export const ChefDashboard = () => {
       {activeTab === "orders" && (
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">📦 Заказы на сегодня ({todayOrders.length})</h2>
+            <h2 className="card-title">
+              📦 Заказы на сегодня ({todayOrders.length})
+            </h2>
             {todayOrders.length === 0 ? (
               <p className="opacity-70">Заказов на сегодня нет</p>
             ) : (
@@ -129,13 +136,21 @@ export const ChefDashboard = () => {
                         <td>#{order.id}</td>
                         <td>{order.student_id}</td>
                         <td>{order.dish_id}</td>
-                        <td>{order.payment_type === "one-time" ? "Разовый" : "Абонемент"}</td>
                         <td>
-                          <span className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}>
+                          {order.payment_type === "one-time"
+                            ? "Разовый"
+                            : "Абонемент"}
+                        </td>
+                        <td>
+                          <span
+                            className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
+                          >
                             {order.is_received ? "Выдано" : "Ожидает выдачи"}
                           </span>
                         </td>
-                        <td>{new Date(order.created_at).toLocaleTimeString("ru")}</td>
+                        <td>
+                          {new Date(order.created_at).toLocaleTimeString("ru")}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -146,7 +161,9 @@ export const ChefDashboard = () => {
             <div className="stats shadow mt-4">
               <div className="stat">
                 <div className="stat-title">Всего заказов</div>
-                <div className="stat-value text-primary">{todayOrders.length}</div>
+                <div className="stat-value text-primary">
+                  {todayOrders.length}
+                </div>
               </div>
               <div className="stat">
                 <div className="stat-title">Выдано</div>
@@ -186,7 +203,9 @@ export const ChefDashboard = () => {
                       <span>Остаток:</span>
                       <span
                         className={`text-2xl font-bold ${
-                          dish.stock_quantity <= 5 ? "text-error" : "text-success"
+                          dish.stock_quantity <= 5
+                            ? "text-error"
+                            : "text-success"
                         }`}
                       >
                         {dish.stock_quantity} шт.
@@ -211,20 +230,27 @@ export const ChefDashboard = () => {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">📝 Создать заявку на закупку</h2>
-              <form onSubmit={handleCreateRequest} className="flex gap-4 flex-wrap">
+              <form
+                onSubmit={handleCreateRequest}
+                className="flex gap-4 flex-wrap"
+              >
                 <input
                   type="text"
                   placeholder="Название продукта"
                   className="input input-bordered flex-1 min-w-50"
                   value={newRequest.item_name}
-                  onChange={(e) => setNewRequest({ ...newRequest, item_name: e.target.value })}
+                  onChange={(e) =>
+                    setNewRequest({ ...newRequest, item_name: e.target.value })
+                  }
                 />
                 <input
                   type="text"
                   placeholder="Количество (напр. 10 кг)"
                   className="input input-bordered w-48"
                   value={newRequest.quantity}
-                  onChange={(e) => setNewRequest({ ...newRequest, quantity: e.target.value })}
+                  onChange={(e) =>
+                    setNewRequest({ ...newRequest, quantity: e.target.value })
+                  }
                 />
                 <button type="submit" className="btn btn-primary">
                   Создать заявку
@@ -257,7 +283,9 @@ export const ChefDashboard = () => {
                           <td>{req.item_name}</td>
                           <td>{req.quantity}</td>
                           <td>{getStatusBadge(req.status)}</td>
-                          <td>{new Date(req.created_at).toLocaleDateString("ru")}</td>
+                          <td>
+                            {new Date(req.created_at).toLocaleDateString("ru")}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
