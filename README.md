@@ -277,6 +277,8 @@ mkdir -p ./pgadmin-data
 sudo chown -R 5050:5050 ./pgadmin-data/
 ```
 
+Теперь запуск всего backend
+
 ```bash
 # В корне проекта запустить
 docker compose up
