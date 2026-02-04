@@ -1,4 +1,3 @@
-# backend/app/crud.py
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
 from . import models, schemas, auth
