@@ -8,6 +8,7 @@ from typing import Optional
 
 from . import models, schemas, crud, auth, dependencies
 from .database import engine, get_db
+from .seed import seed_database
 
 # Создаем таблицы в БД
 models.Base.metadata.create_all(bind=engine)
@@ -80,6 +81,17 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "role": db_user.role
     }
+
+@app.post("/seed")
+def seed_test_data(
+    db: Session = Depends(get_db)
+):
+    """
+    Заполнить базу данных тестовыми данными.
+    Только для администратора в демонстрационных целях.
+    """
+    print("test")
+    return seed_database(db)
 
 # ========== Эндпоинты для учеников ==========
 
