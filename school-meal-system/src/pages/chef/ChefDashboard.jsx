@@ -25,7 +25,9 @@ const ChefDashboard = () => {
           chefApi.getDishesWithStock(),
           chefApi.getMyPurchaseRequests(),
         ]);
-        setTodayOrders(ordersData);
+        // Sort orders by created_at timestamp (newer first)
+        const sortedOrdersData = ordersData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setTodayOrders(sortedOrdersData);
         setDishes(dishesData);
         setRequests(requestsData);
       } catch (error) {

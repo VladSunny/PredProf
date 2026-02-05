@@ -15,7 +15,9 @@ const OrdersPage = () => {
   const fetchOrders = async () => {
     try {
       const data = await studentApi.getMyOrders();
-      setOrders(data);
+      // Sort orders by created_at timestamp (newer first)
+      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setOrders(sortedData);
     } catch (error) {
       toast.error("Ошибка загрузки заказов");
     } finally {
