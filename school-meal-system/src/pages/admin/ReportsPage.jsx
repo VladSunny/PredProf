@@ -106,10 +106,10 @@ const ReportsPage = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="card linear-to-r from-primary to-primary-focus text-primary-content">
+        <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <div className="flex items-center gap-4">
-              <Wallet className="h-12 w-12 opacity-80" />
+              <Wallet className="h-12 w-12" />
               <div>
                 <p className="text-sm opacity-80">Общий доход</p>
                 <p className="text-3xl font-bold">
@@ -120,10 +120,10 @@ const ReportsPage = () => {
           </div>
         </div>
 
-        <div className="card linear-to-r from-secondary to-secondary-focus text-secondary-content">
+        <div className="card bg-secondary text-secondary-content">
           <div className="card-body">
             <div className="flex items-center gap-4">
-              <TrendingUp className="h-12 w-12 opacity-80" />
+              <TrendingUp className="h-12 w-12" />
               <div>
                 <p className="text-sm opacity-80">Средний чек</p>
                 <p className="text-3xl font-bold">
@@ -134,10 +134,10 @@ const ReportsPage = () => {
           </div>
         </div>
 
-        <div className="card bg-linear-to-r from-accent to-accent-focus text-accent-content">
+        <div className="card bg-accent text-accent-content">
           <div className="card-body">
             <div className="flex items-center gap-4">
-              <Users className="h-12 w-12 opacity-80" />
+              <Users className="h-12 w-12" />
               <div>
                 <p className="text-sm opacity-80">Активных учеников</p>
                 <p className="text-3xl font-bold">
