@@ -47,6 +47,10 @@ const ReportsPage = () => {
         dateRange.startDate || null,
         dateRange.endDate || null,
       );
+      // Sort orders by created_at timestamp (newer first)
+      if (data.orders) {
+        data.orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      }
       setReport(data);
       toast.success("Отчет сформирован!");
     } catch (error) {
