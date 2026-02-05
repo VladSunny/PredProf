@@ -51,7 +51,9 @@ const MenuPage = () => {
     setSelectedDish(dish);
     try {
       const data = await studentApi.getDishReviews(dish.id);
-      setReviews(data);
+      // Sort reviews by created_at timestamp (newer first)
+      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setReviews(sortedData);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }
@@ -69,7 +71,9 @@ const MenuPage = () => {
       );
       toast.success("Отзыв добавлен!");
       const data = await studentApi.getDishReviews(selectedDish.id);
-      setReviews(data);
+      // Sort reviews by created_at timestamp (newer first)
+      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setReviews(sortedData);
       setReviewData({ rating: 5, comment: "" });
     } catch (error) {
       toast.error(error.message);

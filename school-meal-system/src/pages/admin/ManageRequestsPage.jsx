@@ -17,7 +17,9 @@ const ManageRequestsPage = () => {
     try {
       const status = filter === "all" ? null : filter;
       const data = await adminApi.getAllPurchaseRequests(status);
-      setRequests(data);
+      // Sort requests by created_at timestamp (newer first)
+      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setRequests(sortedData);
     } catch (error) {
       toast.error("Ошибка загрузки заявок");
     } finally {
