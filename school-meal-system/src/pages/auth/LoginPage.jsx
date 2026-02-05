@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const result = await login(username, password);
+    const result = await login(email, password);
 
     if (result.success) {
       switch (result.role) {
@@ -46,14 +46,14 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control flex flex-col">
               <label className="label">
-                <span className="label-text">Имя пользователя</span>
+                <span className="label-text">Email</span>
               </label>
               <input
-                type="text"
-                placeholder="Введите имя пользователя"
+                type="email"
+                placeholder="Введите email"
                 className="input input-bordered"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>

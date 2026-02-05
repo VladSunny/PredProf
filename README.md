@@ -320,9 +320,9 @@ npm run dev
 
 После заполнения тестовыми данными можно использовать следующие учетные записи:
 
-- **Администратор**: `admin` / `adminpass123`
-- **Повар**: `chef_ivan` / `chefpass123`
-- **Студент**: `ivanov` / `password123`
+- **Администратор**: `admin@school.ru` / `adminpass123`
+- **Повар**: `chef@school.ru` / `chefpass123`
+- **Ученик**: `student1@school.ru` / `password123`
 
 ### 5. Завершение работы
 

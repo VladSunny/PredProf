@@ -36,12 +36,12 @@ def verify_token(token: str):
     """Проверяет JWT токен"""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        email: str = payload.get("sub")
         role: str = payload.get("role", "student")
-        
-        if username is None:
+
+        if email is None:
             return None
-        
-        return {"username": username, "role": role}
+
+        return {"email": email, "role": role}
     except JWTError:
         return None

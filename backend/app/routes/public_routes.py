@@ -46,17 +46,17 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=schemas.Token)
 def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     """Авторизация и получение JWT токена"""
-    db_user = crud.get_user_by_username(db, username=user.username)
+    db_user = crud.get_user_by_email(db, email=user.email)
 
     if not db_user or not auth.verify_password(user.password, db_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверное имя пользователя или пароль",
+            detail="Неверный email или пароль",
         )
 
     access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)))
     access_token = auth.create_access_token(
-        data={"sub": db_user.username, "role": db_user.role.value},
+        data={"sub": db_user.email, "role": db_user.role.value},
         expires_delta=access_token_expires
     )
 

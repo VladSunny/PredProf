@@ -39,7 +39,7 @@ class User(UserBase):
         from_attributes = True
 
 class UserLogin(BaseModel):
-    username: str
+    email: EmailStr
     password: str
 
 # Схемы для токенов
@@ -49,7 +49,7 @@ class Token(BaseModel):
     role: UserRole
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    email: Optional[str] = None
     role: Optional[UserRole] = None
 
 # Схемы для блюд
