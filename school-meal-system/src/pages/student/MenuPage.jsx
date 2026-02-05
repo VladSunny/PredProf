@@ -83,13 +83,13 @@ const MenuPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold">Меню</h1>
           <p className="text-base-content/60">Выберите блюда для заказа</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="badge badge-primary badge-lg">
+          <div className="badge badge-primary badge-lg text-xs sm:text-sm">
             Баланс: {user?.balance?.toFixed(2)} ₽
           </div>
         </div>
@@ -127,7 +127,7 @@ const MenuPage = () => {
           <p className="text-base-content/60">Блюда не найдены</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {dishes.map((dish) => (
             <div key={dish.id} className="card bg-base-100 shadow-lg">
               <div className="card-body">
@@ -136,21 +136,21 @@ const MenuPage = () => {
                     {dish.is_breakfast ? "🥐" : "🍝"}
                   </div>
                   <div
-                    className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
+                    className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"} text-xs`}
                   >
                     {dish.is_breakfast ? "Завтрак" : "Обед"}
                   </div>
                 </div>
-                <h3 className="card-title">{dish.name}</h3>
-                <p className="text-base-content/60 text-sm">
+                <h3 className="card-title text-sm sm:text-base">{dish.name}</h3>
+                <p className="text-base-content/60 text-xs sm:text-sm">
                   {dish.description || "Вкусное блюдо"}
                 </p>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-2xl font-bold text-primary">
+                  <span className="text-xl sm:text-2xl font-bold text-primary">
                     {dish.price} ₽
                   </span>
                   <div
-                    className={`badge ${dish.stock_quantity > 0 ? "badge-success" : "badge-error"} gap-1`}
+                    className={`badge ${dish.stock_quantity > 0 ? "badge-success" : "badge-error"} gap-1 text-xs`}
                   >
                     {dish.stock_quantity > 0
                       ? `В наличии: ${dish.stock_quantity}`

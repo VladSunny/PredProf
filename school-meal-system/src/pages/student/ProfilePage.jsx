@@ -58,7 +58,7 @@ const ProfilePage = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* User Info */}
         <div className="card bg-base-100 shadow-lg">
           <div className="card-body">
@@ -67,21 +67,21 @@ const ProfilePage = () => {
               Информация об аккаунте
             </h2>
             <div className="space-y-4 mt-4">
-              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Имя пользователя</span>
-                <span className="font-semibold">{user?.username}</span>
+                <span className="font-semibold text-right">{user?.username}</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Email</span>
-                <span className="font-semibold">{user?.email}</span>
+                <span className="font-semibold text-right">{user?.email}</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Роль</span>
                 <span className="badge badge-primary">Ученик</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Дата регистрации</span>
-                <span className="font-semibold">
+                <span className="font-semibold text-right">
                   {user?.created_at &&
                     new Date(user.created_at).toLocaleDateString("ru-RU")}
                 </span>
@@ -101,17 +101,17 @@ const ProfilePage = () => {
               <div className="stat-title text-primary-content/70">
                 Текущий баланс
               </div>
-              <div className="stat-value">{user?.balance?.toFixed(2)} ₽</div>
+              <div className="stat-value text-sm sm:text-base">{user?.balance?.toFixed(2)} ₽</div>
             </div>
 
             <div className="form-control mt-4">
               <label className="label">
                 <span className="label-text">Сумма пополнения</span>
               </label>
-              <div className="join">
+              <div className="join w-full sm:w-auto">
                 <input
                   type="number"
-                  className="input input-bordered join-item flex-1"
+                  className="input input-bordered join-item flex-1 w-full"
                   placeholder="Введите сумму"
                   value={topUpAmount}
                   onChange={(e) => setTopUpAmount(e.target.value)}

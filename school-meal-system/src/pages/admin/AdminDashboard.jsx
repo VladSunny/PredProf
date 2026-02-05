@@ -66,13 +66,13 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="stat bg-base-100 rounded-box shadow">
           <div className="stat-figure text-primary">
             <Wallet className="h-8 w-8" />
           </div>
           <div className="stat-title">Общий доход</div>
-          <div className="stat-value text-primary text-2xl">
+          <div className="stat-value text-primary text-base sm:text-2xl">
             {paymentStats?.total_revenue?.toFixed(2) || 0} ₽
           </div>
         </div>
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
             <ShoppingCart className="h-8 w-8" />
           </div>
           <div className="stat-title">Всего заказов</div>
-          <div className="stat-value text-success">
+          <div className="stat-value text-success text-sm sm:text-base">
             {paymentStats?.orders_count || 0}
           </div>
         </div>
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
             <Users className="h-8 w-8" />
           </div>
           <div className="stat-title">Уникальных пользователей</div>
-          <div className="stat-value text-info">
+          <div className="stat-value text-info text-sm sm:text-base">
             {attendanceStats?.unique_users || 0}
           </div>
         </div>
@@ -102,30 +102,30 @@ const AdminDashboard = () => {
             <ClipboardList className="h-8 w-8" />
           </div>
           <div className="stat-title">Заявок на рассмотрении</div>
-          <div className="stat-value text-warning">{pendingRequests}</div>
+          <div className="stat-value text-warning text-sm sm:text-base">{pendingRequests}</div>
         </div>
       </div>
 
       {/* Additional Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card bg-base-100 shadow">
           <div className="card-body">
             <h2 className="card-title">
               <TrendingUp className="h-5 w-5" />
               Статистика оплат
             </h2>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-xl sm:text-2xl font-bold text-primary">
                   {paymentStats?.average_order_value?.toFixed(2) || 0} ₽
                 </div>
-                <div className="text-sm text-base-content/60">Средний чек</div>
+                <div className="text-xs sm:text-sm text-base-content/60">Средний чек</div>
               </div>
               <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-2xl font-bold text-success">
+                <div className="text-xl sm:text-2xl font-bold text-success">
                   {paymentStats?.orders_count || 0}
                 </div>
-                <div className="text-sm text-base-content/60">
+                <div className="text-xs sm:text-sm text-base-content/60">
                   Всего заказов
                 </div>
               </div>
@@ -139,20 +139,20 @@ const AdminDashboard = () => {
               <Users className="h-5 w-5" />
               Статистика посещаемости
             </h2>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-2xl font-bold text-info">
+                <div className="text-xl sm:text-2xl font-bold text-info">
                   {attendanceStats?.unique_users || 0}
                 </div>
-                <div className="text-sm text-base-content/60">
+                <div className="text-xs sm:text-sm text-base-content/60">
                   Уникальных учеников
                 </div>
               </div>
               <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-2xl font-bold text-secondary">
+                <div className="text-xl sm:text-2xl font-bold text-secondary">
                   {attendanceStats?.average_orders_per_user?.toFixed(1) || 0}
                 </div>
-                <div className="text-sm text-base-content/60">
+                <div className="text-xs sm:text-sm text-base-content/60">
                   Заказов на ученика
                 </div>
               </div>
@@ -162,15 +162,15 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link
           to="/admin/dishes"
           className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
         >
           <div className="card-body items-center text-center">
             <UtensilsCrossed className="h-12 w-12 text-primary" />
-            <h3 className="card-title">Управление меню</h3>
-            <p className="text-base-content/60">
+            <h3 className="card-title text-sm sm:text-base">Управление меню</h3>
+            <p className="text-base-content/60 text-xs sm:text-sm">
               Добавить, изменить или удалить блюда
             </p>
           </div>
@@ -182,8 +182,8 @@ const AdminDashboard = () => {
         >
           <div className="card-body items-center text-center">
             <ClipboardList className="h-12 w-12 text-secondary" />
-            <h3 className="card-title">Заявки на закупку</h3>
-            <p className="text-base-content/60">
+            <h3 className="card-title text-sm sm:text-base">Заявки на закупку</h3>
+            <p className="text-base-content/60 text-xs sm:text-sm">
               {pendingRequests > 0
                 ? `${pendingRequests} ожидают рассмотрения`
                 : "Все заявки обработаны"}
@@ -197,8 +197,8 @@ const AdminDashboard = () => {
         >
           <div className="card-body items-center text-center">
             <FileText className="h-12 w-12 text-accent" />
-            <h3 className="card-title">Отчеты</h3>
-            <p className="text-base-content/60">
+            <h3 className="card-title text-sm sm:text-base">Отчеты</h3>
+            <p className="text-base-content/60 text-xs sm:text-sm">
               Формирование отчетов по питанию
             </p>
           </div>

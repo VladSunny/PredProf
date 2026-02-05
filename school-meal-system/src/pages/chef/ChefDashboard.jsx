@@ -68,13 +68,13 @@ const ChefDashboard = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="stat bg-base-100 rounded-box shadow">
           <div className="stat-figure text-primary">
             <ClipboardList className="h-8 w-8" />
           </div>
           <div className="stat-title">Заказов сегодня</div>
-          <div className="stat-value text-primary">{todayOrders.length}</div>
+          <div className="stat-value text-primary text-sm sm:text-base">{todayOrders.length}</div>
         </div>
 
         <div className="stat bg-base-100 rounded-box shadow">
@@ -82,7 +82,7 @@ const ChefDashboard = () => {
             <CheckCircle className="h-8 w-8" />
           </div>
           <div className="stat-title">Выдано</div>
-          <div className="stat-value text-success">{receivedOrders}</div>
+          <div className="stat-value text-success text-sm sm:text-base">{receivedOrders}</div>
         </div>
 
         <div className="stat bg-base-100 rounded-box shadow">
@@ -90,7 +90,7 @@ const ChefDashboard = () => {
             <Clock className="h-8 w-8" />
           </div>
           <div className="stat-title">Ожидают выдачи</div>
-          <div className="stat-value text-warning">{pendingOrders}</div>
+          <div className="stat-value text-warning text-sm sm:text-base">{pendingOrders}</div>
         </div>
 
         <div className="stat bg-base-100 rounded-box shadow">
@@ -98,12 +98,12 @@ const ChefDashboard = () => {
             <Package className="h-8 w-8" />
           </div>
           <div className="stat-title">Мало на складе</div>
-          <div className="stat-value text-error">{lowStockDishes}</div>
+          <div className="stat-value text-error text-sm sm:text-base">{lowStockDishes}</div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           to="/chef/stock"
           className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
@@ -112,8 +112,8 @@ const ChefDashboard = () => {
             <div className="flex items-center gap-4">
               <Package className="h-12 w-12 text-primary" />
               <div>
-                <h3 className="card-title">Остатки блюд</h3>
-                <p className="text-base-content/60">
+                <h3 className="card-title text-sm sm:text-base">Остатки блюд</h3>
+                <p className="text-base-content/60 text-xs sm:text-sm">
                   Контроль остатков продуктов
                 </p>
               </div>
@@ -129,8 +129,8 @@ const ChefDashboard = () => {
             <div className="flex items-center gap-4">
               <ClipboardList className="h-12 w-12 text-secondary" />
               <div>
-                <h3 className="card-title">Заявки на закупку</h3>
-                <p className="text-base-content/60">
+                <h3 className="card-title text-sm sm:text-base">Заявки на закупку</h3>
+                <p className="text-base-content/60 text-xs sm:text-sm">
                   {pendingRequests > 0
                     ? `${pendingRequests} в ожидании`
                     : "Создать новую заявку"}
