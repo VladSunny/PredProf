@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@theme {
+  --color-purple-800: #6B46C1;
+  --color-lavender-blue-100: #E6E6FA;
+  --color-lavender-blue-200: #D1D1F0;
+  --color-lavender-blue-300: #B8B8E6;
+  --color-lavender-blue-400: #9F9FDA;
+  --color-lavender-blue-500: #8B8CF0;
+  --color-lavender-blue-600: #777AC6;
+  --color-lavender-blue-700: #6368AC;
+  --color-lavender-blue-800: #4F5692;
+
+  --color-primary: #6B46C1;
+  --color-secondary: #8B8CF0;
+}

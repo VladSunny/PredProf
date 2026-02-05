@@ -53,7 +53,7 @@ const ChefDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-linear-to-r from-orange-500 to-red-500 text-white rounded-box p-6">
+      <div className="bg-[#6B46C1] text-white rounded-box p-6">
         <div className="flex items-center gap-4">
           <ChefHat className="h-12 w-12" />
           <div>

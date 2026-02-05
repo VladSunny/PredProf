@@ -221,15 +221,15 @@ const PurchaseRequestsPage = () => {
               <X className="h-4 w-4" />
             </button>
             <h3 className="font-bold text-lg">Новая заявка на закупку</h3>
-            <div className="py-4 space-y-4">
+            <div className="py-4 space-y-6">
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Название продукта</span>
-                </label>
+                <div className="mb-2">
+                  <span className="text-base font-medium">Название продукта</span>
+                </div>
                 <input
                   type="text"
                   className="input input-bordered"
-                  placeholder="Например: Молоко 3.2%"
+                  placeholder="Французская булка"
                   value={newRequest.item_name}
                   onChange={(e) =>
                     setNewRequest({ ...newRequest, item_name: e.target.value })
@@ -237,13 +237,13 @@ const PurchaseRequestsPage = () => {
                 />
               </div>
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Количество</span>
-                </label>
+                <div className="mb-2">
+                  <span className="text-base font-medium">Количество</span>
+                </div>
                 <input
                   type="text"
                   className="input input-bordered"
-                  placeholder="Например: 50 литров"
+                  placeholder="3"
                   value={newRequest.quantity}
                   onChange={(e) =>
                     setNewRequest({ ...newRequest, quantity: e.target.value })

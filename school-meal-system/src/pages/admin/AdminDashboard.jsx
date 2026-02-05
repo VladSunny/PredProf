@@ -53,7 +53,7 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-box p-6">
+      <div className="bg-[#6B46C1] text-white rounded-box p-6">
         <div className="flex items-center gap-4">
           <BarChart3 className="h-12 w-12" />
           <div>
