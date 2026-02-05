@@ -84,12 +84,21 @@ class OrderBase(BaseModel):
 class OrderCreate(OrderBase):
     pass
 
+class DishInfo(BaseModel):
+    id: int
+    name: str
+    price: float
+
+    class Config:
+        from_attributes = True
+
 class Order(OrderBase):
     id: int
     student_id: int
     is_received: bool
     created_at: datetime
-    
+    dish: Optional[DishInfo] = None
+
     class Config:
         from_attributes = True
 

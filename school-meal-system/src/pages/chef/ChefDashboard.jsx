@@ -154,7 +154,7 @@ const ChefDashboard = () => {
                   <tr>
                     <th>ID</th>
                     <th>Ученик ID</th>
-                    <th>Блюдо ID</th>
+                    <th>Блюдо</th>
                     <th>Тип оплаты</th>
                     <th>Статус</th>
                     <th>Время</th>
@@ -165,7 +165,7 @@ const ChefDashboard = () => {
                     <tr key={order.id}>
                       <td>#{order.id}</td>
                       <td>{order.student_id}</td>
-                      <td>{order.dish_id}</td>
+                      <td>{order.dish?.name || `ID: ${order.dish_id}`}</td>
                       <td>
                         <span
                           className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}

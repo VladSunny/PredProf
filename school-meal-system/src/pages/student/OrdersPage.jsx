@@ -132,7 +132,7 @@ const OrdersPage = () => {
                     <div>
                       <h3 className="font-bold">Заказ #{order.id}</h3>
                       <p className="text-sm text-base-content/60">
-                        Блюдо ID: {order.dish_id}
+                        Блюдо: {order.dish?.name || `ID: ${order.dish_id}`}
                       </p>
                       <p className="text-sm text-base-content/60">
                         {new Date(order.created_at).toLocaleString("ru-RU")}

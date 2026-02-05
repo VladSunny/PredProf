@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
+from sqlalchemy.orm import joinedload
 from .. import models, schemas
 from . import dish_crud
 from typing import List, Optional
@@ -40,13 +41,13 @@ def create_order(db: Session, order: schemas.OrderCreate, student_id: int):
 
 def get_user_orders(db: Session, user_id: int, skip: int = 0, limit: int = 100):
     """Получить заказы пользователя"""
-    return db.query(models.Order).filter(models.Order.student_id == user_id)\
-        .offset(skip).limit(limit).all()
+    return db.query(models.Order).options(joinedload(models.Order.dish))\
+        .filter(models.Order.student_id == user_id).offset(skip).limit(limit).all()
 
 
 def get_all_orders(db: Session, skip: int = 0, limit: int = 100):
     """Получить все заказы (для повара/админа)"""
-    return db.query(models.Order).offset(skip).limit(limit).all()
+    return db.query(models.Order).options(joinedload(models.Order.dish)).offset(skip).limit(limit).all()
 
 
 def mark_order_received(db: Session, order_id: int, user_id: int):
@@ -64,6 +65,6 @@ def mark_order_received(db: Session, order_id: int, user_id: int):
 def get_today_orders(db: Session):
     """Получить заказы на сегодня (для повара)"""
     today = datetime.now().date()
-    return db.query(models.Order).filter(
+    return db.query(models.Order).options(joinedload(models.Order.dish)).filter(
         func.date(models.Order.created_at) == today
     ).all()
