@@ -24,6 +24,14 @@ class UserProfileUpdate(BaseModel):
     allergies: Optional[str] = None
     preferences: Optional[str] = None
 
+class UserPersonalInfoUpdate(BaseModel):
+    full_name: Optional[str] = None
+    parallel: Optional[str] = None
+
+class PasswordUpdate(BaseModel):
+    old_password: str = Field(..., min_length=8)
+    new_password: str = Field(..., min_length=8)
+
 class UserBalanceUpdate(BaseModel):
     amount: float = Field(..., gt=0)
 

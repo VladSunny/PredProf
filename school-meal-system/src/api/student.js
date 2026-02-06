@@ -21,6 +21,24 @@ export const studentApi = {
     return handleResponse(response);
   },
 
+  updatePersonalInfo: async (personalInfoData) => {
+    const response = await fetch(`${API_BASE_URL}/me/personal-info`, {
+      method: "PATCH",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(personalInfoData),
+    });
+    return handleResponse(response);
+  },
+
+  updatePassword: async (passwordData) => {
+    const response = await fetch(`${API_BASE_URL}/me/password`, {
+      method: "PATCH",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(passwordData),
+    });
+    return handleResponse(response);
+  },
+
   addBalance: async (amount) => {
     const response = await fetch(`${API_BASE_URL}/me/balance`, {
       method: "POST",

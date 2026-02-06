@@ -4,7 +4,9 @@ from .user_crud import (
     get_user_by_full_name,
     create_user,
     update_user_profile,
-    update_user_balance
+    update_user_balance,
+    update_user_personal_info,
+    update_user_password
 )
 
 from .dish_crud import (
@@ -47,6 +49,8 @@ __all__ = [
     "create_user",
     "update_user_profile",
     "update_user_balance",
+    "update_user_personal_info",
+    "update_user_password",
     
     # Dish CRUD functions
     "get_dishes",

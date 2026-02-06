@@ -29,6 +29,34 @@ def update_profile(
     return updated_user
 
 
+@router.patch("/me/personal-info", response_model=schemas.User)
+def update_personal_info(
+    personal_info_update: schemas.UserPersonalInfoUpdate,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.get_current_user)
+):
+    """Обновить личную информацию (ФИО, параллель)"""
+    updated_user = crud.update_user_personal_info(db, current_user.id, personal_info_update)
+    if not updated_user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+    return updated_user
+
+
+@router.patch("/me/password", response_model=dict)
+def update_password(
+    password_update: schemas.PasswordUpdate,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.get_current_user)
+):
+    """Обновить пароль"""
+    result = crud.update_user_password(db, current_user.id, password_update.old_password, password_update.new_password)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+    elif result is False:
+        raise HTTPException(status_code=400, detail="Неверный старый пароль")
+    return {"message": "Пароль успешно обновлен"}
+
+
 @router.post("/me/balance", response_model=schemas.User)
 def add_balance(
     balance_update: schemas.UserBalanceUpdate,
