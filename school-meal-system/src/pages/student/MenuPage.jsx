@@ -25,7 +25,9 @@ const MenuPage = () => {
     try {
       const isBreakfast = filter === "all" ? null : filter === "breakfast";
       const data = await studentApi.getMenu(isBreakfast);
-      setDishes(data);
+      // Sort dishes alphabetically by name
+      const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+      setDishes(sortedData);
     } catch (error) {
       toast.error("Ошибка загрузки меню");
     } finally {
