@@ -11,7 +11,8 @@ class UserRole(str, Enum):
 # Схемы для пользователей
 class UserBase(BaseModel):
     email: EmailStr
-    username: str
+    full_name: str
+    parallel: str
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8)

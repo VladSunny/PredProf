@@ -7,8 +7,8 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def get_user_by_username(db: Session, username: str):
-    return db.query(models.User).filter(models.User.username == username).first()
+def get_user_by_full_name(db: Session, full_name: str):
+    return db.query(models.User).filter(models.User.full_name == full_name).first()
 
 
 def create_user(db: Session, user: schemas.UserCreate):
@@ -16,7 +16,8 @@ def create_user(db: Session, user: schemas.UserCreate):
 
     db_user = models.User(
         email=user.email,
-        username=user.username,
+        full_name=user.full_name,
+        parallel=user.parallel,
         hashed_password=hashed_password,
         role=user.role if user.role else models.UserRole.STUDENT,
         allergies=user.allergies,

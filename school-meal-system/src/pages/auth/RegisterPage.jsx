@@ -6,7 +6,8 @@ import { UserPlus, Eye, EyeOff } from "lucide-react";
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     email: "",
-    username: "",
+    full_name: "",
+    parallel: "",
     password: "",
     confirmPassword: "",
     allergies: "",
@@ -41,7 +42,8 @@ const RegisterPage = () => {
 
     const result = await register({
       email: formData.email,
-      username: formData.username,
+      full_name: formData.full_name,
+      parallel: formData.parallel,
       password: formData.password,
       role: "student",
       allergies: formData.allergies || null,
@@ -89,14 +91,29 @@ const RegisterPage = () => {
 
             <div className="form-control flex flex-col">
               <label className="label">
-                <span className="label-text">Имя пользователя</span>
+                <span className="label-text">ФИО</span>
               </label>
               <input
                 type="text"
-                name="username"
-                placeholder="Введите имя пользователя"
+                name="full_name"
+                placeholder="Введите ФИО (например, Иванов Иван Иванович)"
                 className="input input-bordered"
-                value={formData.username}
+                value={formData.full_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-control flex flex-col">
+              <label className="label">
+                <span className="label-text">Параллель</span>
+              </label>
+              <input
+                type="text"
+                name="parallel"
+                placeholder="Введите параллель (например, 10Г)"
+                className="input input-bordered"
+                value={formData.parallel}
                 onChange={handleChange}
                 required
               />

@@ -32,12 +32,12 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
             detail="Email уже зарегистрирован"
         )
 
-    # Проверяем username
-    db_user = crud.get_user_by_username(db, username=user.username)
+    # Вместо проверки username, теперь проверяем только по ФИО
+    db_user = crud.get_user_by_full_name(db, full_name=user.full_name)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Имя пользователя уже занято"
+            detail="Пользователь с таким ФИО уже зарегистрирован"
         )
 
     return crud.create_user(db=db, user=user)

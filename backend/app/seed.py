@@ -16,7 +16,8 @@ def seed_database(db: Session):
     users_data = [
         {
             "email": "student1@school.ru",
-            "username": "ivanov",
+            "full_name": "Иванов Иван Иванович",
+            "parallel": "10Г",
             "password": "password123",
             "role": models.UserRole.STUDENT,
             "allergies": "Арахис, морепродукты",
@@ -25,7 +26,8 @@ def seed_database(db: Session):
         },
         {
             "email": "student2@school.ru",
-            "username": "petrov",
+            "full_name": "Петров Петр Петрович",
+            "parallel": "9Б",
             "password": "password123",
             "role": models.UserRole.STUDENT,
             "allergies": "Лактоза",
@@ -33,8 +35,9 @@ def seed_database(db: Session):
             "balance": 750.0
         },
         {
-            "email": "student3@school.ru", 
-            "username": "sidorova",
+            "email": "student3@school.ru",
+            "full_name": "Сидорова Мария Сергеевна",
+            "parallel": "11А",
             "password": "password123",
             "role": models.UserRole.STUDENT,
             "allergies": None,
@@ -43,7 +46,8 @@ def seed_database(db: Session):
         },
         {
             "email": "chef@school.ru",
-            "username": "chef_ivan",
+            "full_name": "Шеф Иван Иванович",
+            "parallel": "Школьная столовая",
             "password": "chefpass123",
             "role": models.UserRole.CHEF,
             "allergies": None,
@@ -52,7 +56,8 @@ def seed_database(db: Session):
         },
         {
             "email": "admin@school.ru",
-            "username": "admin",
+            "full_name": "Админ Админ Админович",
+            "parallel": "Администрация",
             "password": "adminpass123",
             "role": models.UserRole.ADMIN,
             "allergies": None,
@@ -66,7 +71,8 @@ def seed_database(db: Session):
         hashed_password = auth.get_password_hash(user_data["password"])
         db_user = models.User(
             email=user_data["email"],
-            username=user_data["username"],
+            full_name=user_data["full_name"],
+            parallel=user_data["parallel"],
             hashed_password=hashed_password,
             role=user_data["role"],
             allergies=user_data["allergies"],
@@ -76,8 +82,8 @@ def seed_database(db: Session):
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
-        created_users[user_data["username"]] = db_user
-        print(f"Создан пользователь: {user_data['username']} ({user_data['role']})")
+        created_users[user_data["full_name"]] = db_user
+        print(f"Создан пользователь: {user_data['full_name']} ({user_data['role']})")
     
     # 2. Создаем блюда (меню)
     dishes_data = [
@@ -109,9 +115,14 @@ def seed_database(db: Session):
     
     # 3. Создаем заказы за последние 7 дней
     payment_types = ["one-time", "subscription"]
-    
+
+    # Filter only student users for orders
+    student_users = [user for user in created_users.values() if user.role == models.UserRole.STUDENT]
+
     for i in range(30):  # Создаем 30 заказов
-        student = random.choice([created_users["ivanov"], created_users["petrov"], created_users["sidorova"]])
+        if not student_users:
+            break  # Exit if no student users available
+        student = random.choice(student_users)
         dish = random.choice(created_dishes)
         
         # Проверяем баланс студента
@@ -146,13 +157,13 @@ def seed_database(db: Session):
     
     # 4. Создаем отзывы
     reviews_data = [
-        {"student": created_users["ivanov"], "dish": created_dishes[0], "rating": 5, "comment": "Очень вкусная каша, ягоды свежие!"},
-        {"student": created_users["petrov"], "dish": created_dishes[0], "rating": 4, "comment": "Хорошо, но могло бы быть больше ягод"},
-        {"student": created_users["sidorova"], "dish": created_dishes[1], "rating": 5, "comment": "Омлет просто великолепный!"},
-        {"student": created_users["ivanov"], "dish": created_dishes[3], "rating": 3, "comment": "Сырники суховатые"},
-        {"student": created_users["petrov"], "dish": created_dishes[5], "rating": 5, "comment": "Лучший куриный суп в школе!"},
-        {"student": created_users["sidorova"], "dish": created_dishes[6], "rating": 4, "comment": "Котлета вкусная, но пюре могло бы быть более воздушным"},
-        {"student": created_users["ivanov"], "dish": created_dishes[8], "rating": 5, "comment": "Рыба приготовлена идеально!"},
+        {"student": created_users["Иванов Иван Иванович"], "dish": created_dishes[0], "rating": 5, "comment": "Очень вкусная каша, ягоды свежие!"},
+        {"student": created_users["Петров Петр Петрович"], "dish": created_dishes[0], "rating": 4, "comment": "Хорошо, но могло бы быть больше ягод"},
+        {"student": created_users["Сидорова Мария Сергеевна"], "dish": created_dishes[1], "rating": 5, "comment": "Омлет просто великолепный!"},
+        {"student": created_users["Иванов Иван Иванович"], "dish": created_dishes[3], "rating": 3, "comment": "Сырники суховатые"},
+        {"student": created_users["Петров Петр Петрович"], "dish": created_dishes[5], "rating": 5, "comment": "Лучший куриный суп в школе!"},
+        {"student": created_users["Сидорова Мария Сергеевна"], "dish": created_dishes[6], "rating": 4, "comment": "Котлета вкусная, но пюре могло бы быть более воздушным"},
+        {"student": created_users["Иванов Иван Иванович"], "dish": created_dishes[8], "rating": 5, "comment": "Рыба приготовлена идеально!"},
     ]
     
     for review_data in reviews_data:
@@ -169,11 +180,11 @@ def seed_database(db: Session):
     
     # 5. Создаем заявки на закупку
     purchase_requests_data = [
-        {"chef": created_users["chef_ivan"], "item_name": "Куриные грудки", "quantity": "10 кг", "status": "approved"},
-        {"chef": created_users["chef_ivan"], "item_name": "Свежие овощи (морковь, лук, картофель)", "quantity": "15 кг", "status": "pending"},
-        {"chef": created_users["chef_ivan"], "item_name": "Молоко", "quantity": "20 л", "status": "rejected"},
-        {"chef": created_users["chef_ivan"], "item_name": "Рис для плова", "quantity": "25 кг", "status": "approved"},
-        {"chef": created_users["chef_ivan"], "item_name": "Сыр для пиццы", "quantity": "5 кг", "status": "pending"},
+        {"chef": created_users["Шеф Иван Иванович"], "item_name": "Куриные грудки", "quantity": "10 кг", "status": "approved"},
+        {"chef": created_users["Шеф Иван Иванович"], "item_name": "Свежие овощи (морковь, лук, картофель)", "quantity": "15 кг", "status": "pending"},
+        {"chef": created_users["Шеф Иван Иванович"], "item_name": "Молоко", "quantity": "20 л", "status": "rejected"},
+        {"chef": created_users["Шеф Иван Иванович"], "item_name": "Рис для плова", "quantity": "25 кг", "status": "approved"},
+        {"chef": created_users["Шеф Иван Иванович"], "item_name": "Сыр для пиццы", "quantity": "5 кг", "status": "pending"},
     ]
     
     for pr_data in purchase_requests_data:

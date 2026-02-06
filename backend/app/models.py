@@ -11,18 +11,19 @@ class UserRole(str, enum.Enum):
 
 class User(Base):
     __tablename__ = "users"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
-    username = Column(String, unique=True, index=True, nullable=False)
+    full_name = Column(String, nullable=False)  # ФИО пользователя
+    parallel = Column(String, nullable=False)   # Параллель (например, 10Г)
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(UserRole), default=UserRole.STUDENT, nullable=False) # Роли из ТЗ [cite: 10]
-    
-    # Поля для ученика 
+
+    # Поля для ученика
     balance = Column(Float, default=0.0)
     allergies = Column(Text, nullable=True) # Пищевые аллергии
     preferences = Column(Text, nullable=True) # Предпочтения
-    
+
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

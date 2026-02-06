@@ -59,7 +59,7 @@ const AdminDashboard = () => {
           <div>
             <h1 className="text-3xl font-bold">Панель администратора</h1>
             <p className="mt-2 opacity-90">
-              Добро пожаловать, {user?.username}!
+              Добро пожаловать, {user?.full_name}!
             </p>
           </div>
         </div>

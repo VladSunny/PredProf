@@ -52,7 +52,7 @@ const StudentDashboard = () => {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-[#6B46C1] text-primary-content rounded-box p-6">
-        <h1 className="text-3xl font-bold">Привет, {user?.username}! 👋</h1>
+        <h1 className="text-3xl font-bold">Привет, {user?.full_name}! 👋</h1>
         <p className="mt-2 opacity-90">
           Добро пожаловать в систему школьного питания
         </p>

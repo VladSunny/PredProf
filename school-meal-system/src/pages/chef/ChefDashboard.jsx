@@ -60,7 +60,7 @@ const ChefDashboard = () => {
           <ChefHat className="h-12 w-12" />
           <div>
             <h1 className="text-3xl font-bold">
-              Добрый день, {user?.username}! 👨‍🍳
+              Добрый день, {user?.full_name}! 👨‍🍳
             </h1>
             <p className="mt-2 opacity-90">Панель управления повара</p>
           </div>

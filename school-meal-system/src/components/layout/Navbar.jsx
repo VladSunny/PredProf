@@ -31,7 +31,7 @@ const Navbar = () => {
         {/* Desktop view - show username and avatar */}
         <div className="hidden sm:flex items-center gap-2">
           <div className="flex flex-col items-end">
-            <span className="font-semibold">{user?.username}</span>
+            <span className="font-semibold">{user?.full_name}</span>
             <span className="text-xs opacity-80">{getRoleLabel(user?.role)}</span>
           </div>
           <div className="dropdown dropdown-end">
@@ -49,7 +49,7 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 text-base-content rounded-box w-52"
             >
               <li className="menu-title sm:hidden">
-                <span>{user?.username}</span>
+                <span>{user?.full_name}</span>
               </li>
               <li className="sm:hidden">
                 <span className="text-xs opacity-60">
@@ -83,7 +83,7 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 text-base-content rounded-box w-52"
             >
               <li className="menu-title">
-                <span>{user?.username}</span>
+                <span>{user?.full_name}</span>
               </li>
               <li>
                 <span className="text-xs opacity-60">

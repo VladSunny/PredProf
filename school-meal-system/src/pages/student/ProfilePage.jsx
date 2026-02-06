@@ -68,12 +68,16 @@ const ProfilePage = () => {
             </h2>
             <div className="space-y-4 mt-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                <span className="text-base-content/60">Имя пользователя</span>
-                <span className="font-semibold text-right">{user?.username}</span>
+                <span className="text-base-content/60">ФИО</span>
+                <span className="font-semibold text-right">{user?.full_name}</span>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Email</span>
                 <span className="font-semibold text-right">{user?.email}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
+                <span className="text-base-content/60">Параллель</span>
+                <span className="font-semibold text-right">{user?.parallel}</span>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                 <span className="text-base-content/60">Роль</span>
