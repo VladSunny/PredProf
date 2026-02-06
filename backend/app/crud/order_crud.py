@@ -26,6 +26,7 @@ def create_order(db: Session, order: schemas.OrderCreate, student_id: int):
     db_order = models.Order(
         student_id=student_id,
         dish_id=order.dish_id,
+        order_date=order.order_date,
         payment_type=order.payment_type
     )
     db.add(db_order)
@@ -65,6 +66,7 @@ def mark_order_received(db: Session, order_id: int, user_id: int):
 def get_today_orders(db: Session):
     """Получить заказы на сегодня (для повара)"""
     today = datetime.now().date()
+    # Use COALESCE to fall back to created_at if order_date is null
     return db.query(models.Order).options(joinedload(models.Order.dish)).filter(
-        func.date(models.Order.created_at) == today
+        func.date(func.coalesce(models.Order.order_date, models.Order.created_at)) == today
     ).all()

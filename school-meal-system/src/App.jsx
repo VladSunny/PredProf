@@ -18,6 +18,7 @@ import ProfilePage from "./pages/student/ProfilePage";
 import ChefDashboard from "./pages/chef/ChefDashboard";
 import StockPage from "./pages/chef/StockPage";
 import PurchaseRequestsPage from "./pages/chef/PurchaseRequestsPage";
+import ChefOrdersPage from "./pages/chef/OrdersPage";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -121,6 +122,7 @@ const App = () => {
         <Route index element={<ChefDashboard />} />
         <Route path="stock" element={<StockPage />} />
         <Route path="requests" element={<PurchaseRequestsPage />} />
+        <Route path="orders" element={<ChefOrdersPage />} />
       </Route>
 
       {/* Admin Routes */}

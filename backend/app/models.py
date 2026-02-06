@@ -47,11 +47,12 @@ class Dish(Base):
 class Order(Base):
     """Учет выданных блюд и оплат """
     __tablename__ = "orders"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("users.id"))
     dish_id = Column(Integer, ForeignKey("dishes.id"))
-    
+
+    order_date = Column(DateTime(timezone=True), nullable=True)  # Дата, на которую заказывается блюдо
     payment_type = Column(String) # "one-time" или "subscription" [cite: 12]
     is_received = Column(Boolean, default=False) # Отметка о получении [cite: 13, 14]
     created_at = Column(DateTime(timezone=True), server_default=func.now())

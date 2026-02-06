@@ -25,8 +25,12 @@ const ChefDashboard = () => {
           chefApi.getDishesWithStock(),
           chefApi.getMyPurchaseRequests(),
         ]);
-        // Sort orders by created_at timestamp (newer first)
-        const sortedOrdersData = ordersData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        // Sort orders by order_date (if available) or created_at timestamp (newer first)
+        const sortedOrdersData = ordersData.sort((a, b) => {
+          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
+          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          return dateB - dateA;
+        });
         setTodayOrders(sortedOrdersData);
         setDishes(dishesData);
         setRequests(requestsData);
@@ -159,6 +163,7 @@ const ChefDashboard = () => {
                     <th>Блюдо</th>
                     <th>Тип оплаты</th>
                     <th>Статус</th>
+                    <th>Дата заказа</th>
                     <th>Время</th>
                   </tr>
                 </thead>
@@ -183,6 +188,11 @@ const ChefDashboard = () => {
                         >
                           {order.is_received ? "Выдано" : "Ожидает"}
                         </span>
+                      </td>
+                      <td>
+                        {order.order_date 
+                          ? new Date(order.order_date).toLocaleDateString("ru-RU")
+                          : new Date(order.created_at).toLocaleDateString("ru-RU")}
                       </td>
                       <td>
                         {new Date(order.created_at).toLocaleTimeString("ru-RU")}

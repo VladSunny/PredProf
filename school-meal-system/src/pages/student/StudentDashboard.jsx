@@ -24,8 +24,12 @@ const StudentDashboard = () => {
           studentApi.getMyOrders(),
           studentApi.getMenu(),
         ]);
-        // Sort orders by created_at timestamp (newer first)
-        const sortedOrdersData = ordersData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        // Sort orders by order_date (if available) or created_at timestamp (newer first)
+        const sortedOrdersData = ordersData.sort((a, b) => {
+          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
+          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          return dateB - dateA;
+        });
         setOrders(sortedOrdersData);
         setMenu(menuData);
       } catch (error) {

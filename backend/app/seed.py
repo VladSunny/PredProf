@@ -141,9 +141,10 @@ def seed_database(db: Session):
             db_order = models.Order(
                 student_id=student.id,
                 dish_id=dish.id,
+                order_date=datetime.now(),  # Use order_date for the scheduled date
                 payment_type=random.choice(payment_types),
                 is_received=random.choice([True, False]),
-                created_at=order_date
+                created_at=order_date  # Keep created_at for when the order was placed
             )
             
             # Списание средств

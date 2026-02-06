@@ -28,6 +28,7 @@ const Sidebar = () => {
       case "chef":
         return [
           { to: "/chef", icon: Home, label: "Главная", end: true },
+          { to: "/chef/orders", icon: ShoppingCart, label: "Все заказы" },
           { to: "/chef/stock", icon: Package, label: "Остатки" },
           {
             to: "/chef/requests",

@@ -146,7 +146,7 @@ const ProfilePage = () => {
                 Личная информация
               </h2>
               <div className="space-y-4 mt-4">
-                <div className="form-control">
+                <div className="form-control flex flex-col">
                   <label className="label">
                     <span className="label-text">ФИО</span>
                   </label>
@@ -160,7 +160,7 @@ const ProfilePage = () => {
                   />
                 </div>
 
-                <div className="form-control">
+                <div className="form-control flex flex-col">
                   <label className="label">
                     <span className="label-text">Параллель</span>
                   </label>
@@ -198,7 +198,7 @@ const ProfilePage = () => {
                 Изменение пароля
               </h2>
               <div className="space-y-4 mt-4">
-                <div className="form-control">
+                <div className="form-control flex flex-col">
                   <label className="label">
                     <span className="label-text">Старый пароль</span>
                   </label>
@@ -213,7 +213,7 @@ const ProfilePage = () => {
                   />
                 </div>
 
-                <div className="form-control">
+                <div className="form-control flex flex-col">
                   <label className="label">
                     <span className="label-text">Новый пароль</span>
                   </label>
@@ -228,7 +228,7 @@ const ProfilePage = () => {
                   />
                 </div>
 
-                <div className="form-control">
+                <div className="form-control flex flex-col">
                   <label className="label">
                     <span className="label-text">Подтвердите новый пароль</span>
                   </label>
@@ -310,7 +310,7 @@ const ProfilePage = () => {
                   <div className="stat-value text-sm sm:text-base">{user?.balance?.toFixed(2)} ₽</div>
                 </div>
 
-                <div className="form-control mt-4">
+                <div className="form-control mt-4 flex flex-col">
                   <label className="label">
                     <span className="label-text">Сумма пополнения</span>
                   </label>

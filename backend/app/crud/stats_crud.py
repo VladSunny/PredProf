@@ -10,6 +10,7 @@ def get_payment_statistics(db: Session, start_date: Optional[datetime] = None,
     """Статистика оплат"""
     query = db.query(models.Order)
 
+    # Using created_at for payment statistics (when orders were placed)
     if start_date:
         query = query.filter(models.Order.created_at >= start_date)
     if end_date:
@@ -31,10 +32,11 @@ def get_attendance_statistics(db: Session, start_date: Optional[datetime] = None
     """Статистика посещаемости"""
     query = db.query(models.Order)
 
+    # Using order_date for attendance statistics (when meals are scheduled), fallback to created_at if null
     if start_date:
-        query = query.filter(models.Order.created_at >= start_date)
+        query = query.filter(func.coalesce(models.Order.order_date, models.Order.created_at) >= start_date)
     if end_date:
-        query = query.filter(models.Order.created_at <= end_date)
+        query = query.filter(func.coalesce(models.Order.order_date, models.Order.created_at) <= end_date)
 
     unique_users = db.query(func.count(func.distinct(models.Order.student_id))).scalar()
     total_orders = query.count()

@@ -47,9 +47,13 @@ const ReportsPage = () => {
         dateRange.startDate || null,
         dateRange.endDate || null,
       );
-      // Sort orders by created_at timestamp (newer first)
+      // Sort orders by order_date (if available) or created_at timestamp (newer first)
       if (data.orders) {
-        data.orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        data.orders.sort((a, b) => {
+          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
+          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          return dateB - dateA;
+        });
       }
       setReport(data);
       toast.success("Отчет сформирован!");
@@ -161,7 +165,7 @@ const ReportsPage = () => {
             Формирование отчета
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Начальная дата</span>
@@ -247,6 +251,7 @@ const ReportsPage = () => {
               </div>
             </div>
 
+            <h2 className="card-title">Все заказы</h2>
             {/* Orders Table */}
             {report.orders && report.orders.length > 0 && (
               <div className="overflow-x-auto">
@@ -258,7 +263,8 @@ const ReportsPage = () => {
                       <th>Блюдо</th>
                       <th>Цена</th>
                       <th>Тип оплаты</th>
-                      <th>Дата</th>
+                      <th>Дата заказа</th>
+                      <th>Дата создания</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -280,6 +286,11 @@ const ReportsPage = () => {
                               ? "Абонемент"
                               : "Разовый"}
                           </span>
+                        </td>
+                        <td>
+                          {order.order_date 
+                            ? new Date(order.order_date).toLocaleDateString("ru-RU")
+                            : new Date(order.created_at).toLocaleDateString("ru-RU")}
                         </td>
                         <td>
                           {new Date(order.created_at).toLocaleString("ru-RU")}

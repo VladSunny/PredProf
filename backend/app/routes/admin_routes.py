@@ -119,6 +119,7 @@ def generate_payment_report(
                 "dish_name": order.dish.name,
                 "price": order.dish.price,
                 "payment_type": order.payment_type,
+                "order_date": order.order_date,
                 "created_at": order.created_at
             }
             for order in orders

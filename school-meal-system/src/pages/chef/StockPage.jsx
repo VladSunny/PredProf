@@ -30,7 +30,7 @@ const StockPage = () => {
       return { label: "Мало", color: "badge-warning", icon: "⚠️" };
     if (quantity < 20)
       return { label: "Нормально", color: "badge-info", icon: "✓" };
-    return { label: "Много", color: "badge-success", icon: "✅" };
+    return { label: "Много", color: "badge-success", icon: "" };
   };
 
   const filteredDishes = dishes.filter((dish) => {

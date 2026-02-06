@@ -48,11 +48,21 @@ export const studentApi = {
     return handleResponse(response);
   },
 
-  createOrder: async (dishId, paymentType) => {
+  createOrder: async (dishId, paymentType, orderDate) => {
+    const orderData = {
+      dish_id: dishId,
+      payment_type: paymentType
+    };
+    
+    // Add order_date if provided
+    if (orderDate) {
+      orderData.order_date = orderDate;
+    }
+    
     const response = await fetch(`${API_BASE_URL}/orders`, {
       method: "POST",
       headers: getAuthHeaders(),
-      body: JSON.stringify({ dish_id: dishId, payment_type: paymentType }),
+      body: JSON.stringify(orderData),
     });
     return handleResponse(response);
   },

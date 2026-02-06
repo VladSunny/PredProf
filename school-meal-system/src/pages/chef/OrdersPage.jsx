@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { studentApi } from "../../api/student";
+import { chefApi } from "../../api/chef";
 import toast from "react-hot-toast";
-import { CheckCircle, Clock, Package } from "lucide-react";
+import { CheckCircle, Clock, Package, Calendar } from "lucide-react";
 
-const OrdersPage = () => {
+const ChefOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -14,7 +14,7 @@ const OrdersPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const data = await studentApi.getMyOrders();
+      const data = await chefApi.getAllOrders();
       // Sort orders by order_date (if available) or created_at timestamp (newer first)
       const sortedData = data.sort((a, b) => {
         const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
@@ -26,16 +26,6 @@ const OrdersPage = () => {
       toast.error("Ошибка загрузки заказов");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleReceive = async (orderId) => {
-    try {
-      await studentApi.markOrderReceived(orderId);
-      toast.success("Заказ отмечен как полученный!");
-      fetchOrders();
-    } catch (error) {
-      toast.error(error.message);
     }
   };
 
@@ -61,8 +51,8 @@ const OrdersPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">Мои заказы</h1>
-        <p className="text-base-content/60">История ваших заказов</p>
+        <h1 className="text-2xl font-bold">Все заказы</h1>
+        <p className="text-base-content/60">Список всех заказов в системе</p>
       </div>
 
       {/* Stats */}
@@ -138,13 +128,19 @@ const OrdersPage = () => {
                     <div>
                       <h3 className="font-bold">Заказ #{order.id}</h3>
                       <p className="text-sm text-base-content/60">
-                        Блюдо: {order.dish?.name || `ID: ${order.dish_id}`}
+                        Ученик ID: {order.student_id}
                       </p>
                       <p className="text-sm text-base-content/60">
-                        {order.order_date 
-                          ? `Заказано на: ${new Date(order.order_date).toLocaleDateString("ru-RU")}` 
-                          : `Заказано на: ${new Date(order.created_at).toLocaleDateString("ru-RU")}`}
+                        Блюдо: {order.dish?.name || `ID: ${order.dish_id}`}
                       </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Calendar className="h-4 w-4" />
+                        <span className="text-sm">
+                          {order.order_date 
+                            ? `Заказано на: ${new Date(order.order_date).toLocaleDateString("ru-RU")}` 
+                            : `Заказано на: ${new Date(order.created_at).toLocaleDateString("ru-RU")}`}
+                        </span>
+                      </div>
                       <p className="text-sm text-base-content/60">
                         Создано: {new Date(order.created_at).toLocaleString("ru-RU")}
                       </p>
@@ -166,16 +162,6 @@ const OrdersPage = () => {
                         {order.is_received ? "Получено" : "Ожидает"}
                       </div>
                     </div>
-
-                    {!order.is_received && (
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => handleReceive(order.id)}
-                      >
-                        <CheckCircle className="h-4 w-4" />
-                        Получить
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
@@ -187,4 +173,4 @@ const OrdersPage = () => {
   );
 };
 
-export default OrdersPage;
+export default ChefOrdersPage;

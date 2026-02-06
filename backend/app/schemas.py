@@ -89,6 +89,7 @@ class Dish(DishBase):
 class OrderBase(BaseModel):
     dish_id: int
     payment_type: str = Field(..., pattern="^(one-time|subscription)$")
+    order_date: Optional[datetime] = None  # Дата, на которую заказывается блюдо
 
 class OrderCreate(OrderBase):
     pass
@@ -106,6 +107,7 @@ class Order(OrderBase):
     student_id: int
     is_received: bool
     created_at: datetime
+    order_date: Optional[datetime] = None  # Дата, на которую заказывается блюдо
     dish: Optional[DishInfo] = None
 
     class Config:

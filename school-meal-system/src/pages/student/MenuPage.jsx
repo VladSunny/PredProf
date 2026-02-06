@@ -14,6 +14,7 @@ const MenuPage = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [paymentType, setPaymentType] = useState("one-time");
+  const [orderDate, setOrderDate] = useState(""); // New state for order date
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
 
   useEffect(() => {
@@ -39,10 +40,11 @@ const MenuPage = () => {
     if (!selectedDish) return;
 
     try {
-      await studentApi.createOrder(selectedDish.id, paymentType);
+      await studentApi.createOrder(selectedDish.id, paymentType, orderDate);
       toast.success("Заказ успешно создан!");
       await refreshUser();
       setOrderModal(false);
+      setOrderDate(""); // Reset order date after successful order
       fetchDishes();
     } catch (error) {
       toast.error(error.message);
@@ -237,6 +239,22 @@ const MenuPage = () => {
                     <span>Абонемент</span>
                   </label>
                 </div>
+              </div>
+
+              <div className="form-control mt-4">
+                <label className="label">
+                  <span className="label-text">Дата заказа</span>
+                </label>
+                <input
+                  type="date"
+                  className="input input-bordered"
+                  value={orderDate}
+                  onChange={(e) => setOrderDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]} // Allow selecting today and future dates
+                />
+                <label className="label">
+                  <span className="label-text-alt text-base-content/60">Оставьте пустым, чтобы заказать на сегодня</span>
+                </label>
               </div>
 
               <div className="mt-4 p-3 bg-info/10 rounded-lg">
