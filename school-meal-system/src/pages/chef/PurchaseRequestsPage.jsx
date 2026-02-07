@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { chefApi } from "../../api/chef";
 import toast from "react-hot-toast";
+import StatCard from "../../components/common/StatCard";
+import Modal from "../../components/common/Modal";
+import FilterTabs from "../../components/common/FilterTabs";
 import {
   Plus,
   Clock,
@@ -106,63 +109,43 @@ const PurchaseRequestsPage = () => {
 
       {/* Stats */}
       <div className="stats shadow w-full">
-        <div className="stat">
-          <div className="stat-figure text-primary">
-            <ClipboardList className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Всего заявок</div>
-          <div className="stat-value text-primary">{requests.length}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-warning">
-            <Clock className="h-8 w-8" />
-          </div>
-          <div className="stat-title">На рассмотрении</div>
-          <div className="stat-value text-warning">{pendingCount}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Одобрено</div>
-          <div className="stat-value text-success">{approvedCount}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-error">
-            <XCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Отклонено</div>
-          <div className="stat-value text-error">{rejectedCount}</div>
-        </div>
+        <StatCard
+          title="Всего заявок"
+          value={requests.length}
+          figure={<ClipboardList className="h-8 w-8" />}
+          color="primary"
+        />
+        <StatCard
+          title="На рассмотрении"
+          value={pendingCount}
+          figure={<Clock className="h-8 w-8" />}
+          color="warning"
+        />
+        <StatCard
+          title="Одобрено"
+          value={approvedCount}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
+        <StatCard
+          title="Отклонено"
+          value={rejectedCount}
+          figure={<XCircle className="h-8 w-8" />}
+          color="error"
+        />
       </div>
 
       {/* Filters */}
-      <div className="tabs tabs-boxed bg-base-100 w-fit">
-        <button
-          className={`tab ${filter === "all" ? "tab-active" : ""}`}
-          onClick={() => setFilter("all")}
-        >
-          Все
-        </button>
-        <button
-          className={`tab ${filter === "pending" ? "tab-active" : ""}`}
-          onClick={() => setFilter("pending")}
-        >
-          На рассмотрении
-        </button>
-        <button
-          className={`tab ${filter === "approved" ? "tab-active" : ""}`}
-          onClick={() => setFilter("approved")}
-        >
-          Одобренные
-        </button>
-        <button
-          className={`tab ${filter === "rejected" ? "tab-active" : ""}`}
-          onClick={() => setFilter("rejected")}
-        >
-          Отклоненные
-        </button>
-      </div>
+      <FilterTabs
+        filters={[
+          { key: "all", label: "Все" },
+          { key: "pending", label: "На рассмотрении" },
+          { key: "approved", label: "Одобренные" },
+          { key: "rejected", label: "Отклоненные" },
+        ]}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+      />
 
       {/* Requests List */}
       {requests.length === 0 ? (
@@ -214,66 +197,57 @@ const PurchaseRequestsPage = () => {
 
       {/* New Request Modal */}
       {showModal && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <button
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-              onClick={() => setShowModal(false)}
-            >
-              <X className="h-4 w-4" />
-            </button>
-            <h3 className="font-bold text-lg">Новая заявка на закупку</h3>
-            <div className="py-4 space-y-6">
-              <div className="form-control">
-                <div className="mb-2">
-                  <span className="text-base font-medium">Название продукта</span>
-                </div>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  placeholder="Французская булка"
-                  value={newRequest.item_name}
-                  onChange={(e) =>
-                    setNewRequest({ ...newRequest, item_name: e.target.value })
-                  }
-                />
+        <Modal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          title="Новая заявка на закупку"
+        >
+          <div className="space-y-6">
+            <div className="form-control">
+              <div className="mb-2">
+                <span className="text-base font-medium">Название продукта</span>
               </div>
-              <div className="form-control">
-                <div className="mb-2">
-                  <span className="text-base font-medium">Количество</span>
-                </div>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  placeholder="3"
-                  value={newRequest.quantity}
-                  onChange={(e) =>
-                    setNewRequest({ ...newRequest, quantity: e.target.value })
-                  }
-                />
-              </div>
+              <input
+                type="text"
+                className="input input-bordered"
+                placeholder="Французская булка"
+                value={newRequest.item_name}
+                onChange={(e) =>
+                  setNewRequest({ ...newRequest, item_name: e.target.value })
+                }
+              />
             </div>
-            <div className="modal-action">
-              <button
-                className="btn btn-ghost"
-                onClick={() => setShowModal(false)}
-              >
-                Отмена
-              </button>
-              <button
-                className={`btn btn-primary ${submitting ? "loading" : ""}`}
-                onClick={handleSubmit}
-                disabled={submitting}
-              >
-                Создать заявку
-              </button>
+            <div className="form-control">
+              <div className="mb-2">
+                <span className="text-base font-medium">Количество</span>
+              </div>
+              <input
+                type="text"
+                className="input input-bordered"
+                placeholder="3"
+                value={newRequest.quantity}
+                onChange={(e) =>
+                  setNewRequest({ ...newRequest, quantity: e.target.value })
+                }
+              />
             </div>
           </div>
-          <div
-            className="modal-backdrop bg-black/50"
-            onClick={() => setShowModal(false)}
-          ></div>
-        </div>
+          <div className="modal-action">
+            <button
+              className="btn btn-ghost"
+              onClick={() => setShowModal(false)}
+            >
+              Отмена
+            </button>
+            <button
+              className={`btn btn-primary ${submitting ? "loading" : ""}`}
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              Создать заявку
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   );

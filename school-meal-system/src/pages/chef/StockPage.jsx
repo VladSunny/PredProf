@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { chefApi } from "../../api/chef";
 import toast from "react-hot-toast";
+import StatCard from "../../components/common/StatCard";
 import { Package, AlertTriangle, CheckCircle } from "lucide-react";
 
 const StockPage = () => {
@@ -66,34 +67,30 @@ const StockPage = () => {
 
       {/* Stats */}
       <div className="stats shadow w-full">
-        <div className="stat">
-          <div className="stat-figure text-primary">
-            <Package className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Всего блюд</div>
-          <div className="stat-value text-primary">{dishes.length}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">В наличии</div>
-          <div className="stat-value text-success">{normalStock}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-warning">
-            <AlertTriangle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Мало</div>
-          <div className="stat-value text-warning">{lowStock}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-error">
-            <Package className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Нет в наличии</div>
-          <div className="stat-value text-error">{outOfStock}</div>
-        </div>
+        <StatCard
+          title="Всего блюд"
+          value={dishes.length}
+          figure={<Package className="h-8 w-8" />}
+          color="primary"
+        />
+        <StatCard
+          title="В наличии"
+          value={normalStock}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
+        <StatCard
+          title="Мало"
+          value={lowStock}
+          figure={<AlertTriangle className="h-8 w-8" />}
+          color="warning"
+        />
+        <StatCard
+          title="Нет в наличии"
+          value={outOfStock}
+          figure={<Package className="h-8 w-8" />}
+          color="error"
+        />
       </div>
 
       {/* Filters */}

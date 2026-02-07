@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { adminApi } from "../../api/admin";
+import StatCard from "../../components/common/StatCard";
 import {
   BarChart3,
   Users,
@@ -67,43 +68,33 @@ const AdminDashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-primary">
-            <Wallet className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Общий доход</div>
-          <div className="stat-value text-primary text-base sm:text-2xl">
-            {paymentStats?.total_revenue?.toFixed(2) || 0} ₽
-          </div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-success">
-            <ShoppingCart className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Всего заказов</div>
-          <div className="stat-value text-success text-sm sm:text-base">
-            {paymentStats?.orders_count || 0}
-          </div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-info">
-            <Users className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Уникальных пользователей</div>
-          <div className="stat-value text-info text-sm sm:text-base">
-            {attendanceStats?.unique_users || 0}
-          </div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-warning">
-            <ClipboardList className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Заявок на рассмотрении</div>
-          <div className="stat-value text-warning text-sm sm:text-base">{pendingRequests}</div>
-        </div>
+        <StatCard
+          title="Общий доход"
+          value={`${paymentStats?.total_revenue?.toFixed(2) || 0} ₽`}
+          figure={<Wallet className="h-8 w-8" />}
+          color="primary"
+        />
+        
+        <StatCard
+          title="Всего заказов"
+          value={paymentStats?.orders_count || 0}
+          figure={<ShoppingCart className="h-8 w-8" />}
+          color="success"
+        />
+        
+        <StatCard
+          title="Уникальных пользователей"
+          value={attendanceStats?.unique_users || 0}
+          figure={<Users className="h-8 w-8" />}
+          color="info"
+        />
+        
+        <StatCard
+          title="Заявок на рассмотрении"
+          value={pendingRequests}
+          figure={<ClipboardList className="h-8 w-8" />}
+          color="warning"
+        />
       </div>
 
       {/* Additional Stats */}
@@ -115,20 +106,20 @@ const AdminDashboard = () => {
               Статистика оплат
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-xl sm:text-2xl font-bold text-primary">
-                  {paymentStats?.average_order_value?.toFixed(2) || 0} ₽
-                </div>
-                <div className="text-xs sm:text-sm text-base-content/60">Средний чек</div>
-              </div>
-              <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-xl sm:text-2xl font-bold text-success">
-                  {paymentStats?.orders_count || 0}
-                </div>
-                <div className="text-xs sm:text-sm text-base-content/60">
-                  Всего заказов
-                </div>
-              </div>
+              <StatCard
+                title="Средний чек"
+                value={`${paymentStats?.average_order_value?.toFixed(2) || 0} ₽`}
+                figure={<TrendingUp className="h-8 w-8" />}
+                color="primary"
+                className="text-center"
+              />
+              <StatCard
+                title="Всего заказов"
+                value={paymentStats?.orders_count || 0}
+                figure={<ShoppingCart className="h-8 w-8" />}
+                color="success"
+                className="text-center"
+              />
             </div>
           </div>
         </div>
@@ -140,22 +131,20 @@ const AdminDashboard = () => {
               Статистика посещаемости
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-xl sm:text-2xl font-bold text-info">
-                  {attendanceStats?.unique_users || 0}
-                </div>
-                <div className="text-xs sm:text-sm text-base-content/60">
-                  Уникальных учеников
-                </div>
-              </div>
-              <div className="p-4 bg-base-200 rounded-lg text-center">
-                <div className="text-xl sm:text-2xl font-bold text-secondary">
-                  {attendanceStats?.average_orders_per_user?.toFixed(1) || 0}
-                </div>
-                <div className="text-xs sm:text-sm text-base-content/60">
-                  Заказов на ученика
-                </div>
-              </div>
+              <StatCard
+                title="Уникальных учеников"
+                value={attendanceStats?.unique_users || 0}
+                figure={<Users className="h-8 w-8" />}
+                color="info"
+                className="text-center"
+              />
+              <StatCard
+                title="Заказов на ученика"
+                value={attendanceStats?.average_orders_per_user?.toFixed(1) || 0}
+                figure={<TrendingUp className="h-8 w-8" />}
+                color="secondary"
+                className="text-center"
+              />
             </div>
           </div>
         </div>

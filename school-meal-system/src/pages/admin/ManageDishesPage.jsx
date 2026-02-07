@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import { studentApi } from "../../api/student";
 import toast from "react-hot-toast";
+import StatCard from "../../components/common/StatCard";
 import { Plus, Edit2, Trash2, X, UtensilsCrossed } from "lucide-react";
 
 const ManageDishesPage = () => {
@@ -136,20 +137,24 @@ const ManageDishesPage = () => {
 
       {/* Stats */}
       <div className="stats shadow w-full">
-        <div className="stat">
-          <div className="stat-title">Всего блюд</div>
-          <div className="stat-value text-primary">{dishes.length}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-title">Завтраков</div>
-          <div className="stat-value text-warning">
-            {breakfastDishes.length}
-          </div>
-        </div>
-        <div className="stat">
-          <div className="stat-title">Обедов</div>
-          <div className="stat-value text-info">{lunchDishes.length}</div>
-        </div>
+        <StatCard
+          title="Всего блюд"
+          value={dishes.length}
+          figure={<UtensilsCrossed className="h-8 w-8" />}
+          color="primary"
+        />
+        <StatCard
+          title="Завтраков"
+          value={breakfastDishes.length}
+          figure={<UtensilsCrossed className="h-8 w-8" />}
+          color="warning"
+        />
+        <StatCard
+          title="Обедов"
+          value={lunchDishes.length}
+          figure={<UtensilsCrossed className="h-8 w-8" />}
+          color="info"
+        />
       </div>
 
       {/* Dishes Table */}

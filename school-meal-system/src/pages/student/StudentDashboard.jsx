@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { studentApi } from "../../api/student";
+import StatCard from "../../components/common/StatCard";
 import {
   UtensilsCrossed,
   ShoppingCart,
@@ -64,39 +65,33 @@ const StudentDashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-primary">
-            <Wallet className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Баланс</div>
-          <div className="stat-value text-primary text-sm sm:text-base">
-            {user?.balance?.toFixed(2)} ₽
-          </div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-warning">
-            <Clock className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Ожидают получения</div>
-          <div className="stat-value text-warning text-sm sm:text-base">{pendingOrders}</div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Получено</div>
-          <div className="stat-value text-success text-sm sm:text-base">{completedOrders}</div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-info">
-            <UtensilsCrossed className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Блюд в меню</div>
-          <div className="stat-value text-info text-sm sm:text-base">{menu.length}</div>
-        </div>
+        <StatCard
+          title="Баланс"
+          value={`${user?.balance?.toFixed(2)} ₽`}
+          figure={<Wallet className="h-8 w-8" />}
+          color="primary"
+        />
+        
+        <StatCard
+          title="Ожидают получения"
+          value={pendingOrders}
+          figure={<Clock className="h-8 w-8" />}
+          color="warning"
+        />
+        
+        <StatCard
+          title="Получено"
+          value={completedOrders}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
+        
+        <StatCard
+          title="Блюд в меню"
+          value={menu.length}
+          figure={<UtensilsCrossed className="h-8 w-8" />}
+          color="info"
+        />
       </div>
 
       {/* Quick Actions */}

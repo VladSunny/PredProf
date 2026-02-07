@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import toast from "react-hot-toast";
+import StatCard from "../../components/common/StatCard";
 import {
   FileText,
   Download,
@@ -113,49 +114,31 @@ const ReportsPage = () => {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="card bg-primary text-primary-content">
-          <div className="card-body">
-            <div className="flex items-center gap-4">
-              <Wallet className="h-12 w-12" />
-              <div>
-                <p className="text-sm opacity-80">Общий доход</p>
-                <p className="text-3xl font-bold">
-                  {paymentStats?.total_revenue?.toFixed(2) || 0} ₽
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="card bg-secondary text-secondary-content">
-          <div className="card-body">
-            <div className="flex items-center gap-4">
-              <TrendingUp className="h-12 w-12" />
-              <div>
-                <p className="text-sm opacity-80">Средний чек</p>
-                <p className="text-3xl font-bold">
-                  {paymentStats?.average_order_value?.toFixed(2) || 0} ₽
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="card bg-accent text-accent-content">
-          <div className="card-body">
-            <div className="flex items-center gap-4">
-              <Users className="h-12 w-12" />
-              <div>
-                <p className="text-sm opacity-80">Активных учеников</p>
-                <p className="text-3xl font-bold">
-                  {attendanceStats?.unique_users || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          title="Общий доход"
+          value={`${paymentStats?.total_revenue?.toFixed(2) || 0} ₽`}
+          figure={<Wallet className="h-12 w-12" />}
+          color="primary"
+          className="bg-primary text-primary-content"
+        />
+        
+        <StatCard
+          title="Средний чек"
+          value={`${paymentStats?.average_order_value?.toFixed(2) || 0} ₽`}
+          figure={<TrendingUp className="h-12 w-12" />}
+          color="secondary"
+          className="bg-secondary text-secondary-content"
+        />
+        
+        <StatCard
+          title="Активных учеников"
+          value={attendanceStats?.unique_users || 0}
+          figure={<Users className="h-12 w-12" />}
+          color="accent"
+          className="bg-accent text-accent-content"
+        />
+      </div> */}
 
       {/* Report Generator */}
       <div className="card bg-base-100 shadow">
@@ -232,21 +215,30 @@ const ReportsPage = () => {
             {/* Report Stats */}
             <div className="stats stats-vertical lg:stats-horizontal shadow my-4">
               <div className="stat">
+                <div className="stat-figure text-primary">
+                  <Wallet className="h-8 w-8" />
+                </div>
                 <div className="stat-title">Общий доход</div>
-                <div className="stat-value text-primary">
-                  {report.statistics?.total_revenue?.toFixed(2) || 0} ₽
+                <div className="stat-value text-primary text-sm sm:text-base">
+                  {`${report.statistics?.total_revenue?.toFixed(2) || 0} ₽`}
                 </div>
               </div>
               <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <TrendingUp className="h-8 w-8" />
+                </div>
                 <div className="stat-title">Количество заказов</div>
-                <div className="stat-value text-secondary">
+                <div className="stat-value text-secondary text-sm sm:text-base">
                   {report.statistics?.orders_count || 0}
                 </div>
               </div>
               <div className="stat">
+                <div className="stat-figure text-accent">
+                  <Users className="h-8 w-8" />
+                </div>
                 <div className="stat-title">Средний чек</div>
-                <div className="stat-value text-accent">
-                  {report.statistics?.average_order_value?.toFixed(2) || 0} ₽
+                <div className="stat-value text-accent text-sm sm:text-base">
+                  {`${report.statistics?.average_order_value?.toFixed(2) || 0} ₽`}
                 </div>
               </div>
             </div>

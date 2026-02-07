@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { studentApi } from "../../api/student";
 import toast from "react-hot-toast";
+import OrderCard from "../../components/common/OrderCard";
+import FilterTabs from "../../components/common/FilterTabs";
+import StatCard from "../../components/common/StatCard";
 import { CheckCircle, Clock, Package } from "lucide-react";
 
 const OrdersPage = () => {
@@ -67,50 +70,36 @@ const OrdersPage = () => {
 
       {/* Stats */}
       <div className="stats shadow w-full">
-        <div className="stat">
-          <div className="stat-figure text-primary">
-            <Package className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Всего заказов</div>
-          <div className="stat-value text-primary">{orders.length}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-warning">
-            <Clock className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Ожидают получения</div>
-          <div className="stat-value text-warning">{pendingCount}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Получено</div>
-          <div className="stat-value text-success">{receivedCount}</div>
-        </div>
+        <StatCard
+          title="Всего заказов"
+          value={orders.length}
+          figure={<Package className="h-8 w-8" />}
+          color="primary"
+        />
+        <StatCard
+          title="Ожидают получения"
+          value={pendingCount}
+          figure={<Clock className="h-8 w-8" />}
+          color="warning"
+        />
+        <StatCard
+          title="Получено"
+          value={receivedCount}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
       </div>
 
       {/* Filters */}
-      <div className="tabs tabs-boxed bg-base-100 w-fit">
-        <button
-          className={`tab ${filter === "all" ? "tab-active" : ""}`}
-          onClick={() => setFilter("all")}
-        >
-          Все ({orders.length})
-        </button>
-        <button
-          className={`tab ${filter === "pending" ? "tab-active" : ""}`}
-          onClick={() => setFilter("pending")}
-        >
-          Ожидают ({pendingCount})
-        </button>
-        <button
-          className={`tab ${filter === "received" ? "tab-active" : ""}`}
-          onClick={() => setFilter("received")}
-        >
-          Получены ({receivedCount})
-        </button>
-      </div>
+      <FilterTabs
+        filters={[
+          { key: "all", label: `Все (${orders.length})` },
+          { key: "pending", label: `Ожидают (${pendingCount})` },
+          { key: "received", label: `Получены (${receivedCount})` },
+        ]}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+      />
 
       {/* Orders List */}
       {filteredOrders.length === 0 ? (
@@ -121,65 +110,11 @@ const OrdersPage = () => {
       ) : (
         <div className="space-y-4">
           {filteredOrders.map((order) => (
-            <div
+            <OrderCard
               key={order.id}
-              className={`card bg-base-100 shadow ${
-                !order.is_received
-                  ? "border-l-4 border-warning"
-                  : "border-l-4 border-success"
-              }`}
-            >
-              <div className="card-body">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="text-4xl">
-                      {order.is_received ? "✅" : "⏳"}
-                    </div>
-                    <div>
-                      <h3 className="font-bold">Заказ #{order.id}</h3>
-                      <p className="text-sm text-base-content/60">
-                        Блюдо: {order.dish?.name || `ID: ${order.dish_id}`}
-                      </p>
-                      <p className="text-sm text-base-content/60">
-                        {order.order_date 
-                          ? `Заказано на: ${new Date(order.order_date).toLocaleDateString("ru-RU")}` 
-                          : `Заказано на: ${new Date(order.created_at).toLocaleDateString("ru-RU")}`}
-                      </p>
-                      <p className="text-sm text-base-content/60">
-                        Создано: {new Date(order.created_at).toLocaleString("ru-RU")}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <div
-                        className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
-                      >
-                        {order.payment_type === "subscription"
-                          ? "Абонемент"
-                          : "Разовый"}
-                      </div>
-                      <div
-                        className={`badge ml-2 ${order.is_received ? "badge-success" : "badge-warning"}`}
-                      >
-                        {order.is_received ? "Получено" : "Ожидает"}
-                      </div>
-                    </div>
-
-                    {!order.is_received && (
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => handleReceive(order.id)}
-                      >
-                        <CheckCircle className="h-4 w-4" />
-                        Получить
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+              order={order}
+              onReceiveClick={handleReceive}
+            />
           ))}
         </div>
       )}

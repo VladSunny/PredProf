@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import toast from "react-hot-toast";
+import StatCard from "../../components/common/StatCard";
+import FilterTabs from "../../components/common/FilterTabs";
 import { Clock, CheckCircle, XCircle, ClipboardList } from "lucide-react";
 
 const ManageRequestsPage = () => {
@@ -83,63 +85,43 @@ const ManageRequestsPage = () => {
 
       {/* Stats */}
       <div className="stats shadow w-full">
-        <div className="stat">
-          <div className="stat-figure text-primary">
-            <ClipboardList className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Всего заявок</div>
-          <div className="stat-value text-primary">{requests.length}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-warning">
-            <Clock className="h-8 w-8" />
-          </div>
-          <div className="stat-title">На рассмотрении</div>
-          <div className="stat-value text-warning">{pendingCount}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Одобрено</div>
-          <div className="stat-value text-success">{approvedCount}</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-error">
-            <XCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Отклонено</div>
-          <div className="stat-value text-error">{rejectedCount}</div>
-        </div>
+        <StatCard
+          title="Всего заявок"
+          value={requests.length}
+          figure={<ClipboardList className="h-8 w-8" />}
+          color="primary"
+        />
+        <StatCard
+          title="На рассмотрении"
+          value={pendingCount}
+          figure={<Clock className="h-8 w-8" />}
+          color="warning"
+        />
+        <StatCard
+          title="Одобрено"
+          value={approvedCount}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
+        <StatCard
+          title="Отклонено"
+          value={rejectedCount}
+          figure={<XCircle className="h-8 w-8" />}
+          color="error"
+        />
       </div>
 
       {/* Filters */}
-      <div className="tabs tabs-boxed bg-base-100 w-fit">
-        <button
-          className={`tab ${filter === "all" ? "tab-active" : ""}`}
-          onClick={() => setFilter("all")}
-        >
-          Все ({requests.length})
-        </button>
-        <button
-          className={`tab ${filter === "pending" ? "tab-active" : ""}`}
-          onClick={() => setFilter("pending")}
-        >
-          На рассмотрении ({pendingCount})
-        </button>
-        <button
-          className={`tab ${filter === "approved" ? "tab-active" : ""}`}
-          onClick={() => setFilter("approved")}
-        >
-          Одобренные ({approvedCount})
-        </button>
-        <button
-          className={`tab ${filter === "rejected" ? "tab-active" : ""}`}
-          onClick={() => setFilter("rejected")}
-        >
-          Отклоненные ({rejectedCount})
-        </button>
-      </div>
+      <FilterTabs
+        filters={[
+          { key: "all", label: `Все (${requests.length})` },
+          { key: "pending", label: `На рассмотрении (${pendingCount})` },
+          { key: "approved", label: `Одобренные (${approvedCount})` },
+          { key: "rejected", label: `Отклоненные (${rejectedCount})` },
+        ]}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+      />
 
       {/* Requests List */}
       {requests.length === 0 ? (

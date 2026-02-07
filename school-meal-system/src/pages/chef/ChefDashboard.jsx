@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { chefApi } from "../../api/chef";
+import StatCard from "../../components/common/StatCard";
 import {
   Package,
   ClipboardList,
@@ -73,37 +74,33 @@ const ChefDashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-primary">
-            <ClipboardList className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Заказов сегодня</div>
-          <div className="stat-value text-primary text-sm sm:text-base">{todayOrders.length}</div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-success">
-            <CheckCircle className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Выдано</div>
-          <div className="stat-value text-success text-sm sm:text-base">{receivedOrders}</div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-warning">
-            <Clock className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Ожидают выдачи</div>
-          <div className="stat-value text-warning text-sm sm:text-base">{pendingOrders}</div>
-        </div>
-
-        <div className="stat bg-base-100 rounded-box shadow">
-          <div className="stat-figure text-error">
-            <Package className="h-8 w-8" />
-          </div>
-          <div className="stat-title">Мало на складе</div>
-          <div className="stat-value text-error text-sm sm:text-base">{lowStockDishes}</div>
-        </div>
+        <StatCard
+          title="Заказов сегодня"
+          value={todayOrders.length}
+          figure={<ClipboardList className="h-8 w-8" />}
+          color="primary"
+        />
+        
+        <StatCard
+          title="Выдано"
+          value={receivedOrders}
+          figure={<CheckCircle className="h-8 w-8" />}
+          color="success"
+        />
+        
+        <StatCard
+          title="Ожидают выдачи"
+          value={pendingOrders}
+          figure={<Clock className="h-8 w-8" />}
+          color="warning"
+        />
+        
+        <StatCard
+          title="Мало на складе"
+          value={lowStockDishes}
+          figure={<Package className="h-8 w-8" />}
+          color="error"
+        />
       </div>
 
       {/* Quick Actions */}
