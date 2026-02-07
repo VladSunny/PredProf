@@ -213,7 +213,7 @@ const MenuPage = () => {
                 </div>
               </div>
 
-              <div className="form-control mt-4">
+              <div className="form-control mt-4 flex flex-col">
                 <label className="label">
                   <span className="label-text">Тип оплаты</span>
                 </label>
@@ -241,7 +241,7 @@ const MenuPage = () => {
                 </div>
               </div>
 
-              <div className="form-control mt-4">
+              <div className="form-control mt-4 flex flex-col">
                 <label className="label">
                   <span className="label-text">Дата заказа</span>
                 </label>
