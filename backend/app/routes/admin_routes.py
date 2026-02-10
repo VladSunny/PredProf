@@ -8,7 +8,6 @@ from ..database import get_db
 
 router = APIRouter()
 
-# ========== Эндпоинты для администраторов ==========
 
 @router.get("/admin/statistics/payments", response_model=schemas.PaymentStatistics)
 def get_payment_statistics(

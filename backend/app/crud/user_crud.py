@@ -35,7 +35,7 @@ def update_user_profile(db: Session, user_id: int, profile_update: schemas.UserP
     if not db_user:
         return None
 
-    update_data = profile_update.dict(exclude_unset=True)
+    update_data = profile_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_user, key, value)
 
@@ -79,7 +79,7 @@ def update_user_password(db: Session, user_id: int, old_password: str, new_passw
 
     # Проверяем старый пароль
     if not auth.verify_password(old_password, db_user.hashed_password):
-        return False  # False indicates incorrect old password
+        return False 
 
     # Обновляем пароль
     db_user.hashed_password = auth.get_password_hash(new_password)

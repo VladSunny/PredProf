@@ -66,7 +66,7 @@ def mark_order_received(db: Session, order_id: int, user_id: int):
 def get_today_orders(db: Session):
     """Получить заказы на сегодня (для повара)"""
     today = datetime.now().date()
-    # Use COALESCE to fall back to created_at if order_date is null
+    
     return db.query(models.Order).options(joinedload(models.Order.dish)).filter(
         func.date(func.coalesce(models.Order.order_date, models.Order.created_at)) == today
     ).all()

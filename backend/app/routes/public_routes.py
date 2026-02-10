@@ -32,7 +32,7 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
             detail="Email уже зарегистрирован"
         )
 
-    # Вместо проверки username, теперь проверяем только по ФИО
+    # Проверяем ФИО
     db_user = crud.get_user_by_full_name(db, full_name=user.full_name)
     if db_user:
         raise HTTPException(

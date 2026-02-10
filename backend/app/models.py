@@ -30,7 +30,7 @@ class User(Base):
     reviews = relationship("Review", back_populates="student")
 
 class Dish(Base):
-    """Меню завтраков и обедов [cite: 12]"""
+    """Меню завтраков и обедов"""
     __tablename__ = "dishes"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -45,23 +45,23 @@ class Dish(Base):
     reviews = relationship("Review", back_populates="dish")
 
 class Order(Base):
-    """Учет выданных блюд и оплат """
+    """Учет выданных блюд и оплат"""
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("users.id"))
     dish_id = Column(Integer, ForeignKey("dishes.id"))
 
-    order_date = Column(DateTime(timezone=True), nullable=True)  # Дата, на которую заказывается блюдо
-    payment_type = Column(String) # "one-time" или "subscription" [cite: 12]
-    is_received = Column(Boolean, default=False) # Отметка о получении [cite: 13, 14]
+    order_date = Column(DateTime(timezone=True), nullable=True)
+    payment_type = Column(String)
+    is_received = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     student = relationship("User", back_populates="orders")
     dish = relationship("Dish", back_populates="orders")
 
 class PurchaseRequest(Base):
-    """Заявки на закупку продуктов от повара [cite: 15]"""
+    """Заявки на закупку продуктов от повара"""
     __tablename__ = "purchase_requests"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -72,7 +72,7 @@ class PurchaseRequest(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Review(Base):
-    """Отзывы о блюдах """
+    """Отзывы о блюдах"""
     __tablename__ = "reviews"
     
     id = Column(Integer, primary_key=True, index=True)

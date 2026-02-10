@@ -7,7 +7,6 @@ from ..database import get_db
 
 router = APIRouter()
 
-# ========== Эндпоинты для поваров ==========
 
 @router.get("/chef/orders", response_model=list[schemas.Order])
 def get_all_orders(

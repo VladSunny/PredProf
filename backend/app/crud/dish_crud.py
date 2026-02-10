@@ -17,7 +17,7 @@ def get_dish_by_id(db: Session, dish_id: int):
 
 def create_dish(db: Session, dish: schemas.DishCreate):
     """Создать новое блюдо (для админа/повара)"""
-    db_dish = models.Dish(**dish.dict())
+    db_dish = models.Dish(**dish.model_dump())
     db.add(db_dish)
     db.commit()
     db.refresh(db_dish)

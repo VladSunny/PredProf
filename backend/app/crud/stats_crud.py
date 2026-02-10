@@ -10,7 +10,6 @@ def get_payment_statistics(db: Session, start_date: Optional[datetime] = None,
     """Статистика оплат"""
     query = db.query(models.Order)
 
-    # Using created_at for payment statistics (when orders were placed)
     if start_date:
         query = query.filter(models.Order.created_at >= start_date)
     if end_date:

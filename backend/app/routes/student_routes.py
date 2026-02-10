@@ -8,7 +8,6 @@ from ..database import get_db
 
 router = APIRouter()
 
-# ========== Эндпоинты для учеников ==========
 
 @router.get("/me", response_model=schemas.User)
 def get_current_user_profile(current_user: schemas.User = Depends(dependencies.get_current_user)):
