@@ -4,12 +4,14 @@ import toast from "react-hot-toast";
 import OrderCard from "../../components/common/OrderCard";
 import FilterTabs from "../../components/common/FilterTabs";
 import StatCard from "../../components/common/StatCard";
-import { CheckCircle, Clock, Package, Calendar } from "lucide-react";
+import OrderCalendar from "../../components/common/OrderCalendar";
+import { CheckCircle, Clock, Package, Calendar, List } from "lucide-react";
 
 const ChefOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [viewMode, setViewMode] = useState("list"); // 'list' or 'calendar'
 
   useEffect(() => {
     fetchOrders();
@@ -53,9 +55,29 @@ const ChefOrdersPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Все заказы</h1>
-        <p className="text-base-content/60">Список всех заказов в системе</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Все заказы</h1>
+          <p className="text-base-content/60">Список всех заказов в системе</p>
+        </div>
+        
+        {/* View Mode Toggle */}
+        <div className="join">
+          <button
+            className={`join-item btn btn-sm ${viewMode === 'list' ? 'btn-active' : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            <List className="h-4 w-4 mr-1" />
+            Список
+          </button>
+          <button
+            className={`join-item btn btn-sm ${viewMode === 'calendar' ? 'btn-active' : ''}`}
+            onClick={() => setViewMode('calendar')}
+          >
+            <Calendar className="h-4 w-4 mr-1" />
+            Календарь
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -91,22 +113,29 @@ const ChefOrdersPage = () => {
         onFilterChange={setFilter}
       />
 
-      {/* Orders List */}
-      {filteredOrders.length === 0 ? (
-        <div className="text-center py-12 bg-base-100 rounded-box">
-          <Package className="h-16 w-16 mx-auto text-base-content/30 mb-4" />
-          <p className="text-base-content/60">Заказов нет</p>
-        </div>
+      {/* Orders Display based on view mode */}
+      {viewMode === 'list' ? (
+        <>
+          {/* Orders List */}
+          {filteredOrders.length === 0 ? (
+            <div className="text-center py-12 bg-base-100 rounded-box">
+              <Package className="h-16 w-16 mx-auto text-base-content/30 mb-4" />
+              <p className="text-base-content/60">Заказов нет</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredOrders.map((order) => (
+                <OrderCard
+                  key={order.id}
+                  order={order}
+                  showStudentId={true}
+                />
+              ))}
+            </div>
+          )}
+        </>
       ) : (
-        <div className="space-y-4">
-          {filteredOrders.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              showStudentId={true}
-            />
-          ))}
-        </div>
+        <OrderCalendar orders={filteredOrders} userType="chef" />
       )}
     </div>
   );
