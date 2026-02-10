@@ -28,7 +28,8 @@ const PurchaseRequestsPage = () => {
       const data = await chefApi.getMyPurchaseRequests(null);
       // Sort requests by created_at timestamp (newer first)
       const sortedData = data.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       );
       setAllRequests(sortedData);
       setRequests(sortedData); // Initially show all requests
@@ -67,7 +68,7 @@ const PurchaseRequestsPage = () => {
       toast.success("Заявка создана!");
       setShowModal(false);
       setNewRequest({ item_name: "", quantity: "" });
-      fetchRequests();
+      fetchAllRequests();
     } catch (error) {
       toast.error(error.message);
     } finally {

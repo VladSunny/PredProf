@@ -51,7 +51,7 @@ const ManageRequestsPage = () => {
       toast.success(
         status === "approved" ? "Заявка одобрена!" : "Заявка отклонена!",
       );
-      fetchRequests();
+      fetchAllRequests();
     } catch (error) {
       toast.error(error.message);
     } finally {
