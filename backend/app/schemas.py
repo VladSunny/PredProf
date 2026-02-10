@@ -94,7 +94,7 @@ class OrderBase(BaseModel):
     order_date: Optional[datetime] = None
 
 class OrderCreate(OrderBase):
-    pass
+    subscription_weeks: Optional[int] = Field(None, ge=1, le=3)  # For subscriptions, max 3 weeks
 
 class DishInfo(BaseModel):
     id: int

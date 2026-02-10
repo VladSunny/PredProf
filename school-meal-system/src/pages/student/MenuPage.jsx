@@ -18,6 +18,7 @@ const MenuPage = () => {
   const [reviews, setReviews] = useState([]);
   const [paymentType, setPaymentType] = useState("one-time");
   const [orderDate, setOrderDate] = useState(""); // New state for order date
+  const [subscriptionWeeks, setSubscriptionWeeks] = useState(1); // Number of weeks for subscription
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
 
   useEffect(() => {
@@ -43,11 +44,24 @@ const MenuPage = () => {
     if (!selectedDish) return;
 
     try {
-      await studentApi.createOrder(selectedDish.id, paymentType, orderDate);
+      // Prepare order data based on payment type
+      let orderData = {
+        dishId: selectedDish.id,
+        paymentType: paymentType,
+        orderDate: orderDate || null
+      };
+
+      // If it's a subscription, include the number of weeks
+      if (paymentType === "subscription") {
+        orderData.subscriptionWeeks = subscriptionWeeks;
+      }
+
+      await studentApi.createOrder(orderData);
       toast.success("Заказ успешно создан!");
       await refreshUser();
       setOrderModal(false);
       setOrderDate(""); // Reset order date after successful order
+      setSubscriptionWeeks(1); // Reset subscription weeks
       fetchDishes();
     } catch (error) {
       toast.error(error.message);
@@ -207,6 +221,30 @@ const MenuPage = () => {
                 </label>
               </div>
             </div>
+
+            {paymentType === "subscription" && (
+              <div className="form-control mt-4 flex flex-col">
+                <label className="label">
+                  <span className="label-text">Количество недель</span>
+                </label>
+                <select
+                  className="select select-bordered"
+                  value={subscriptionWeeks}
+                  onChange={(e) => setSubscriptionWeeks(parseInt(e.target.value))}
+                >
+                  {[1, 2, 3].map((week) => (
+                    <option key={week} value={week}>
+                      {week} неделя{week > 1 ? "и" : ""}
+                    </option>
+                  ))}
+                </select>
+                <label className="label">
+                  <span className="label-text-alt text-base-content/60">
+                    Выберите количество недель (до 3)
+                  </span>
+                </label>
+              </div>
+            )}
 
             <div className="form-control mt-4 flex flex-col">
               <label className="label">

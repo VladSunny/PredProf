@@ -16,28 +16,83 @@ def create_order(db: Session, order: schemas.OrderCreate, student_id: int):
 
     # Проверяем баланс студента
     student = db.query(models.User).filter(models.User.id == student_id).first()
-    if not student or student.balance < dish.price:
+    if not student:
         return None
 
-    # Списание средств
-    student.balance -= dish.price
+    # Calculate total cost based on payment type and subscription weeks
+    if order.payment_type == "subscription":
+        # For subscription, we need to calculate the total cost for all weeks
+        num_orders = order.subscription_weeks if order.subscription_weeks else 1
+        
+        # Check if the student has enough balance for all orders
+        total_cost = dish.price * num_orders
+        if student.balance < total_cost:
+            return None
+        
+        # Deduct the total cost from the student's balance
+        student.balance -= total_cost
+        
+        # Create multiple orders for each week
+        from datetime import timedelta
+        import calendar
+        
+        # Determine the day of the week for the order
+        order_day = order.order_date.weekday() if order.order_date else datetime.now().weekday()
+        
+        created_orders = []
+        for week in range(num_orders):
+            # Calculate the date for this week's order
+            if order.order_date:
+                order_date = order.order_date + timedelta(weeks=week)
+            else:
+                # If no specific date provided, use the corresponding day of the week for each week
+                days_ahead = order_day - datetime.now().weekday()
+                if days_ahead <= 0:  # Target day already happened this week
+                    days_ahead += 7
+                base_date = datetime.now() + timedelta(days_ahead)
+                order_date = base_date + timedelta(weeks=week)
+            
+            # Create the order
+            db_order = models.Order(
+                student_id=student_id,
+                dish_id=order.dish_id,
+                order_date=order_date,
+                payment_type=order.payment_type
+            )
+            db.add(db_order)
+            created_orders.append(db_order)
+            
+            # Decrease stock quantity for each order
+            dish.stock_quantity -= 1
+        
+        db.commit()
+        
+        # Return the first order (the API expects a single order object)
+        return created_orders[0]
+    
+    else:  # one-time payment
+        if student.balance < dish.price:
+            return None
 
-    # Создание заказа
-    db_order = models.Order(
-        student_id=student_id,
-        dish_id=order.dish_id,
-        order_date=order.order_date,
-        payment_type=order.payment_type
-    )
-    db.add(db_order)
-    db.commit()
-    db.refresh(db_order)
+        # Списание средств
+        student.balance -= dish.price
 
-    # Уменьшаем остаток блюда
-    dish.stock_quantity -= 1
-    db.commit()
+        # Создание заказа
+        db_order = models.Order(
+            student_id=student_id,
+            dish_id=order.dish_id,
+            order_date=order.order_date,
+            payment_type=order.payment_type
+        )
+        db.add(db_order)
+        db.commit()
+        db.refresh(db_order)
 
-    return db_order
+        # Уменьшаем остаток блюда
+        dish.stock_quantity -= 1
+        db.commit()
+
+        return db_order
 
 
 def get_user_orders(db: Session, user_id: int, skip: int = 0, limit: int = 100):
