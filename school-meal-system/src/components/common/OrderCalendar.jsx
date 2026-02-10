@@ -9,14 +9,17 @@ const OrderCalendar = ({ orders, userType = 'student' }) => {
   
   // Filter orders for the selected date
   const getOrdersForDate = (date) => {
-    const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    // Create a date object that represents the start and end of the selected date in local timezone
+    const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     
     return orders.filter(order => {
       // Compare with order_date if available, otherwise use created_at
       const orderDate = order.order_date || order.created_at;
-      const orderDateString = new Date(orderDate).toISOString().split('T')[0];
+      const orderDateTime = new Date(orderDate);
       
-      return orderDateString === dateString;
+      // Check if the order date falls within the selected date range
+      return orderDateTime >= startDate && orderDateTime < endDate;
     });
   };
   
