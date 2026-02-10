@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import { Clock, CheckCircle, Package } from 'lucide-react';
 import OrderCard from './OrderCard';
 
-const OrderCalendar = ({ orders, userType = 'student' }) => {
+const OrderCalendar = ({ orders, userType = 'student', onReceiveClick = null }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   
   // Filter orders for the selected date
@@ -88,6 +88,7 @@ const OrderCalendar = ({ orders, userType = 'student' }) => {
               <OrderCard
                 key={order.id}
                 order={order}
+                onReceiveClick={onReceiveClick}
                 showStudentId={userType === 'chef'}
                 className="hover:shadow-md transition-shadow"
               />

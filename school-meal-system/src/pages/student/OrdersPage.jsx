@@ -145,7 +145,7 @@ const OrdersPage = () => {
           )}
         </>
       ) : (
-        <OrderCalendar orders={filteredOrders} userType="student" />
+        <OrderCalendar orders={filteredOrders} userType="student" onReceiveClick={handleReceive} />
       )}
     </div>
   );
