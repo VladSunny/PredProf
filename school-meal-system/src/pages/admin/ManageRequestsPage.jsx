@@ -22,7 +22,10 @@ const ManageRequestsPage = () => {
       // Fetch all requests regardless of status
       const data = await adminApi.getAllPurchaseRequests(null);
       // Sort requests by created_at timestamp (newer first)
-      const sortedData = data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      const sortedData = data.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      );
       setAllRequests(sortedData);
       setRequests(sortedData); // Initially show all requests
     } catch (error) {
@@ -37,7 +40,7 @@ const ManageRequestsPage = () => {
     if (filter === "all") {
       setRequests(allRequests);
     } else {
-      setRequests(allRequests.filter(r => r.status === filter));
+      setRequests(allRequests.filter((r) => r.status === filter));
     }
   }, [filter, allRequests]);
 
@@ -74,8 +77,12 @@ const ManageRequestsPage = () => {
   };
 
   const pendingCount = allRequests.filter((r) => r.status === "pending").length;
-  const approvedCount = allRequests.filter((r) => r.status === "approved").length;
-  const rejectedCount = allRequests.filter((r) => r.status === "rejected").length;
+  const approvedCount = allRequests.filter(
+    (r) => r.status === "approved",
+  ).length;
+  const rejectedCount = allRequests.filter(
+    (r) => r.status === "rejected",
+  ).length;
 
   if (loading) {
     return (

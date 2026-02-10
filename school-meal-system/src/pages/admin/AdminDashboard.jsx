@@ -74,21 +74,21 @@ const AdminDashboard = () => {
           figure={<Wallet className="h-8 w-8" />}
           color="primary"
         />
-        
+
         <StatCard
           title="Всего заказов"
           value={paymentStats?.orders_count || 0}
           figure={<ShoppingCart className="h-8 w-8" />}
           color="success"
         />
-        
+
         <StatCard
           title="Уникальных пользователей"
           value={attendanceStats?.unique_users || 0}
           figure={<Users className="h-8 w-8" />}
           color="info"
         />
-        
+
         <StatCard
           title="Заявок на рассмотрении"
           value={pendingRequests}
@@ -140,7 +140,9 @@ const AdminDashboard = () => {
               />
               <StatCard
                 title="Заказов на ученика"
-                value={attendanceStats?.average_orders_per_user?.toFixed(1) || 0}
+                value={
+                  attendanceStats?.average_orders_per_user?.toFixed(1) || 0
+                }
                 figure={<TrendingUp className="h-8 w-8" />}
                 color="secondary"
                 className="text-center"
@@ -171,7 +173,9 @@ const AdminDashboard = () => {
         >
           <div className="card-body items-center text-center">
             <ClipboardList className="h-12 w-12 text-secondary" />
-            <h3 className="card-title text-sm sm:text-base">Заявки на закупку</h3>
+            <h3 className="card-title text-sm sm:text-base">
+              Заявки на закупку
+            </h3>
             <p className="text-base-content/60 text-xs sm:text-sm">
               {pendingRequests > 0
                 ? `${pendingRequests} ожидают рассмотрения`

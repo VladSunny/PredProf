@@ -29,7 +29,7 @@ const ReportsPage = () => {
       await fetchStats();
       setLoading(false); // Set main loading to false after initial data is loaded
     };
-    
+
     loadInitialData();
   }, []);
 
@@ -39,8 +39,8 @@ const ReportsPage = () => {
         adminApi.getPaymentStatistics(),
         adminApi.getAttendanceStatistics(),
       ]);
-      console.log("Payment stats:", payment);  // Debug log
-      console.log("Attendance stats:", attendance);  // Debug log
+      console.log("Payment stats:", payment); // Debug log
+      console.log("Attendance stats:", attendance); // Debug log
       setPaymentStats(payment);
       setAttendanceStats(attendance);
       setStatsError(null); // Clear any previous error
@@ -63,8 +63,12 @@ const ReportsPage = () => {
       if (data.orders) {
         data.orders.sort((a, b) => {
           // Create date objects that represent the dates in local timezone to avoid timezone issues
-          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
-          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          const dateA = a.order_date
+            ? new Date(a.order_date)
+            : new Date(a.created_at);
+          const dateB = b.order_date
+            ? new Date(b.order_date)
+            : new Date(b.created_at);
           return dateB.getTime() - dateA.getTime();
         });
       }
@@ -80,7 +84,15 @@ const ReportsPage = () => {
   const exportToCSV = () => {
     if (!report || !report.orders) return;
 
-    const headers = ["ID", "Ученик ID", "Блюдо", "Цена", "Тип оплаты", "Дата заказа", "Дата создания"];
+    const headers = [
+      "ID",
+      "Ученик ID",
+      "Блюдо",
+      "Цена",
+      "Тип оплаты",
+      "Дата заказа",
+      "Дата создания",
+    ];
     const rows = report.orders.map((order) => [
       order.id,
       order.student_id,
@@ -311,9 +323,13 @@ const ReportsPage = () => {
                           </span>
                         </td>
                         <td>
-                          {order.order_date 
-                            ? new Date(order.order_date).toLocaleDateString("ru-RU")
-                            : new Date(order.created_at).toLocaleDateString("ru-RU")}
+                          {order.order_date
+                            ? new Date(order.order_date).toLocaleDateString(
+                                "ru-RU",
+                              )
+                            : new Date(order.created_at).toLocaleDateString(
+                                "ru-RU",
+                              )}
                         </td>
                         <td>
                           {new Date(order.created_at).toLocaleString("ru-RU")}

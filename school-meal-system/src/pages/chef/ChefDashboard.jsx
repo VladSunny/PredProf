@@ -28,8 +28,12 @@ const ChefDashboard = () => {
         ]);
         // Sort orders by order_date (if available) or created_at timestamp (newer first)
         const sortedOrdersData = ordersData.sort((a, b) => {
-          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
-          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          const dateA = a.order_date
+            ? new Date(a.order_date)
+            : new Date(a.created_at);
+          const dateB = b.order_date
+            ? new Date(b.order_date)
+            : new Date(b.created_at);
           return dateB - dateA;
         });
         setTodayOrders(sortedOrdersData);
@@ -80,21 +84,21 @@ const ChefDashboard = () => {
           figure={<ClipboardList className="h-8 w-8" />}
           color="primary"
         />
-        
+
         <StatCard
           title="Выдано"
           value={receivedOrders}
           figure={<CheckCircle className="h-8 w-8" />}
           color="success"
         />
-        
+
         <StatCard
           title="Ожидают выдачи"
           value={pendingOrders}
           figure={<Clock className="h-8 w-8" />}
           color="warning"
         />
-        
+
         <StatCard
           title="Мало на складе"
           value={lowStockDishes}
@@ -113,7 +117,9 @@ const ChefDashboard = () => {
             <div className="flex items-center gap-4">
               <Package className="h-12 w-12 text-primary" />
               <div>
-                <h3 className="card-title text-sm sm:text-base">Остатки блюд</h3>
+                <h3 className="card-title text-sm sm:text-base">
+                  Остатки блюд
+                </h3>
                 <p className="text-base-content/60 text-xs sm:text-sm">
                   Контроль остатков продуктов
                 </p>
@@ -130,7 +136,9 @@ const ChefDashboard = () => {
             <div className="flex items-center gap-4">
               <ClipboardList className="h-12 w-12 text-secondary" />
               <div>
-                <h3 className="card-title text-sm sm:text-base">Заявки на закупку</h3>
+                <h3 className="card-title text-sm sm:text-base">
+                  Заявки на закупку
+                </h3>
                 <p className="text-base-content/60 text-xs sm:text-sm">
                   {pendingRequests > 0
                     ? `${pendingRequests} в ожидании`
@@ -187,9 +195,13 @@ const ChefDashboard = () => {
                         </span>
                       </td>
                       <td>
-                        {order.order_date 
-                          ? new Date(order.order_date).toLocaleDateString("ru-RU")
-                          : new Date(order.created_at).toLocaleDateString("ru-RU")}
+                        {order.order_date
+                          ? new Date(order.order_date).toLocaleDateString(
+                              "ru-RU",
+                            )
+                          : new Date(order.created_at).toLocaleDateString(
+                              "ru-RU",
+                            )}
                       </td>
                       <td>
                         {new Date(order.created_at).toLocaleTimeString("ru-RU")}

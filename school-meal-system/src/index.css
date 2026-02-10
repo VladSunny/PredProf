@@ -2,18 +2,18 @@
 @plugin "daisyui";
 
 @theme {
-  --color-purple-800: #6B46C1;
-  --color-lavender-blue-100: #E6E6FA;
-  --color-lavender-blue-200: #D1D1F0;
-  --color-lavender-blue-300: #B8B8E6;
-  --color-lavender-blue-400: #9F9FDA;
-  --color-lavender-blue-500: #8B8CF0;
-  --color-lavender-blue-600: #777AC6;
-  --color-lavender-blue-700: #6368AC;
-  --color-lavender-blue-800: #4F5692;
+  --color-purple-800: #6b46c1;
+  --color-lavender-blue-100: #e6e6fa;
+  --color-lavender-blue-200: #d1d1f0;
+  --color-lavender-blue-300: #b8b8e6;
+  --color-lavender-blue-400: #9f9fda;
+  --color-lavender-blue-500: #8b8cf0;
+  --color-lavender-blue-600: #777ac6;
+  --color-lavender-blue-700: #6368ac;
+  --color-lavender-blue-800: #4f5692;
 
-  --color-primary: #6B46C1;
-  --color-secondary: #8B8CF0;
+  --color-primary: #6b46c1;
+  --color-secondary: #8b8cf0;
 }
 
 /* Custom calendar styles */
@@ -22,7 +22,9 @@
   max-width: 100%;
   border: none;
   border-radius: var(--rounded-box, 0.5rem);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 

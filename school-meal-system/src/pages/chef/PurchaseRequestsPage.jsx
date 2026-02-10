@@ -27,7 +27,9 @@ const PurchaseRequestsPage = () => {
       // Fetch all requests regardless of status
       const data = await chefApi.getMyPurchaseRequests(null);
       // Sort requests by created_at timestamp (newer first)
-      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const sortedData = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
       setAllRequests(sortedData);
       setRequests(sortedData); // Initially show all requests
     } catch (error) {
@@ -46,7 +48,7 @@ const PurchaseRequestsPage = () => {
     if (filter === "all") {
       setRequests(allRequests);
     } else {
-      setRequests(allRequests.filter(r => r.status === filter));
+      setRequests(allRequests.filter((r) => r.status === filter));
     }
   }, [filter, allRequests]);
 
@@ -91,8 +93,12 @@ const PurchaseRequestsPage = () => {
   };
 
   const pendingCount = allRequests.filter((r) => r.status === "pending").length;
-  const approvedCount = allRequests.filter((r) => r.status === "approved").length;
-  const rejectedCount = allRequests.filter((r) => r.status === "rejected").length;
+  const approvedCount = allRequests.filter(
+    (r) => r.status === "approved",
+  ).length;
+  const rejectedCount = allRequests.filter(
+    (r) => r.status === "rejected",
+  ).length;
 
   if (loading) {
     return (

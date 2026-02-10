@@ -59,7 +59,9 @@ const MenuPage = () => {
     try {
       const data = await studentApi.getDishReviews(dish.id);
       // Sort reviews by created_at timestamp (newer first)
-      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const sortedData = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
       setReviews(sortedData);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -79,7 +81,9 @@ const MenuPage = () => {
       toast.success("Отзыв добавлен!");
       const data = await studentApi.getDishReviews(selectedDish.id);
       // Sort reviews by created_at timestamp (newer first)
-      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const sortedData = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
       setReviews(sortedData);
       setReviewData({ rating: 5, comment: "" });
     } catch (error) {
@@ -156,6 +160,23 @@ const MenuPage = () => {
                 <div className="text-2xl font-bold text-primary">
                   {selectedDish.price} ₽
                 </div>
+                {selectedDish.allergens && (
+                  <div className="text-sm text-error mt-1 flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Аллергены: {selectedDish.allergens}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -196,10 +217,12 @@ const MenuPage = () => {
                 className="input input-bordered"
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]} // Allow selecting today and future dates
+                min={new Date().toISOString().split("T")[0]} // Allow selecting today and future dates
               />
               <label className="label">
-                <span className="label-text-alt text-base-content/60">Оставьте пустым, чтобы заказать на сегодня</span>
+                <span className="label-text-alt text-base-content/60">
+                  Оставьте пустым, чтобы заказать на сегодня
+                </span>
               </label>
             </div>
 

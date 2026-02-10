@@ -17,6 +17,7 @@ const ManageDishesPage = () => {
     price: "",
     is_breakfast: true,
     stock_quantity: "",
+    allergens: "",
   });
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const ManageDishesPage = () => {
       price: "",
       is_breakfast: true,
       stock_quantity: "",
+      allergens: "",
     });
     setEditingDish(null);
   };
@@ -57,6 +59,7 @@ const ManageDishesPage = () => {
       price: dish.price.toString(),
       is_breakfast: dish.is_breakfast,
       stock_quantity: dish.stock_quantity.toString(),
+      allergens: dish.allergens || "",
     });
     setEditingDish(dish);
     setShowModal(true);
@@ -76,6 +79,7 @@ const ManageDishesPage = () => {
         price: parseFloat(formData.price),
         is_breakfast: formData.is_breakfast,
         stock_quantity: parseInt(formData.stock_quantity),
+        allergens: formData.allergens || null,
       };
 
       if (editingDish) {
@@ -168,6 +172,7 @@ const ManageDishesPage = () => {
                   <th>Название</th>
                   <th>Тип</th>
                   <th>Цена</th>
+                  <th>Аллергены</th>
                   <th>Остаток</th>
                   <th>Действия</th>
                 </tr>
@@ -197,6 +202,15 @@ const ManageDishesPage = () => {
                       </span>
                     </td>
                     <td className="font-semibold">{dish.price} ₽</td>
+                    <td>
+                      {dish.allergens ? (
+                        <span className="text-sm text-error">
+                          {dish.allergens}
+                        </span>
+                      ) : (
+                        <span className="text-sm text-base-content/40">-</span>
+                      )}
+                    </td>
                     <td>
                       <span
                         className={`badge ${
@@ -258,7 +272,7 @@ const ManageDishesPage = () => {
               {editingDish ? "Редактировать блюдо" : "Добавить блюдо"}
             </h3>
             <div className="py-4 space-y-4">
-              <div className="form-control">
+              <div className="form-control flex flex-col">
                 <label className="label">
                   <span className="label-text">Название *</span>
                 </label>
@@ -273,7 +287,7 @@ const ManageDishesPage = () => {
                 />
               </div>
 
-              <div className="form-control">
+              <div className="form-control flex flex-col">
                 <label className="label">
                   <span className="label-text">Описание</span>
                 </label>
@@ -283,6 +297,21 @@ const ManageDishesPage = () => {
                   value={formData.description}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="form-control flex flex-col">
+                <label className="label">
+                  <span className="label-text">Аллергены</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  placeholder="Аллергены через запятую (например: Глютен, Молоко)"
+                  value={formData.allergens}
+                  onChange={(e) =>
+                    setFormData({ ...formData, allergens: e.target.value })
                   }
                 />
               </div>

@@ -117,20 +117,20 @@ const ProfilePage = () => {
       {/* Tabs */}
       <div className="tabs tabs-lifted">
         <button
-          className={`tab ${activeTab === 'profile' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('profile')}
+          className={`tab ${activeTab === "profile" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("profile")}
         >
           Профиль
         </button>
         <button
-          className={`tab ${activeTab === 'personal' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('personal')}
+          className={`tab ${activeTab === "personal" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("personal")}
         >
           Личная информация
         </button>
         <button
-          className={`tab ${activeTab === 'password' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('password')}
+          className={`tab ${activeTab === "password" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("password")}
         >
           Безопасность
         </button>
@@ -138,7 +138,7 @@ const ProfilePage = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {/* Personal Info Tab */}
-        {activeTab === 'personal' && (
+        {activeTab === "personal" && (
           <div className="card bg-base-100 shadow-lg">
             <div className="card-body">
               <h2 className="card-title">
@@ -155,7 +155,10 @@ const ProfilePage = () => {
                     className="input input-bordered"
                     value={personalInfoData.full_name}
                     onChange={(e) =>
-                      setPersonalInfoData({ ...personalInfoData, full_name: e.target.value })
+                      setPersonalInfoData({
+                        ...personalInfoData,
+                        full_name: e.target.value,
+                      })
                     }
                   />
                 </div>
@@ -169,7 +172,10 @@ const ProfilePage = () => {
                     className="input input-bordered"
                     value={personalInfoData.parallel}
                     onChange={(e) =>
-                      setPersonalInfoData({ ...personalInfoData, parallel: e.target.value })
+                      setPersonalInfoData({
+                        ...personalInfoData,
+                        parallel: e.target.value,
+                      })
                     }
                   />
                 </div>
@@ -190,7 +196,7 @@ const ProfilePage = () => {
         )}
 
         {/* Password Tab */}
-        {activeTab === 'password' && (
+        {activeTab === "password" && (
           <div className="card bg-base-100 shadow-lg">
             <div className="card-body">
               <h2 className="card-title">
@@ -207,7 +213,10 @@ const ProfilePage = () => {
                     className="input input-bordered"
                     value={passwordData.old_password}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, old_password: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        old_password: e.target.value,
+                      })
                     }
                     placeholder="Введите текущий пароль"
                   />
@@ -222,7 +231,10 @@ const ProfilePage = () => {
                     className="input input-bordered"
                     value={passwordData.new_password}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, new_password: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        new_password: e.target.value,
+                      })
                     }
                     placeholder="Введите новый пароль (не менее 8 символов)"
                   />
@@ -237,7 +249,10 @@ const ProfilePage = () => {
                     className="input input-bordered"
                     value={passwordData.confirm_new_password}
                     onChange={(e) =>
-                      setPasswordData({ ...passwordData, confirm_new_password: e.target.value })
+                      setPasswordData({
+                        ...passwordData,
+                        confirm_new_password: e.target.value,
+                      })
                     }
                     placeholder="Подтвердите новый пароль"
                   />
@@ -259,7 +274,7 @@ const ProfilePage = () => {
         )}
 
         {/* Profile Tab */}
-        {activeTab === 'profile' && (
+        {activeTab === "profile" && (
           <>
             {/* User Info */}
             <div className="card bg-base-100 shadow-lg">
@@ -271,22 +286,30 @@ const ProfilePage = () => {
                 <div className="space-y-4 mt-4">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                     <span className="text-base-content/60">ФИО</span>
-                    <span className="font-semibold text-right">{user?.full_name}</span>
+                    <span className="font-semibold text-right">
+                      {user?.full_name}
+                    </span>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                     <span className="text-base-content/60">Email</span>
-                    <span className="font-semibold text-right">{user?.email}</span>
+                    <span className="font-semibold text-right">
+                      {user?.email}
+                    </span>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                     <span className="text-base-content/60">Параллель</span>
-                    <span className="font-semibold text-right">{user?.parallel}</span>
+                    <span className="font-semibold text-right">
+                      {user?.parallel}
+                    </span>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
                     <span className="text-base-content/60">Роль</span>
                     <span className="badge badge-primary">Ученик</span>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">Дата регистрации</span>
+                    <span className="text-base-content/60">
+                      Дата регистрации
+                    </span>
                     <span className="font-semibold text-right">
                       {user?.created_at &&
                         new Date(user.created_at).toLocaleDateString("ru-RU")}
@@ -307,7 +330,9 @@ const ProfilePage = () => {
                   <div className="stat-title text-primary-content/70">
                     Текущий баланс
                   </div>
-                  <div className="stat-value text-sm sm:text-base">{user?.balance?.toFixed(2)} ₽</div>
+                  <div className="stat-value text-sm sm:text-base">
+                    {user?.balance?.toFixed(2)} ₽
+                  </div>
                 </div>
 
                 <div className="form-control mt-4 flex flex-col">
@@ -363,7 +388,10 @@ const ProfilePage = () => {
                     placeholder="Например: молоко, орехи, глютен..."
                     value={profileData.allergies}
                     onChange={(e) =>
-                      setProfileData({ ...profileData, allergies: e.target.value })
+                      setProfileData({
+                        ...profileData,
+                        allergies: e.target.value,
+                      })
                     }
                   />
                 </div>

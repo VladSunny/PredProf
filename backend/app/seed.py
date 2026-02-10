@@ -88,20 +88,20 @@ def seed_database(db: Session):
     # 2. Создаем блюда (меню)
     dishes_data = [
         # Завтраки
-        {"name": "Овсяная каша с ягодами", "description": "Овсянка с свежими ягодами и медом", "price": 150.0, "is_breakfast": True, "stock_quantity": 50},
-        {"name": "Омлет с сыром", "description": "Пушистый омлет с сыром и зеленью", "price": 180.0, "is_breakfast": True, "stock_quantity": 40},
-        {"name": "Блинчики с творогом", "description": "Тонкие блинчики с начинкой из творога", "price": 200.0, "is_breakfast": True, "stock_quantity": 30},
-        {"name": "Сырники со сметаной", "description": "Домашние сырники с соусом из сметаны", "price": 190.0, "is_breakfast": True, "stock_quantity": 35},
-        {"name": "Каша гречневая с молоком", "description": "Гречневая каша с теплым молоком", "price": 120.0, "is_breakfast": True, "stock_quantity": 45},
-        
+        {"name": "Овсяная каша с ягодами", "description": "Овсянка с свежими ягодами и медом", "price": 150.0, "is_breakfast": True, "stock_quantity": 50, "allergens": "Глютен, Молоко"},
+        {"name": "Омлет с сыром", "description": "Пушистый омлет с сыром и зеленью", "price": 180.0, "is_breakfast": True, "stock_quantity": 40, "allergens": "Яйца, Молоко"},
+        {"name": "Блинчики с творогом", "description": "Тонкие блинчики с начинкой из творога", "price": 200.0, "is_breakfast": True, "stock_quantity": 30, "allergens": "Глютен, Яйца, Молоко"},
+        {"name": "Сырники со сметаной", "description": "Домашние сырники с соусом из сметаны", "price": 190.0, "is_breakfast": True, "stock_quantity": 35, "allergens": "Яйца, Молоко"},
+        {"name": "Каша гречневая с молоком", "description": "Гречневая каша с теплым молоком", "price": 120.0, "is_breakfast": True, "stock_quantity": 45, "allergens": "Молоко"},
+
         # Обеды
-        {"name": "Куриный суп с лапшой", "description": "Ароматный куриный суп с домашней лапшой", "price": 220.0, "is_breakfast": False, "stock_quantity": 60},
-        {"name": "Пюре с котлетой", "description": "Картофельное пюре с куриной котлетой", "price": 250.0, "is_breakfast": False, "stock_quantity": 55},
-        {"name": "Гречка с тефтелями", "description": "Гречневая каша с говяжьими тефтелями в томатном соусе", "price": 230.0, "is_breakfast": False, "stock_quantity": 50},
-        {"name": "Рыба с овощами", "description": "Запеченная рыба с сезонными овощами", "price": 280.0, "is_breakfast": False, "stock_quantity": 40},
-        {"name": "Салат Цезарь с курицей", "description": "Классический салат Цезарь с куриной грудкой", "price": 210.0, "is_breakfast": False, "stock_quantity": 45},
-        {"name": "Плов с бараниной", "description": "Узбекский плов с бараниной и морковью", "price": 270.0, "is_breakfast": False, "stock_quantity": 35},
-        {"name": "Овощное рагу", "description": "Тушеные овощи с грибами в сметанном соусе", "price": 190.0, "is_breakfast": False, "stock_quantity": 40},
+        {"name": "Куриный суп с лапшой", "description": "Ароматный куриный суп с домашней лапшой", "price": 220.0, "is_breakfast": False, "stock_quantity": 60, "allergens": "Глютен, Яйца"},
+        {"name": "Пюре с котлетой", "description": "Картофельное пюре с куриной котлетой", "price": 250.0, "is_breakfast": False, "stock_quantity": 55, "allergens": "Молоко, Яйца"},
+        {"name": "Гречка с тефтелями", "description": "Гречневая каша с говяжьими тефтелями в томатном соусе", "price": 230.0, "is_breakfast": False, "stock_quantity": 50, "allergens": "Молоко, Яйца"},
+        {"name": "Рыба с овощами", "description": "Запеченная рыба с сезонными овощами", "price": 280.0, "is_breakfast": False, "stock_quantity": 40, "allergens": "Рыба, Моллюски"},
+        {"name": "Салат Цезарь с курицей", "description": "Классический салат Цезарь с куриной грудкой", "price": 210.0, "is_breakfast": False, "stock_quantity": 45, "allergens": "Яйца, Молоко, Глютен"},
+        {"name": "Плов с бараниной", "description": "Узбекский плов с бараниной и морковью", "price": 270.0, "is_breakfast": False, "stock_quantity": 35, "allergens": "Глютен"},
+        {"name": "Овощное рагу", "description": "Тушеные овощи с грибами в сметанном соусе", "price": 190.0, "is_breakfast": False, "stock_quantity": 40, "allergens": "Молоко"},
     ]
     
     created_dishes = []

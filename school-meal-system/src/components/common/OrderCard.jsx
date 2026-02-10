@@ -1,14 +1,14 @@
-import React from 'react';
-import { CheckCircle, Clock, Calendar } from 'lucide-react';
+import React from "react";
+import { CheckCircle, Clock, Calendar } from "lucide-react";
 
-const OrderCard = ({ 
-  order, 
-  onReceiveClick, 
+const OrderCard = ({
+  order,
+  onReceiveClick,
   showStudentId = false,
-  className = '' 
+  className = "",
 }) => {
   const isReceived = order.is_received;
-  
+
   return (
     <div
       className={`card bg-base-100 shadow ${
@@ -18,9 +18,7 @@ const OrderCard = ({
       <div className="card-body">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
-            <div className="text-4xl">
-              {isReceived ? "✅" : "⏳"}
-            </div>
+            <div className="text-4xl">{isReceived ? "✅" : "⏳"}</div>
             <div>
               <h3 className="font-bold">Заказ #{order.id}</h3>
               {showStudentId && (

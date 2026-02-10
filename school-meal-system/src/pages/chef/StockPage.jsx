@@ -138,6 +138,7 @@ const StockPage = () => {
                   <th>Название</th>
                   <th>Тип</th>
                   <th>Цена</th>
+                  <th>Аллергены</th>
                   <th>Остаток</th>
                   <th>Статус</th>
                 </tr>
@@ -169,6 +170,17 @@ const StockPage = () => {
                         </span>
                       </td>
                       <td className="font-semibold">{dish.price} ₽</td>
+                      <td>
+                        {dish.allergens ? (
+                          <span className="text-sm text-error">
+                            {dish.allergens}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-base-content/40">
+                            -
+                          </span>
+                        )}
+                      </td>
                       <td>
                         <span
                           className={`text-lg font-bold ${

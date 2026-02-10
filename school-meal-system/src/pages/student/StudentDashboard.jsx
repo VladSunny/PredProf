@@ -27,8 +27,12 @@ const StudentDashboard = () => {
         ]);
         // Sort orders by order_date (if available) or created_at timestamp (newer first)
         const sortedOrdersData = ordersData.sort((a, b) => {
-          const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
-          const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+          const dateA = a.order_date
+            ? new Date(a.order_date)
+            : new Date(a.created_at);
+          const dateB = b.order_date
+            ? new Date(b.order_date)
+            : new Date(b.created_at);
           return dateB - dateA;
         });
         setOrders(sortedOrdersData);
@@ -71,21 +75,21 @@ const StudentDashboard = () => {
           figure={<Wallet className="h-8 w-8" />}
           color="primary"
         />
-        
+
         <StatCard
           title="Ожидают получения"
           value={pendingOrders}
           figure={<Clock className="h-8 w-8" />}
           color="warning"
         />
-        
+
         <StatCard
           title="Получено"
           value={completedOrders}
           figure={<CheckCircle className="h-8 w-8" />}
           color="success"
         />
-        
+
         <StatCard
           title="Блюд в меню"
           value={menu.length}
@@ -103,7 +107,9 @@ const StudentDashboard = () => {
           <div className="card-body items-center text-center">
             <UtensilsCrossed className="h-12 w-12 text-primary" />
             <h3 className="card-title text-sm sm:text-base">Меню</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">Посмотреть завтраки и обеды</p>
+            <p className="text-base-content/60 text-xs sm:text-sm">
+              Посмотреть завтраки и обеды
+            </p>
             <div className="card-actions">
               <button className="btn btn-primary btn-sm">Перейти</button>
             </div>
@@ -117,7 +123,9 @@ const StudentDashboard = () => {
           <div className="card-body items-center text-center">
             <ShoppingCart className="h-12 w-12 text-secondary" />
             <h3 className="card-title text-sm sm:text-base">Мои заказы</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">История и текущие заказы</p>
+            <p className="text-base-content/60 text-xs sm:text-sm">
+              История и текущие заказы
+            </p>
             <div className="card-actions">
               <button className="btn btn-secondary btn-sm">Перейти</button>
             </div>
@@ -131,7 +139,9 @@ const StudentDashboard = () => {
           <div className="card-body items-center text-center">
             <Star className="h-12 w-12 text-accent" />
             <h3 className="card-title text-sm sm:text-base">Профиль</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">Настройки и пополнение</p>
+            <p className="text-base-content/60 text-xs sm:text-sm">
+              Настройки и пополнение
+            </p>
             <div className="card-actions">
               <button className="btn btn-accent btn-sm">Перейти</button>
             </div>

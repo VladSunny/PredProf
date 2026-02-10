@@ -32,7 +32,9 @@ const Navbar = () => {
         <div className="hidden sm:flex items-center gap-2">
           <div className="flex flex-col items-end">
             <span className="font-semibold">{user?.full_name}</span>
-            <span className="text-xs opacity-80">{getRoleLabel(user?.role)}</span>
+            <span className="text-xs opacity-80">
+              {getRoleLabel(user?.role)}
+            </span>
           </div>
           <div className="dropdown dropdown-end">
             <div
@@ -65,7 +67,7 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-        
+
         {/* Mobile view - show only avatar */}
         <div className="sm:hidden flex items-center">
           <div className="dropdown dropdown-end">

@@ -14,15 +14,14 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
-    full_name = Column(String, nullable=False)  # ФИО пользователя
-    parallel = Column(String, nullable=False)   # Параллель (например, 10Г)
+    full_name = Column(String, nullable=False)
+    parallel = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.STUDENT, nullable=False) # Роли из ТЗ [cite: 10]
+    role = Column(Enum(UserRole), default=UserRole.STUDENT, nullable=False)
 
-    # Поля для ученика
     balance = Column(Float, default=0.0)
-    allergies = Column(Text, nullable=True) # Пищевые аллергии
-    preferences = Column(Text, nullable=True) # Предпочтения
+    allergies = Column(Text, nullable=True)
+    preferences = Column(Text, nullable=True)
 
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -33,13 +32,14 @@ class User(Base):
 class Dish(Base):
     """Меню завтраков и обедов [cite: 12]"""
     __tablename__ = "dishes"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String)
     price = Column(Float, nullable=False)
-    is_breakfast = Column(Boolean, default=True) # True - завтрак, False - обед [cite: 12]
-    stock_quantity = Column(Integer, default=0) # Контроль остатков [cite: 14]
+    is_breakfast = Column(Boolean, default=True)
+    stock_quantity = Column(Integer, default=0)
+    allergens = Column(Text, nullable=True)
 
     orders = relationship("Order", back_populates="dish")
     reviews = relationship("Review", back_populates="dish")
@@ -67,7 +67,7 @@ class PurchaseRequest(Base):
     id = Column(Integer, primary_key=True, index=True)
     item_name = Column(String, nullable=False)
     quantity = Column(String, nullable=False)
-    status = Column(String, default="pending") # pending, approved, rejected [cite: 16]
+    status = Column(String, default="pending")
     chef_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
@@ -78,7 +78,7 @@ class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("users.id"))
     dish_id = Column(Integer, ForeignKey("dishes.id"))
-    rating = Column(Integer) # Оценка 1-5
+    rating = Column(Integer)
     comment = Column(Text)
 
     student = relationship("User", back_populates="reviews")

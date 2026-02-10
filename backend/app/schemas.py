@@ -68,6 +68,7 @@ class DishBase(BaseModel):
     price: float = Field(..., gt=0)
     is_breakfast: bool = True
     stock_quantity: int = Field(..., ge=0)
+    allergens: Optional[str] = None
 
 class DishCreate(DishBase):
     pass
@@ -78,10 +79,11 @@ class DishUpdate(BaseModel):
     price: Optional[float] = None
     is_breakfast: Optional[bool] = None
     stock_quantity: Optional[int] = None
+    allergens: Optional[str] = None
 
 class Dish(DishBase):
     id: int
-    
+
     class Config:
         from_attributes = True
 

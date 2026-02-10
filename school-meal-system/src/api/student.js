@@ -51,14 +51,14 @@ export const studentApi = {
   createOrder: async (dishId, paymentType, orderDate) => {
     const orderData = {
       dish_id: dishId,
-      payment_type: paymentType
+      payment_type: paymentType,
     };
-    
+
     // Add order_date if provided
     if (orderDate) {
       orderData.order_date = orderDate;
     }
-    
+
     const response = await fetch(`${API_BASE_URL}/orders`, {
       method: "POST",
       headers: getAuthHeaders(),

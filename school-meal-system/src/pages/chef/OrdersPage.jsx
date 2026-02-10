@@ -22,8 +22,12 @@ const ChefOrdersPage = () => {
       const data = await chefApi.getAllOrders();
       // Sort orders by order_date (if available) or created_at timestamp (newer first)
       const sortedData = data.sort((a, b) => {
-        const dateA = a.order_date ? new Date(a.order_date) : new Date(a.created_at);
-        const dateB = b.order_date ? new Date(b.order_date) : new Date(b.created_at);
+        const dateA = a.order_date
+          ? new Date(a.order_date)
+          : new Date(a.created_at);
+        const dateB = b.order_date
+          ? new Date(b.order_date)
+          : new Date(b.created_at);
         return dateB - dateA;
       });
       setOrders(sortedData);
@@ -60,19 +64,19 @@ const ChefOrdersPage = () => {
           <h1 className="text-2xl font-bold">Все заказы</h1>
           <p className="text-base-content/60">Список всех заказов в системе</p>
         </div>
-        
+
         {/* View Mode Toggle */}
         <div className="join">
           <button
-            className={`join-item btn btn-sm ${viewMode === 'list' ? 'btn-active' : ''}`}
-            onClick={() => setViewMode('list')}
+            className={`join-item btn btn-sm ${viewMode === "list" ? "btn-active" : ""}`}
+            onClick={() => setViewMode("list")}
           >
             <List className="h-4 w-4 mr-1" />
             Список
           </button>
           <button
-            className={`join-item btn btn-sm ${viewMode === 'calendar' ? 'btn-active' : ''}`}
-            onClick={() => setViewMode('calendar')}
+            className={`join-item btn btn-sm ${viewMode === "calendar" ? "btn-active" : ""}`}
+            onClick={() => setViewMode("calendar")}
           >
             <Calendar className="h-4 w-4 mr-1" />
             Календарь
@@ -114,7 +118,7 @@ const ChefOrdersPage = () => {
       />
 
       {/* Orders Display based on view mode */}
-      {viewMode === 'list' ? (
+      {viewMode === "list" ? (
         <>
           {/* Orders List */}
           {filteredOrders.length === 0 ? (
@@ -125,11 +129,7 @@ const ChefOrdersPage = () => {
           ) : (
             <div className="space-y-4">
               {filteredOrders.map((order) => (
-                <OrderCard
-                  key={order.id}
-                  order={order}
-                  showStudentId={true}
-                />
+                <OrderCard key={order.id} order={order} showStudentId={true} />
               ))}
             </div>
           )}
