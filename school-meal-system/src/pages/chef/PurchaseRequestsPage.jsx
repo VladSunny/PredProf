@@ -15,29 +15,40 @@ import {
 
 const PurchaseRequestsPage = () => {
   const [requests, setRequests] = useState([]);
+  const [allRequests, setAllRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
   const [newRequest, setNewRequest] = useState({ item_name: "", quantity: "" });
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchRequests();
-  }, [filter]);
-
-  const fetchRequests = async () => {
+  const fetchAllRequests = async () => {
     try {
-      const status = filter === "all" ? null : filter;
-      const data = await chefApi.getMyPurchaseRequests(status);
+      // Fetch all requests regardless of status
+      const data = await chefApi.getMyPurchaseRequests(null);
       // Sort requests by created_at timestamp (newer first)
       const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      setRequests(sortedData);
+      setAllRequests(sortedData);
+      setRequests(sortedData); // Initially show all requests
     } catch (error) {
       toast.error("Ошибка загрузки заявок");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchAllRequests();
+  }, []);
+
+  useEffect(() => {
+    // Apply filter locally based on all requests
+    if (filter === "all") {
+      setRequests(allRequests);
+    } else {
+      setRequests(allRequests.filter(r => r.status === filter));
+    }
+  }, [filter, allRequests]);
 
   const handleSubmit = async () => {
     if (!newRequest.item_name.trim() || !newRequest.quantity.trim()) {
@@ -79,9 +90,9 @@ const PurchaseRequestsPage = () => {
     }
   };
 
-  const pendingCount = requests.filter((r) => r.status === "pending").length;
-  const approvedCount = requests.filter((r) => r.status === "approved").length;
-  const rejectedCount = requests.filter((r) => r.status === "rejected").length;
+  const pendingCount = allRequests.filter((r) => r.status === "pending").length;
+  const approvedCount = allRequests.filter((r) => r.status === "approved").length;
+  const rejectedCount = allRequests.filter((r) => r.status === "rejected").length;
 
   if (loading) {
     return (
@@ -138,10 +149,10 @@ const PurchaseRequestsPage = () => {
       {/* Filters */}
       <FilterTabs
         filters={[
-          { key: "all", label: "Все" },
-          { key: "pending", label: "На рассмотрении" },
-          { key: "approved", label: "Одобренные" },
-          { key: "rejected", label: "Отклоненные" },
+          { key: "all", label: `Все (${allRequests.length})` },
+          { key: "pending", label: `На рассмотрении (${pendingCount})` },
+          { key: "approved", label: `Одобренные (${approvedCount})` },
+          { key: "rejected", label: `Отклоненные (${rejectedCount})` },
         ]}
         activeFilter={filter}
         onFilterChange={setFilter}
