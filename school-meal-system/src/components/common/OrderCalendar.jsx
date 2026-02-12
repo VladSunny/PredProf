@@ -11,9 +11,7 @@ const OrderCalendar = ({
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Filter orders for the selected date
   const getOrdersForDate = (date) => {
-    // Create a date object that represents the start and end of the selected date in local timezone
     const startDate = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -26,21 +24,17 @@ const OrderCalendar = ({
     );
 
     return orders.filter((order) => {
-      // Compare with order_date if available, otherwise use created_at
       const orderDate = order.order_date || order.created_at;
       const orderDateTime = new Date(orderDate);
 
-      // Check if the order date falls within the selected date range
       return orderDateTime >= startDate && orderDateTime < endDate;
     });
   };
 
-  // Get the count of orders for a specific date (for calendar tile styling)
   const getOrderCountForDate = (date) => {
     return getOrdersForDate(date).length;
   };
 
-  // Custom tile content to show order count
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       const count = getOrderCountForDate(date);

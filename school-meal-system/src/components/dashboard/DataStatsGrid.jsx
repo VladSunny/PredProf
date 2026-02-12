@@ -2,7 +2,6 @@ import React from "react";
 import StatCard from "../common/StatCard";
 
 const DataStatsGrid = ({ stats, layout = "horizontal" }) => {
-  // Determine grid classes based on layout prop
   const gridClass =
     layout === "vertical"
       ? "stats shadow w-full"
