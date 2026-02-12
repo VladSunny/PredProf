@@ -1,10 +1,10 @@
 import React from "react";
 
-const DashboardTable = ({ 
-  headers, 
-  rows, 
-  emptyMessage = "Данных нет", 
-  tableClass = "table table-zebra" 
+const DashboardTable = ({
+  headers,
+  rows,
+  emptyMessage = "Данных нет",
+  tableClass = "table table-zebra",
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -27,7 +27,10 @@ const DashboardTable = ({
             ))
           ) : (
             <tr>
-              <td colSpan={headers.length} className="text-center py-8 text-base-content/60">
+              <td
+                colSpan={headers.length}
+                className="text-center py-8 text-base-content/60"
+              >
                 {emptyMessage}
               </td>
             </tr>

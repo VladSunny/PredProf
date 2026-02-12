@@ -58,39 +58,39 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <DashboardWelcomeSection 
+      <DashboardWelcomeSection
         title="Панель администратора"
         subtitle={`Добро пожаловать, ${user?.full_name}!`}
         icon={<BarChart3 className="h-12 w-12" />}
       />
 
       {/* Main Stats */}
-      <DashboardStatsGrid 
+      <DashboardStatsGrid
         stats={[
           {
             title: "Общий доход",
             value: `${paymentStats?.total_revenue?.toFixed(2) || 0} ₽`,
             figure: <Wallet className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "Всего заказов",
             value: paymentStats?.orders_count || 0,
             figure: <ShoppingCart className="h-8 w-8" />,
-            color: "success"
+            color: "success",
           },
           {
             title: "Уникальных пользователей",
             value: attendanceStats?.unique_users || 0,
             figure: <Users className="h-8 w-8" />,
-            color: "info"
+            color: "info",
           },
           {
             title: "Заявок на рассмотрении",
             value: pendingRequests,
             figure: <ClipboardList className="h-8 w-8" />,
-            color: "warning"
-          }
+            color: "warning",
+          },
         ]}
       />
 
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
               <TrendingUp className="h-5 w-5" />
               Статистика оплат
             </h2>
-            <DashboardStatsGrid 
+            <DashboardStatsGrid
               layout="two-col"
               stats={[
                 {
@@ -110,15 +110,15 @@ const AdminDashboard = () => {
                   value: `${paymentStats?.average_order_value?.toFixed(2) || 0} ₽`,
                   figure: <TrendingUp className="h-8 w-8" />,
                   color: "primary",
-                  className: "text-center"
+                  className: "text-center",
                 },
                 {
                   title: "Всего заказов",
                   value: paymentStats?.orders_count || 0,
                   figure: <ShoppingCart className="h-8 w-8" />,
                   color: "success",
-                  className: "text-center"
-                }
+                  className: "text-center",
+                },
               ]}
             />
           </div>
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
               <Users className="h-5 w-5" />
               Статистика посещаемости
             </h2>
-            <DashboardStatsGrid 
+            <DashboardStatsGrid
               layout="two-col"
               stats={[
                 {
@@ -138,15 +138,16 @@ const AdminDashboard = () => {
                   value: attendanceStats?.unique_users || 0,
                   figure: <Users className="h-8 w-8" />,
                   color: "info",
-                  className: "text-center"
+                  className: "text-center",
                 },
                 {
                   title: "Заказов на ученика",
-                  value: attendanceStats?.average_orders_per_user?.toFixed(1) || 0,
+                  value:
+                    attendanceStats?.average_orders_per_user?.toFixed(1) || 0,
                   figure: <TrendingUp className="h-8 w-8" />,
                   color: "secondary",
-                  className: "text-center"
-                }
+                  className: "text-center",
+                },
               ]}
             />
           </div>
@@ -154,34 +155,35 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <DashboardQuickActions 
+      <DashboardQuickActions
         actions={[
           {
             to: "/admin/dishes",
             icon: <UtensilsCrossed className="h-12 w-12 text-primary" />,
             title: "Управление меню",
-            description: "Добавить, изменить или удалить блюда"
+            description: "Добавить, изменить или удалить блюда",
           },
           {
             to: "/admin/requests",
             icon: <ClipboardList className="h-12 w-12 text-secondary" />,
             title: "Заявки на закупку",
-            description: pendingRequests > 0
-              ? `${pendingRequests} ожидают рассмотрения`
-              : "Все заявки обработаны"
+            description:
+              pendingRequests > 0
+                ? `${pendingRequests} ожидают рассмотрения`
+                : "Все заявки обработаны",
           },
           {
             to: "/admin/reports",
             icon: <FileText className="h-12 w-12 text-accent" />,
             title: "Отчеты",
-            description: "Формирование отчетов по питанию"
-          }
+            description: "Формирование отчетов по питанию",
+          },
         ]}
       />
 
       {/* Pending Requests Alert */}
       {pendingRequests > 0 && (
-        <DashboardAlerts 
+        <DashboardAlerts
           alerts={[
             {
               type: "warning",
@@ -190,9 +192,9 @@ const AdminDashboard = () => {
               message: `${pendingRequests} заявок на закупку ожидают рассмотрения`,
               link: {
                 to: "/admin/requests",
-                text: "Рассмотреть"
-              }
-            }
+                text: "Рассмотреть",
+              },
+            },
           ]}
         />
       )}

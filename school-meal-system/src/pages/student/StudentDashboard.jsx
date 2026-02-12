@@ -29,7 +29,7 @@ const StudentDashboard = () => {
           studentApi.getMyOrders(),
           studentApi.getMenu(),
         ]);
-        // Sort orders by order_date (if available) or created_at timestamp (newer first)
+
         const sortedOrdersData = ordersData.sort((a, b) => {
           const dateA = a.order_date
             ? new Date(a.order_date)
@@ -64,44 +64,44 @@ const StudentDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <DashboardWelcomeSection 
+      <DashboardWelcomeSection
         title={`Привет, ${user?.full_name}!`}
         subtitle="Добро пожаловать в систему школьного питания"
         icon={null}
       />
 
       {/* Stats */}
-      <DashboardStatsGrid 
+      <DashboardStatsGrid
         stats={[
           {
             title: "Баланс",
             value: `${user?.balance?.toFixed(2)} ₽`,
             figure: <Wallet className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "Ожидают получения",
             value: pendingOrders,
             figure: <Clock className="h-8 w-8" />,
-            color: "warning"
+            color: "warning",
           },
           {
             title: "Получено",
             value: completedOrders,
             figure: <CheckCircle className="h-8 w-8" />,
-            color: "success"
+            color: "success",
           },
           {
             title: "Блюд в меню",
             value: menu.length,
             figure: <UtensilsCrossed className="h-8 w-8" />,
-            color: "info"
-          }
+            color: "info",
+          },
         ]}
       />
 
       {/* Quick Actions */}
-      <DashboardQuickActions 
+      <DashboardQuickActions
         actions={[
           {
             to: "/student/menu",
@@ -109,7 +109,7 @@ const StudentDashboard = () => {
             title: "Меню",
             description: "Посмотреть завтраки и обеды",
             buttonText: "Перейти",
-            buttonStyle: "btn-primary"
+            buttonStyle: "btn-primary",
           },
           {
             to: "/student/orders",
@@ -117,7 +117,7 @@ const StudentDashboard = () => {
             title: "Мои заказы",
             description: "История и текущие заказы",
             buttonText: "Перейти",
-            buttonStyle: "btn-secondary"
+            buttonStyle: "btn-secondary",
           },
           {
             to: "/student/profile",
@@ -125,21 +125,21 @@ const StudentDashboard = () => {
             title: "Профиль",
             description: "Настройки и пополнение",
             buttonText: "Перейти",
-            buttonStyle: "btn-accent"
-          }
+            buttonStyle: "btn-accent",
+          },
         ]}
       />
 
       {/* Allergies Alert */}
       {user?.allergies && (
-        <DashboardAlerts 
+        <DashboardAlerts
           alerts={[
             {
               type: "warning",
               title: "⚠️ Ваши аллергии:",
               message: user.allergies,
-              icon: null
-            }
+              icon: null,
+            },
           ]}
         />
       )}

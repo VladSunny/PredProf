@@ -129,7 +129,7 @@ const ManageDishesPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
+      <PageHeader
         title="Управление меню"
         subtitle="Добавление и редактирование блюд"
         actions={
@@ -141,35 +141,43 @@ const ManageDishesPage = () => {
       />
 
       {/* Stats */}
-      <DataStatsGrid 
+      <DataStatsGrid
         layout="vertical"
         stats={[
           {
             title: "Всего блюд",
             value: dishes.length,
             figure: <UtensilsCrossed className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "Завтраков",
             value: breakfastDishes.length,
             figure: <UtensilsCrossed className="h-8 w-8" />,
-            color: "warning"
+            color: "warning",
           },
           {
             title: "Обедов",
             value: lunchDishes.length,
             figure: <UtensilsCrossed className="h-8 w-8" />,
-            color: "info"
-          }
+            color: "info",
+          },
         ]}
       />
 
       {/* Dishes Table */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
-          <DataTable 
-            headers={["ID", "Название", "Тип", "Цена", "Аллергены", "Остаток", "Действия"]}
+          <DataTable
+            headers={[
+              "ID",
+              "Название",
+              "Тип",
+              "Цена",
+              "Аллергены",
+              "Остаток",
+              "Действия",
+            ]}
             rows={dishes.map((dish) => [
               dish.id,
               <div className="flex items-center gap-2" key={`name-${dish.id}`}>
@@ -189,13 +197,23 @@ const ManageDishesPage = () => {
               >
                 {dish.is_breakfast ? "Завтрак" : "Обед"}
               </span>,
-              <span className="font-semibold" key={`price-${dish.id}`}>{dish.price} ₽</span>,
+              <span className="font-semibold" key={`price-${dish.id}`}>
+                {dish.price} ₽
+              </span>,
               dish.allergens ? (
-                <span className="text-sm text-error" key={`allergen-${dish.id}`}>
+                <span
+                  className="text-sm text-error"
+                  key={`allergen-${dish.id}`}
+                >
                   {dish.allergens}
                 </span>
               ) : (
-                <span className="text-sm text-base-content/40" key={`allergen-${dish.id}`}>-</span>
+                <span
+                  className="text-sm text-base-content/40"
+                  key={`allergen-${dish.id}`}
+                >
+                  -
+                </span>
               ),
               <span
                 className={`badge ${
@@ -222,12 +240,12 @@ const ManageDishesPage = () => {
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
-              </div>
+              </div>,
             ])}
             emptyMessage="Блюд пока нет"
             showEmptyRow={false}
           />
-          
+
           {dishes.length === 0 && (
             <div className="text-center py-12">
               <UtensilsCrossed className="h-16 w-16 mx-auto text-base-content/30 mb-4" />

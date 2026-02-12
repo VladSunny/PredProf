@@ -60,7 +60,10 @@ export const studentApi = {
     }
 
     // Add subscription weeks if it's a subscription
-    if (orderData.paymentType === "subscription" && orderData.subscriptionWeeks) {
+    if (
+      orderData.paymentType === "subscription" &&
+      orderData.subscriptionWeeks
+    ) {
       requestData.subscription_weeks = orderData.subscriptionWeeks;
     }
 

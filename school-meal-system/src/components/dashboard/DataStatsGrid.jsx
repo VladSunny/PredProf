@@ -3,9 +3,10 @@ import StatCard from "../common/StatCard";
 
 const DataStatsGrid = ({ stats, layout = "horizontal" }) => {
   // Determine grid classes based on layout prop
-  const gridClass = layout === "vertical" 
-    ? "stats shadow w-full" 
-    : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
+  const gridClass =
+    layout === "vertical"
+      ? "stats shadow w-full"
+      : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
 
   return (
     <div className={gridClass}>

@@ -21,7 +21,7 @@ const ProfilePage = () => {
     new_password: "",
     confirm_new_password: "",
   });
-  const [activeTab, setActiveTab] = useState("profile"); // 'profile', 'personal', 'password'
+  const [activeTab, setActiveTab] = useState("profile");
 
   const handleTopUp = async () => {
     const amount = parseFloat(topUpAmount);
@@ -62,11 +62,6 @@ const ProfilePage = () => {
       await studentApi.updatePersonalInfo(personalInfoData);
       toast.success("Личная информация обновлена");
       await refreshUser();
-      // Update the personal info form with the new values
-      // setPersonalInfoData({
-      //   full_name: user?.full_name || "",
-      //   parallel: user?.parallel || "",
-      // });
     } catch (error) {
       toast.error(error.message);
     } finally {

@@ -11,7 +11,7 @@ const ChefOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
-  const [viewMode, setViewMode] = useState("list"); // 'list' or 'calendar'
+  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchOrders();
@@ -20,7 +20,6 @@ const ChefOrdersPage = () => {
   const fetchOrders = async () => {
     try {
       const data = await chefApi.getAllOrders();
-      // Sort orders by order_date (if available) or created_at timestamp (newer first)
       const sortedData = data.sort((a, b) => {
         const dateA = a.order_date
           ? new Date(a.order_date)

@@ -31,7 +31,6 @@ const ChefDashboard = () => {
           chefApi.getDishesWithStock(),
           chefApi.getMyPurchaseRequests(),
         ]);
-        // Sort orders by order_date (if available) or created_at timestamp (newer first)
         const sortedOrdersData = ordersData.sort((a, b) => {
           const dateA = a.order_date
             ? new Date(a.order_date)
@@ -69,39 +68,39 @@ const ChefDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <DashboardWelcomeSection 
+      <DashboardWelcomeSection
         title={`Добрый день, ${user?.full_name}! 👨‍🍳`}
         subtitle="Панель управления повара"
         icon={<ChefHat className="h-12 w-12" />}
       />
 
       {/* Stats */}
-      <DashboardStatsGrid 
+      <DashboardStatsGrid
         stats={[
           {
             title: "Заказов сегодня",
             value: todayOrders.length,
             figure: <ClipboardList className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "Выдано",
             value: receivedOrders,
             figure: <CheckCircle className="h-8 w-8" />,
-            color: "success"
+            color: "success",
           },
           {
             title: "Ожидают выдачи",
             value: pendingOrders,
             figure: <Clock className="h-8 w-8" />,
-            color: "warning"
+            color: "warning",
           },
           {
             title: "Мало на складе",
             value: lowStockDishes,
             figure: <Package className="h-8 w-8" />,
-            color: "error"
-          }
+            color: "error",
+          },
         ]}
       />
 
@@ -157,29 +156,39 @@ const ChefDashboard = () => {
               Заказов пока нет
             </p>
           ) : (
-            <DashboardTable 
-              headers={["ID", "Ученик ID", "Блюдо", "Тип оплаты", "Статус", "Дата заказа", "Время"]}
-              rows={todayOrders.slice(0, 10).map((order) => [
-                `#${order.id}`,
-                order.student_id,
-                order.dish?.name || `ID: ${order.dish_id}`,
-                <span
-                  className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
-                >
-                  {order.payment_type === "subscription"
-                    ? "Абонемент"
-                    : "Разовый"}
-                </span>,
-                <span
-                  className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
-                >
-                  {order.is_received ? "Выдано" : "Ожидает"}
-                </span>,
-                order.order_date
-                  ? new Date(order.order_date).toLocaleDateString("ru-RU")
-                  : new Date(order.created_at).toLocaleDateString("ru-RU"),
-                new Date(order.created_at).toLocaleTimeString("ru-RU")
-              ])}
+            <DashboardTable
+              headers={[
+                "ID",
+                "Ученик ID",
+                "Блюдо",
+                "Тип оплаты",
+                "Статус",
+                "Дата заказа",
+                "Время",
+              ]}
+              rows={todayOrders
+                .slice(0, 10)
+                .map((order) => [
+                  `#${order.id}`,
+                  order.student_id,
+                  order.dish?.name || `ID: ${order.dish_id}`,
+                  <span
+                    className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
+                  >
+                    {order.payment_type === "subscription"
+                      ? "Абонемент"
+                      : "Разовый"}
+                  </span>,
+                  <span
+                    className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
+                  >
+                    {order.is_received ? "Выдано" : "Ожидает"}
+                  </span>,
+                  order.order_date
+                    ? new Date(order.order_date).toLocaleDateString("ru-RU")
+                    : new Date(order.created_at).toLocaleDateString("ru-RU"),
+                  new Date(order.created_at).toLocaleTimeString("ru-RU"),
+                ])}
               emptyMessage="Заказов пока нет"
             />
           )}
@@ -188,7 +197,7 @@ const ChefDashboard = () => {
 
       {/* Low Stock Alert */}
       {lowStockDishes > 0 && (
-        <DashboardAlerts 
+        <DashboardAlerts
           alerts={[
             {
               type: "warning",
@@ -197,9 +206,9 @@ const ChefDashboard = () => {
               message: `${lowStockDishes} блюд имеют низкий остаток (менее 5 порций)`,
               link: {
                 to: "/chef/stock",
-                text: "Проверить"
-              }
-            }
+                text: "Проверить",
+              },
+            },
           ]}
         />
       )}

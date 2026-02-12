@@ -1,7 +1,12 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
 
-const DashboardWelcomeSection = ({ title, subtitle, icon, roleSpecificMessage = null }) => {
+const DashboardWelcomeSection = ({
+  title,
+  subtitle,
+  icon,
+  roleSpecificMessage = null,
+}) => {
   const { user } = useAuth();
 
   // // Format the title and subtitle by replacing {user} with the actual user's name
@@ -16,9 +21,11 @@ const DashboardWelcomeSection = ({ title, subtitle, icon, roleSpecificMessage = 
           <h1 className="text-3xl font-bold">{title}</h1>
           <p className="mt-2 opacity-90">
             {subtitle}
-            {roleSpecificMessage && user?.role && roleSpecificMessage[user?.role] && (
-              <span> {roleSpecificMessage[user?.role]}</span>
-            )}
+            {roleSpecificMessage &&
+              user?.role &&
+              roleSpecificMessage[user?.role] && (
+                <span> {roleSpecificMessage[user?.role]}</span>
+              )}
           </p>
         </div>
       </div>

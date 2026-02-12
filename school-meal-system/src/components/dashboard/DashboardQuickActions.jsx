@@ -18,7 +18,9 @@ const DashboardQuickActions = ({ actions }) => {
             </p>
             {action.buttonText && (
               <div className="card-actions">
-                <button className={`btn ${action.buttonStyle || "btn-primary"} btn-sm`}>
+                <button
+                  className={`btn ${action.buttonStyle || "btn-primary"} btn-sm`}
+                >
                   {action.buttonText}
                 </button>
               </div>

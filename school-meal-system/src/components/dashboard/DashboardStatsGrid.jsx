@@ -3,9 +3,10 @@ import StatCard from "../common/StatCard";
 
 const DashboardStatsGrid = ({ stats, layout = "four-col" }) => {
   // Determine grid classes based on layout prop
-  const gridClass = layout === "two-col" 
-    ? "grid grid-cols-1 sm:grid-cols-2 gap-4" 
-    : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4";
+  const gridClass =
+    layout === "two-col"
+      ? "grid grid-cols-1 sm:grid-cols-2 gap-4"
+      : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4";
 
   return (
     <div className={gridClass}>

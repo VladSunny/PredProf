@@ -1,11 +1,11 @@
 import React from "react";
 
-const DataTable = ({ 
-  headers, 
-  rows, 
-  emptyMessage = "Данных нет", 
+const DataTable = ({
+  headers,
+  rows,
+  emptyMessage = "Данных нет",
   tableClass = "table table-zebra",
-  showEmptyRow = true
+  showEmptyRow = true,
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -28,7 +28,10 @@ const DataTable = ({
             ))
           ) : showEmptyRow ? (
             <tr>
-              <td colSpan={headers.length} className="text-center py-8 text-base-content/60">
+              <td
+                colSpan={headers.length}
+                className="text-center py-8 text-base-content/60"
+              >
                 {emptyMessage}
               </td>
             </tr>

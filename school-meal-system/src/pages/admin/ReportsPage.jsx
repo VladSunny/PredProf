@@ -14,10 +14,6 @@ import {
 } from "lucide-react";
 
 const ReportsPage = () => {
-  const [paymentStats, setPaymentStats] = useState(null);
-  const [attendanceStats, setAttendanceStats] = useState(null);
-  const [statsLoading, setStatsLoading] = useState(true);
-  const [statsError, setStatsError] = useState(null);
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -29,7 +25,7 @@ const ReportsPage = () => {
   useEffect(() => {
     const loadInitialData = async () => {
       await fetchStats();
-      setLoading(false); // Set main loading to false after initial data is loaded
+      setLoading(false);
     };
 
     loadInitialData();
@@ -41,11 +37,11 @@ const ReportsPage = () => {
         adminApi.getPaymentStatistics(),
         adminApi.getAttendanceStatistics(),
       ]);
-      console.log("Payment stats:", payment); // Debug log
-      console.log("Attendance stats:", attendance); // Debug log
+      console.log("Payment stats:", payment);
+      console.log("Attendance stats:", attendance);
       setPaymentStats(payment);
       setAttendanceStats(attendance);
-      setStatsError(null); // Clear any previous error
+      setStatsError(null);
     } catch (error) {
       console.error("Error fetching stats:", error);
       setStatsError(error.message || "Ошибка при загрузке статистики");
@@ -61,10 +57,9 @@ const ReportsPage = () => {
         dateRange.startDate || null,
         dateRange.endDate || null,
       );
-      // Sort orders by order_date (if available) or created_at timestamp (newer first)
+
       if (data.orders) {
         data.orders.sort((a, b) => {
-          // Create date objects that represent the dates in local timezone to avoid timezone issues
           const dateA = a.order_date
             ? new Date(a.order_date)
             : new Date(a.created_at);
@@ -135,55 +130,11 @@ const ReportsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
+      <PageHeader
         title="Отчеты"
         subtitle="Формирование отчетов по питанию и затратам"
       />
 
-      {/* Summary Stats */}
-      {/* {statsLoading ? (
-        <div className="flex justify-center items-center py-8">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-        </div>
-      ) : statsError ? (
-        <div className="alert alert-error">
-          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>Ошибка: {statsError}</span>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatCard
-            title="Общий доход"
-            value={`${paymentStats?.total_revenue?.toFixed(2) || paymentStats?.totalRevenue?.toFixed(2) || 0} ₽`}
-            figure={<Wallet className="h-12 w-12" />}
-            color="primary"
-            className="bg-primary text-primary-content"
-          />
-
-          <StatCard
-            title="Средний чек"
-            value={`${paymentStats?.average_order_value?.toFixed(2) || paymentStats?.averageOrderValue?.toFixed(2) || 0} ₽`}
-            figure={<TrendingUp className="h-12 w-12" />}
-            color="secondary"
-            className="bg-secondary text-secondary-content"
-          />
-
-          <StatCard
-            title="Активных учеников"
-            value={attendanceStats?.unique_users || attendanceStats?.uniqueUsers || 0}
-            figure={<Users className="h-12 w-12" />}
-            color="accent"
-            className="bg-accent text-accent-content"
-          />
-        </div>
-      )} */}
-      {/* Debug info - remove in production */}
-      {/* <div className="text-xs p-4 bg-gray-100 rounded">
-        <div>Payment Stats: {JSON.stringify(paymentStats)}</div>
-        <div>Attendance Stats: {JSON.stringify(attendanceStats)}</div>
-      </div> */}
-
-      {/* Report Generator */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
           <h2 className="card-title">
@@ -289,8 +240,16 @@ const ReportsPage = () => {
             <h2 className="card-title">Все заказы</h2>
             {/* Orders Table */}
             {report.orders && report.orders.length > 0 && (
-              <DataTable 
-                headers={["ID", "Ученик ID", "Блюдо", "Цена", "Тип оплаты", "Дата заказа", "Дата создания"]}
+              <DataTable
+                headers={[
+                  "ID",
+                  "Ученик ID",
+                  "Блюдо",
+                  "Цена",
+                  "Тип оплаты",
+                  "Дата заказа",
+                  "Дата создания",
+                ]}
                 rows={report.orders.slice(0, 50).map((order) => [
                   `#${order.id}`,
                   order.student_id,
@@ -311,7 +270,7 @@ const ReportsPage = () => {
                   order.order_date
                     ? new Date(order.order_date).toLocaleDateString("ru-RU")
                     : new Date(order.created_at).toLocaleDateString("ru-RU"),
-                  new Date(order.created_at).toLocaleString("ru-RU")
+                  new Date(order.created_at).toLocaleString("ru-RU"),
                 ])}
                 emptyMessage="Нет данных за выбранный период"
                 showEmptyRow={false}

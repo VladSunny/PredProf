@@ -63,50 +63,75 @@ const StockPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
+      <PageHeader
         title="Контроль остатков"
         subtitle="Мониторинг остатков готовых блюд"
       />
 
       {/* Stats */}
-      <DataStatsGrid 
+      <DataStatsGrid
         layout="vertical"
         stats={[
           {
             title: "Всего блюд",
             value: dishes.length,
             figure: <Package className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "В наличии",
             value: normalStock,
             figure: <CheckCircle className="h-8 w-8" />,
-            color: "success"
+            color: "success",
           },
           {
             title: "Мало",
             value: lowStock,
             figure: <AlertTriangle className="h-8 w-8" />,
-            color: "warning"
+            color: "warning",
           },
           {
             title: "Нет в наличии",
             value: outOfStock,
             figure: <Package className="h-8 w-8" />,
-            color: "error"
-          }
+            color: "error",
+          },
         ]}
       />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         {[
-          { key: "all", label: "Все", activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
-          { key: "low", label: `Мало (${lowStock})`, activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
-          { key: "out", label: `Нет в наличии (${outOfStock})`, activeButtonClass: "btn-error", inactiveButtonClass: "btn-outline btn-error" },
-          { key: "breakfast", label: "🌅 Завтраки", activeButtonClass: "btn-info", inactiveButtonClass: "btn-outline btn-info" },
-          { key: "lunch", label: "🌞 Обеды", activeButtonClass: "btn-secondary", inactiveButtonClass: "btn-outline btn-secondary" },
+          {
+            key: "all",
+            label: "Все",
+            activeButtonClass: "btn-primary",
+            inactiveButtonClass: "btn-outline",
+          },
+          {
+            key: "low",
+            label: `Мало (${lowStock})`,
+            activeButtonClass: "btn-warning",
+            inactiveButtonClass: "btn-outline btn-warning",
+          },
+          {
+            key: "out",
+            label: `Нет в наличии (${outOfStock})`,
+            activeButtonClass: "btn-error",
+            inactiveButtonClass: "btn-outline btn-error",
+          },
+          {
+            key: "breakfast",
+            label: "🌅 Завтраки",
+            activeButtonClass: "btn-info",
+            inactiveButtonClass: "btn-outline btn-info",
+          },
+          {
+            key: "lunch",
+            label: "🌞 Обеды",
+            activeButtonClass: "btn-secondary",
+            inactiveButtonClass: "btn-outline btn-secondary",
+          },
         ].map((filterItem) => (
           <button
             key={filterItem.key}
@@ -125,13 +150,24 @@ const StockPage = () => {
       {/* Dishes Table */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
-          <DataTable 
-            headers={["ID", "Название", "Тип", "Цена", "Аллергены", "Остаток", "Статус"]}
+          <DataTable
+            headers={[
+              "ID",
+              "Название",
+              "Тип",
+              "Цена",
+              "Аллергены",
+              "Остаток",
+              "Статус",
+            ]}
             rows={filteredDishes.map((dish) => {
               const status = getStockStatus(dish.stock_quantity);
               return [
                 dish.id,
-                <div className="flex items-center gap-2" key={`name-${dish.id}`}>
+                <div
+                  className="flex items-center gap-2"
+                  key={`name-${dish.id}`}
+                >
                   <span className="text-xl">
                     {dish.is_breakfast ? "🥐" : "🍝"}
                   </span>
@@ -148,13 +184,23 @@ const StockPage = () => {
                 >
                   {dish.is_breakfast ? "Завтрак" : "Обед"}
                 </span>,
-                <span className="font-semibold" key={`price-${dish.id}`}>{dish.price} ₽</span>,
+                <span className="font-semibold" key={`price-${dish.id}`}>
+                  {dish.price} ₽
+                </span>,
                 dish.allergens ? (
-                  <span className="text-sm text-error" key={`allergen-${dish.id}`}>
+                  <span
+                    className="text-sm text-error"
+                    key={`allergen-${dish.id}`}
+                  >
                     {dish.allergens}
                   </span>
                 ) : (
-                  <span className="text-sm text-base-content/40" key={`allergen-${dish.id}`}>-</span>
+                  <span
+                    className="text-sm text-base-content/40"
+                    key={`allergen-${dish.id}`}
+                  >
+                    -
+                  </span>
                 ),
                 <span
                   className={`text-lg font-bold ${
@@ -168,15 +214,18 @@ const StockPage = () => {
                 >
                   {dish.stock_quantity}
                 </span>,
-                <span className={`badge ${status.color} gap-1`} key={`status-${dish.id}`}>
+                <span
+                  className={`badge ${status.color} gap-1`}
+                  key={`status-${dish.id}`}
+                >
                   {status.icon} {status.label}
-                </span>
+                </span>,
               ];
             })}
             emptyMessage="Блюд не найдено"
             showEmptyRow={false}
           />
-          
+
           {filteredDishes.length === 0 && (
             <p className="text-center py-8 text-base-content/60">
               Блюд не найдено

@@ -96,49 +96,69 @@ const ManageRequestsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
+      <PageHeader
         title="Заявки на закупку"
         subtitle="Рассмотрение и согласование заявок от поваров"
       />
 
       {/* Stats */}
-      <DataStatsGrid 
+      <DataStatsGrid
         layout="vertical"
         stats={[
           {
             title: "Всего заявок",
             value: requests.length,
             figure: <ClipboardList className="h-8 w-8" />,
-            color: "primary"
+            color: "primary",
           },
           {
             title: "На рассмотрении",
             value: pendingCount,
             figure: <Clock className="h-8 w-8" />,
-            color: "warning"
+            color: "warning",
           },
           {
             title: "Одобрено",
             value: approvedCount,
             figure: <CheckCircle className="h-8 w-8" />,
-            color: "success"
+            color: "success",
           },
           {
             title: "Отклонено",
             value: rejectedCount,
             figure: <XCircle className="h-8 w-8" />,
-            color: "error"
-          }
+            color: "error",
+          },
         ]}
       />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         {[
-          { key: "all", label: `Все (${requests.length})`, activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
-          { key: "pending", label: `На рассмотрении (${pendingCount})`, activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
-          { key: "approved", label: `Одобренные (${approvedCount})`, activeButtonClass: "btn-success", inactiveButtonClass: "btn-outline btn-success" },
-          { key: "rejected", label: `Отклоненные (${rejectedCount})`, activeButtonClass: "btn-error", inactiveButtonClass: "btn-outline btn-error" },
+          {
+            key: "all",
+            label: `Все (${requests.length})`,
+            activeButtonClass: "btn-primary",
+            inactiveButtonClass: "btn-outline",
+          },
+          {
+            key: "pending",
+            label: `На рассмотрении (${pendingCount})`,
+            activeButtonClass: "btn-warning",
+            inactiveButtonClass: "btn-outline btn-warning",
+          },
+          {
+            key: "approved",
+            label: `Одобренные (${approvedCount})`,
+            activeButtonClass: "btn-success",
+            inactiveButtonClass: "btn-outline btn-success",
+          },
+          {
+            key: "rejected",
+            label: `Отклоненные (${rejectedCount})`,
+            activeButtonClass: "btn-error",
+            inactiveButtonClass: "btn-outline btn-error",
+          },
         ].map((filterItem) => (
           <button
             key={filterItem.key}

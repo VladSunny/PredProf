@@ -17,8 +17,8 @@ const MenuPage = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [paymentType, setPaymentType] = useState("one-time");
-  const [orderDate, setOrderDate] = useState(""); // New state for order date
-  const [subscriptionWeeks, setSubscriptionWeeks] = useState(1); // Number of weeks for subscription
+  const [orderDate, setOrderDate] = useState("");
+  const [subscriptionWeeks, setSubscriptionWeeks] = useState(1);
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
 
   useEffect(() => {
@@ -44,14 +44,12 @@ const MenuPage = () => {
     if (!selectedDish) return;
 
     try {
-      // Prepare order data based on payment type
       let orderData = {
         dishId: selectedDish.id,
         paymentType: paymentType,
-        orderDate: orderDate || null
+        orderDate: orderDate || null,
       };
 
-      // If it's a subscription, include the number of weeks
       if (paymentType === "subscription") {
         orderData.subscriptionWeeks = subscriptionWeeks;
       }
@@ -60,8 +58,8 @@ const MenuPage = () => {
       toast.success("Заказ успешно создан!");
       await refreshUser();
       setOrderModal(false);
-      setOrderDate(""); // Reset order date after successful order
-      setSubscriptionWeeks(1); // Reset subscription weeks
+      setOrderDate("");
+      setSubscriptionWeeks(1);
       fetchDishes();
     } catch (error) {
       toast.error(error.message);
@@ -72,7 +70,6 @@ const MenuPage = () => {
     setSelectedDish(dish);
     try {
       const data = await studentApi.getDishReviews(dish.id);
-      // Sort reviews by created_at timestamp (newer first)
       const sortedData = data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at),
       );
@@ -94,7 +91,6 @@ const MenuPage = () => {
       );
       toast.success("Отзыв добавлен!");
       const data = await studentApi.getDishReviews(selectedDish.id);
-      // Sort reviews by created_at timestamp (newer first)
       const sortedData = data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at),
       );
@@ -108,7 +104,7 @@ const MenuPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
+      <PageHeader
         title="Меню"
         subtitle="Выберите блюда для заказа"
         actions={
@@ -123,9 +119,24 @@ const MenuPage = () => {
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         {[
-          { key: "all", label: "Все", activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
-          { key: "breakfast", label: "🌅 Завтраки", activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
-          { key: "lunch", label: "🌞 Обеды", activeButtonClass: "btn-info", inactiveButtonClass: "btn-outline btn-info" },
+          {
+            key: "all",
+            label: "Все",
+            activeButtonClass: "btn-primary",
+            inactiveButtonClass: "btn-outline",
+          },
+          {
+            key: "breakfast",
+            label: "🌅 Завтраки",
+            activeButtonClass: "btn-warning",
+            inactiveButtonClass: "btn-outline btn-warning",
+          },
+          {
+            key: "lunch",
+            label: "🌞 Обеды",
+            activeButtonClass: "btn-info",
+            inactiveButtonClass: "btn-outline btn-info",
+          },
         ].map((filterItem) => (
           <button
             key={filterItem.key}
@@ -240,7 +251,9 @@ const MenuPage = () => {
                 <select
                   className="select select-bordered"
                   value={subscriptionWeeks}
-                  onChange={(e) => setSubscriptionWeeks(parseInt(e.target.value))}
+                  onChange={(e) =>
+                    setSubscriptionWeeks(parseInt(e.target.value))
+                  }
                 >
                   {[1, 2, 3].map((week) => (
                     <option key={week} value={week}>
@@ -265,7 +278,7 @@ const MenuPage = () => {
                 className="input input-bordered"
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]} // Allow selecting today and future dates
+                min={new Date().toISOString().split("T")[0]}
               />
               <label className="label">
                 <span className="label-text-alt text-base-content/60">
@@ -281,8 +294,12 @@ const MenuPage = () => {
               <p className="text-sm">
                 <strong>После оплаты:</strong>{" "}
                 {paymentType === "subscription"
-                  ? (user?.balance - selectedDish.price * subscriptionWeeks).toFixed(2)
-                  : (user?.balance - selectedDish.price).toFixed(2)} ₽
+                  ? (
+                      user?.balance -
+                      selectedDish.price * subscriptionWeeks
+                    ).toFixed(2)
+                  : (user?.balance - selectedDish.price).toFixed(2)}{" "}
+                ₽
               </p>
             </div>
           </div>

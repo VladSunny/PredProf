@@ -24,15 +24,13 @@ const PurchaseRequestsPage = () => {
 
   const fetchAllRequests = async () => {
     try {
-      // Fetch all requests regardless of status
       const data = await chefApi.getMyPurchaseRequests(null);
-      // Sort requests by created_at timestamp (newer first)
       const sortedData = data.sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       );
       setAllRequests(sortedData);
-      setRequests(sortedData); // Initially show all requests
+      setRequests(sortedData);
     } catch (error) {
       toast.error("Ошибка загрузки заявок");
     } finally {
@@ -45,7 +43,6 @@ const PurchaseRequestsPage = () => {
   }, []);
 
   useEffect(() => {
-    // Apply filter locally based on all requests
     if (filter === "all") {
       setRequests(allRequests);
     } else {
