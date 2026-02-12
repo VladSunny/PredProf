@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { chefApi } from "../../api/chef";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
+import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
+import PageHeader from "../../components/common/PageHeader";
+import DataTable from "../../components/dashboard/DataTable";
 import { Package, AlertTriangle, CheckCircle } from "lucide-react";
 
 const StockPage = () => {
@@ -60,152 +63,120 @@ const StockPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Контроль остатков</h1>
-        <p className="text-base-content/60">Мониторинг остатков готовых блюд</p>
-      </div>
+      <PageHeader 
+        title="Контроль остатков"
+        subtitle="Мониторинг остатков готовых блюд"
+      />
 
       {/* Stats */}
-      <div className="stats shadow w-full">
-        <StatCard
-          title="Всего блюд"
-          value={dishes.length}
-          figure={<Package className="h-8 w-8" />}
-          color="primary"
-        />
-        <StatCard
-          title="В наличии"
-          value={normalStock}
-          figure={<CheckCircle className="h-8 w-8" />}
-          color="success"
-        />
-        <StatCard
-          title="Мало"
-          value={lowStock}
-          figure={<AlertTriangle className="h-8 w-8" />}
-          color="warning"
-        />
-        <StatCard
-          title="Нет в наличии"
-          value={outOfStock}
-          figure={<Package className="h-8 w-8" />}
-          color="error"
-        />
-      </div>
+      <DataStatsGrid 
+        layout="vertical"
+        stats={[
+          {
+            title: "Всего блюд",
+            value: dishes.length,
+            figure: <Package className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "В наличии",
+            value: normalStock,
+            figure: <CheckCircle className="h-8 w-8" />,
+            color: "success"
+          },
+          {
+            title: "Мало",
+            value: lowStock,
+            figure: <AlertTriangle className="h-8 w-8" />,
+            color: "warning"
+          },
+          {
+            title: "Нет в наличии",
+            value: outOfStock,
+            figure: <Package className="h-8 w-8" />,
+            color: "error"
+          }
+        ]}
+      />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <button
-          className={`btn btn-sm ${filter === "all" ? "btn-primary" : "btn-outline"}`}
-          onClick={() => setFilter("all")}
-        >
-          Все
-        </button>
-        <button
-          className={`btn btn-sm ${filter === "low" ? "btn-warning" : "btn-outline btn-warning"}`}
-          onClick={() => setFilter("low")}
-        >
-          Мало ({lowStock})
-        </button>
-        <button
-          className={`btn btn-sm ${filter === "out" ? "btn-error" : "btn-outline btn-error"}`}
-          onClick={() => setFilter("out")}
-        >
-          Нет в наличии ({outOfStock})
-        </button>
-        <button
-          className={`btn btn-sm ${filter === "breakfast" ? "btn-info" : "btn-outline btn-info"}`}
-          onClick={() => setFilter("breakfast")}
-        >
-          🌅 Завтраки
-        </button>
-        <button
-          className={`btn btn-sm ${filter === "lunch" ? "btn-secondary" : "btn-outline btn-secondary"}`}
-          onClick={() => setFilter("lunch")}
-        >
-          🌞 Обеды
-        </button>
+        {[
+          { key: "all", label: "Все", activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
+          { key: "low", label: `Мало (${lowStock})`, activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
+          { key: "out", label: `Нет в наличии (${outOfStock})`, activeButtonClass: "btn-error", inactiveButtonClass: "btn-outline btn-error" },
+          { key: "breakfast", label: "🌅 Завтраки", activeButtonClass: "btn-info", inactiveButtonClass: "btn-outline btn-info" },
+          { key: "lunch", label: "🌞 Обеды", activeButtonClass: "btn-secondary", inactiveButtonClass: "btn-outline btn-secondary" },
+        ].map((filterItem) => (
+          <button
+            key={filterItem.key}
+            className={`btn btn-sm ${
+              filter === filterItem.key
+                ? filterItem.activeButtonClass
+                : filterItem.inactiveButtonClass
+            }`}
+            onClick={() => setFilter(filterItem.key)}
+          >
+            {filterItem.label}
+          </button>
+        ))}
       </div>
 
       {/* Dishes Table */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Название</th>
-                  <th>Тип</th>
-                  <th>Цена</th>
-                  <th>Аллергены</th>
-                  <th>Остаток</th>
-                  <th>Статус</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredDishes.map((dish) => {
-                  const status = getStockStatus(dish.stock_quantity);
-                  return (
-                    <tr key={dish.id}>
-                      <td>{dish.id}</td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">
-                            {dish.is_breakfast ? "🥐" : "🍝"}
-                          </span>
-                          <div>
-                            <div className="font-bold">{dish.name}</div>
-                            <div className="text-sm text-base-content/60">
-                              {dish.description}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span
-                          className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
-                        >
-                          {dish.is_breakfast ? "Завтрак" : "Обед"}
-                        </span>
-                      </td>
-                      <td className="font-semibold">{dish.price} ₽</td>
-                      <td>
-                        {dish.allergens ? (
-                          <span className="text-sm text-error">
-                            {dish.allergens}
-                          </span>
-                        ) : (
-                          <span className="text-sm text-base-content/40">
-                            -
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        <span
-                          className={`text-lg font-bold ${
-                            dish.stock_quantity === 0
-                              ? "text-error"
-                              : dish.stock_quantity < 5
-                                ? "text-warning"
-                                : "text-success"
-                          }`}
-                        >
-                          {dish.stock_quantity}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`badge ${status.color} gap-1`}>
-                          {status.icon} {status.label}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
+          <DataTable 
+            headers={["ID", "Название", "Тип", "Цена", "Аллергены", "Остаток", "Статус"]}
+            rows={filteredDishes.map((dish) => {
+              const status = getStockStatus(dish.stock_quantity);
+              return [
+                dish.id,
+                <div className="flex items-center gap-2" key={`name-${dish.id}`}>
+                  <span className="text-xl">
+                    {dish.is_breakfast ? "🥐" : "🍝"}
+                  </span>
+                  <div>
+                    <div className="font-bold">{dish.name}</div>
+                    <div className="text-sm text-base-content/60">
+                      {dish.description}
+                    </div>
+                  </div>
+                </div>,
+                <span
+                  className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
+                  key={`type-${dish.id}`}
+                >
+                  {dish.is_breakfast ? "Завтрак" : "Обед"}
+                </span>,
+                <span className="font-semibold" key={`price-${dish.id}`}>{dish.price} ₽</span>,
+                dish.allergens ? (
+                  <span className="text-sm text-error" key={`allergen-${dish.id}`}>
+                    {dish.allergens}
+                  </span>
+                ) : (
+                  <span className="text-sm text-base-content/40" key={`allergen-${dish.id}`}>-</span>
+                ),
+                <span
+                  className={`text-lg font-bold ${
+                    dish.stock_quantity === 0
+                      ? "text-error"
+                      : dish.stock_quantity < 5
+                        ? "text-warning"
+                        : "text-success"
+                  }`}
+                  key={`stock-${dish.id}`}
+                >
+                  {dish.stock_quantity}
+                </span>,
+                <span className={`badge ${status.color} gap-1`} key={`status-${dish.id}`}>
+                  {status.icon} {status.label}
+                </span>
+              ];
+            })}
+            emptyMessage="Блюд не найдено"
+            showEmptyRow={false}
+          />
+          
           {filteredDishes.length === 0 && (
             <p className="text-center py-8 text-base-content/60">
               Блюд не найдено

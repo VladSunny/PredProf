@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { studentApi } from "../../api/student";
 import StatCard from "../../components/common/StatCard";
+import DashboardWelcomeSection from "../../components/dashboard/DashboardWelcomeSection";
+import DashboardStatsGrid from "../../components/dashboard/DashboardStatsGrid";
+import DashboardQuickActions from "../../components/dashboard/DashboardQuickActions";
+import DashboardAlerts from "../../components/dashboard/DashboardAlerts";
 import {
   UtensilsCrossed,
   ShoppingCart,
@@ -60,103 +64,84 @@ const StudentDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-[#6B46C1] text-primary-content rounded-box p-6">
-        <h1 className="text-3xl font-bold">Привет, {user?.full_name}! 👋</h1>
-        <p className="mt-2 opacity-90">
-          Добро пожаловать в систему школьного питания
-        </p>
-      </div>
+      <DashboardWelcomeSection 
+        title={`Привет, ${user?.full_name}!`}
+        subtitle="Добро пожаловать в систему школьного питания"
+        icon={null}
+      />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Баланс"
-          value={`${user?.balance?.toFixed(2)} ₽`}
-          figure={<Wallet className="h-8 w-8" />}
-          color="primary"
-        />
-
-        <StatCard
-          title="Ожидают получения"
-          value={pendingOrders}
-          figure={<Clock className="h-8 w-8" />}
-          color="warning"
-        />
-
-        <StatCard
-          title="Получено"
-          value={completedOrders}
-          figure={<CheckCircle className="h-8 w-8" />}
-          color="success"
-        />
-
-        <StatCard
-          title="Блюд в меню"
-          value={menu.length}
-          figure={<UtensilsCrossed className="h-8 w-8" />}
-          color="info"
-        />
-      </div>
+      <DashboardStatsGrid 
+        stats={[
+          {
+            title: "Баланс",
+            value: `${user?.balance?.toFixed(2)} ₽`,
+            figure: <Wallet className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "Ожидают получения",
+            value: pendingOrders,
+            figure: <Clock className="h-8 w-8" />,
+            color: "warning"
+          },
+          {
+            title: "Получено",
+            value: completedOrders,
+            figure: <CheckCircle className="h-8 w-8" />,
+            color: "success"
+          },
+          {
+            title: "Блюд в меню",
+            value: menu.length,
+            figure: <UtensilsCrossed className="h-8 w-8" />,
+            color: "info"
+          }
+        ]}
+      />
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link
-          to="/student/menu"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <UtensilsCrossed className="h-12 w-12 text-primary" />
-            <h3 className="card-title text-sm sm:text-base">Меню</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              Посмотреть завтраки и обеды
-            </p>
-            <div className="card-actions">
-              <button className="btn btn-primary btn-sm">Перейти</button>
-            </div>
-          </div>
-        </Link>
-
-        <Link
-          to="/student/orders"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <ShoppingCart className="h-12 w-12 text-secondary" />
-            <h3 className="card-title text-sm sm:text-base">Мои заказы</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              История и текущие заказы
-            </p>
-            <div className="card-actions">
-              <button className="btn btn-secondary btn-sm">Перейти</button>
-            </div>
-          </div>
-        </Link>
-
-        <Link
-          to="/student/profile"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <Star className="h-12 w-12 text-accent" />
-            <h3 className="card-title text-sm sm:text-base">Профиль</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              Настройки и пополнение
-            </p>
-            <div className="card-actions">
-              <button className="btn btn-accent btn-sm">Перейти</button>
-            </div>
-          </div>
-        </Link>
-      </div>
+      <DashboardQuickActions 
+        actions={[
+          {
+            to: "/student/menu",
+            icon: <UtensilsCrossed className="h-12 w-12 text-primary" />,
+            title: "Меню",
+            description: "Посмотреть завтраки и обеды",
+            buttonText: "Перейти",
+            buttonStyle: "btn-primary"
+          },
+          {
+            to: "/student/orders",
+            icon: <ShoppingCart className="h-12 w-12 text-secondary" />,
+            title: "Мои заказы",
+            description: "История и текущие заказы",
+            buttonText: "Перейти",
+            buttonStyle: "btn-secondary"
+          },
+          {
+            to: "/student/profile",
+            icon: <Star className="h-12 w-12 text-accent" />,
+            title: "Профиль",
+            description: "Настройки и пополнение",
+            buttonText: "Перейти",
+            buttonStyle: "btn-accent"
+          }
+        ]}
+      />
 
       {/* Allergies Alert */}
       {user?.allergies && (
-        <div className="alert alert-warning shadow-lg">
-          <div>
-            <span className="font-semibold">⚠️ Ваши аллергии:</span>
-            <span className="ml-2">{user.allergies}</span>
-          </div>
-        </div>
+        <DashboardAlerts 
+          alerts={[
+            {
+              type: "warning",
+              title: "⚠️ Ваши аллергии:",
+              message: user.allergies,
+              icon: null
+            }
+          ]}
+        />
       )}
 
       {/* Recent Menu Items */}

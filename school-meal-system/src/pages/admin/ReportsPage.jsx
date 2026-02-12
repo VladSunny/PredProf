@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
+import PageHeader from "../../components/common/PageHeader";
+import DataTable from "../../components/dashboard/DataTable";
 import {
   FileText,
   Download,
@@ -133,12 +135,10 @@ const ReportsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Отчеты</h1>
-        <p className="text-base-content/60">
-          Формирование отчетов по питанию и затратам
-        </p>
-      </div>
+      <PageHeader 
+        title="Отчеты"
+        subtitle="Формирование отчетов по питанию и затратам"
+      />
 
       {/* Summary Stats */}
       {/* {statsLoading ? (
@@ -289,62 +289,33 @@ const ReportsPage = () => {
             <h2 className="card-title">Все заказы</h2>
             {/* Orders Table */}
             {report.orders && report.orders.length > 0 && (
-              <div className="overflow-x-auto">
-                <table className="table table-zebra">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Ученик ID</th>
-                      <th>Блюдо</th>
-                      <th>Цена</th>
-                      <th>Тип оплаты</th>
-                      <th>Дата заказа</th>
-                      <th>Дата создания</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {report.orders.slice(0, 50).map((order) => (
-                      <tr key={order.id}>
-                        <td>#{order.id}</td>
-                        <td>{order.student_id}</td>
-                        <td>{order.dish_name}</td>
-                        <td>{order.price} ₽</td>
-                        <td>
-                          <span
-                            className={`badge ${
-                              order.payment_type === "subscription"
-                                ? "badge-secondary"
-                                : "badge-primary"
-                            }`}
-                          >
-                            {order.payment_type === "subscription"
-                              ? "Абонемент"
-                              : "Разовый"}
-                          </span>
-                        </td>
-                        <td>
-                          {order.order_date
-                            ? new Date(order.order_date).toLocaleDateString(
-                                "ru-RU",
-                              )
-                            : new Date(order.created_at).toLocaleDateString(
-                                "ru-RU",
-                              )}
-                        </td>
-                        <td>
-                          {new Date(order.created_at).toLocaleString("ru-RU")}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {report.orders.length > 50 && (
-                  <p className="text-center text-base-content/60 mt-4">
-                    Показано 50 из {report.orders.length} заказов. Экспортируйте
-                    CSV для полного списка.
-                  </p>
-                )}
-              </div>
+              <DataTable 
+                headers={["ID", "Ученик ID", "Блюдо", "Цена", "Тип оплаты", "Дата заказа", "Дата создания"]}
+                rows={report.orders.slice(0, 50).map((order) => [
+                  `#${order.id}`,
+                  order.student_id,
+                  order.dish_name,
+                  `${order.price} ₽`,
+                  <span
+                    key={`payment-${order.id}`}
+                    className={`badge ${
+                      order.payment_type === "subscription"
+                        ? "badge-secondary"
+                        : "badge-primary"
+                    }`}
+                  >
+                    {order.payment_type === "subscription"
+                      ? "Абонемент"
+                      : "Разовый"}
+                  </span>,
+                  order.order_date
+                    ? new Date(order.order_date).toLocaleDateString("ru-RU")
+                    : new Date(order.created_at).toLocaleDateString("ru-RU"),
+                  new Date(order.created_at).toLocaleString("ru-RU")
+                ])}
+                emptyMessage="Нет данных за выбранный период"
+                showEmptyRow={false}
+              />
             )}
 
             {(!report.orders || report.orders.length === 0) && (

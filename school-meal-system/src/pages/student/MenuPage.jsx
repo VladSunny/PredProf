@@ -3,8 +3,8 @@ import { studentApi } from "../../api/student";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import DishCard from "../../components/common/DishCard";
-import FilterTabs from "../../components/common/FilterTabs";
 import Modal from "../../components/common/Modal";
+import PageHeader from "../../components/common/PageHeader";
 import { ShoppingCart, Star, MessageSquare, X } from "lucide-react";
 
 const MenuPage = () => {
@@ -108,28 +108,38 @@ const MenuPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Меню</h1>
-          <p className="text-base-content/60">Выберите блюда для заказа</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="badge badge-primary badge-lg text-xs sm:text-sm">
-            Баланс: {user?.balance?.toFixed(2)} ₽
+      <PageHeader 
+        title="Меню"
+        subtitle="Выберите блюда для заказа"
+        actions={
+          <div className="flex items-center gap-2">
+            <div className="badge badge-primary badge-lg text-xs sm:text-sm">
+              Баланс: {user?.balance?.toFixed(2)} ₽
+            </div>
           </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* Filters */}
-      <FilterTabs
-        filters={[
-          { key: "all", label: "Все" },
-          { key: "breakfast", label: "🌅 Завтраки" },
-          { key: "lunch", label: "🌞 Обеды" },
-        ]}
-        activeFilter={filter}
-        onFilterChange={setFilter}
-      />
+      <div className="flex flex-wrap gap-2">
+        {[
+          { key: "all", label: "Все", activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
+          { key: "breakfast", label: "🌅 Завтраки", activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
+          { key: "lunch", label: "🌞 Обеды", activeButtonClass: "btn-info", inactiveButtonClass: "btn-outline btn-info" },
+        ].map((filterItem) => (
+          <button
+            key={filterItem.key}
+            className={`btn btn-sm ${
+              filter === filterItem.key
+                ? filterItem.activeButtonClass
+                : filterItem.inactiveButtonClass
+            }`}
+            onClick={() => setFilter(filterItem.key)}
+          >
+            {filterItem.label}
+          </button>
+        ))}
+      </div>
 
       {/* Menu Grid */}
       {loading ? (
@@ -234,7 +244,7 @@ const MenuPage = () => {
                 >
                   {[1, 2, 3].map((week) => (
                     <option key={week} value={week}>
-                      {week} неделя{week > 1 ? "и" : ""}
+                      {week} недел{week > 1 ? "и" : "я"}
                     </option>
                   ))}
                 </select>
@@ -270,7 +280,9 @@ const MenuPage = () => {
               </p>
               <p className="text-sm">
                 <strong>После оплаты:</strong>{" "}
-                {(user?.balance - selectedDish.price).toFixed(2)} ₽
+                {paymentType === "subscription"
+                  ? (user?.balance - selectedDish.price * subscriptionWeeks).toFixed(2)
+                  : (user?.balance - selectedDish.price).toFixed(2)} ₽
               </p>
             </div>
           </div>

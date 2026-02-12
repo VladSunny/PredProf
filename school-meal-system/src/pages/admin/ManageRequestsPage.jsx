@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
-import FilterTabs from "../../components/common/FilterTabs";
+import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
+import PageHeader from "../../components/common/PageHeader";
 import { Clock, CheckCircle, XCircle, ClipboardList } from "lucide-react";
 
 const ManageRequestsPage = () => {
@@ -95,52 +96,63 @@ const ManageRequestsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Заявки на закупку</h1>
-        <p className="text-base-content/60">
-          Рассмотрение и согласование заявок от поваров
-        </p>
-      </div>
+      <PageHeader 
+        title="Заявки на закупку"
+        subtitle="Рассмотрение и согласование заявок от поваров"
+      />
 
       {/* Stats */}
-      <div className="stats shadow w-full">
-        <StatCard
-          title="Всего заявок"
-          value={requests.length}
-          figure={<ClipboardList className="h-8 w-8" />}
-          color="primary"
-        />
-        <StatCard
-          title="На рассмотрении"
-          value={pendingCount}
-          figure={<Clock className="h-8 w-8" />}
-          color="warning"
-        />
-        <StatCard
-          title="Одобрено"
-          value={approvedCount}
-          figure={<CheckCircle className="h-8 w-8" />}
-          color="success"
-        />
-        <StatCard
-          title="Отклонено"
-          value={rejectedCount}
-          figure={<XCircle className="h-8 w-8" />}
-          color="error"
-        />
-      </div>
+      <DataStatsGrid 
+        layout="vertical"
+        stats={[
+          {
+            title: "Всего заявок",
+            value: requests.length,
+            figure: <ClipboardList className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "На рассмотрении",
+            value: pendingCount,
+            figure: <Clock className="h-8 w-8" />,
+            color: "warning"
+          },
+          {
+            title: "Одобрено",
+            value: approvedCount,
+            figure: <CheckCircle className="h-8 w-8" />,
+            color: "success"
+          },
+          {
+            title: "Отклонено",
+            value: rejectedCount,
+            figure: <XCircle className="h-8 w-8" />,
+            color: "error"
+          }
+        ]}
+      />
 
       {/* Filters */}
-      <FilterTabs
-        filters={[
-          { key: "all", label: `Все (${requests.length})` },
-          { key: "pending", label: `На рассмотрении (${pendingCount})` },
-          { key: "approved", label: `Одобренные (${approvedCount})` },
-          { key: "rejected", label: `Отклоненные (${rejectedCount})` },
-        ]}
-        activeFilter={filter}
-        onFilterChange={setFilter}
-      />
+      <div className="flex flex-wrap gap-2">
+        {[
+          { key: "all", label: `Все (${requests.length})`, activeButtonClass: "btn-primary", inactiveButtonClass: "btn-outline" },
+          { key: "pending", label: `На рассмотрении (${pendingCount})`, activeButtonClass: "btn-warning", inactiveButtonClass: "btn-outline btn-warning" },
+          { key: "approved", label: `Одобренные (${approvedCount})`, activeButtonClass: "btn-success", inactiveButtonClass: "btn-outline btn-success" },
+          { key: "rejected", label: `Отклоненные (${rejectedCount})`, activeButtonClass: "btn-error", inactiveButtonClass: "btn-outline btn-error" },
+        ].map((filterItem) => (
+          <button
+            key={filterItem.key}
+            className={`btn btn-sm ${
+              filter === filterItem.key
+                ? filterItem.activeButtonClass
+                : filterItem.inactiveButtonClass
+            }`}
+            onClick={() => setFilter(filterItem.key)}
+          >
+            {filterItem.label}
+          </button>
+        ))}
+      </div>
 
       {/* Requests List */}
       {requests.length === 0 ? (

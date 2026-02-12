@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { adminApi } from "../../api/admin";
 import StatCard from "../../components/common/StatCard";
+import DashboardWelcomeSection from "../../components/dashboard/DashboardWelcomeSection";
+import DashboardStatsGrid from "../../components/dashboard/DashboardStatsGrid";
+import DashboardQuickActions from "../../components/dashboard/DashboardQuickActions";
+import DashboardAlerts from "../../components/dashboard/DashboardAlerts";
 import {
   BarChart3,
   Users,
@@ -54,50 +58,43 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-[#6B46C1] text-white rounded-box p-6">
-        <div className="flex items-center gap-4">
-          <BarChart3 className="h-12 w-12" />
-          <div>
-            <h1 className="text-3xl font-bold">Панель администратора</h1>
-            <p className="mt-2 opacity-90">
-              Добро пожаловать, {user?.full_name}!
-            </p>
-          </div>
-        </div>
-      </div>
+      <DashboardWelcomeSection 
+        title="Панель администратора"
+        subtitle={`Добро пожаловать, ${user?.full_name}!`}
+        icon={<BarChart3 className="h-12 w-12" />}
+      />
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Общий доход"
-          value={`${paymentStats?.total_revenue?.toFixed(2) || 0} ₽`}
-          figure={<Wallet className="h-8 w-8" />}
-          color="primary"
-        />
+      {/* Main Stats */}
+      <DashboardStatsGrid 
+        stats={[
+          {
+            title: "Общий доход",
+            value: `${paymentStats?.total_revenue?.toFixed(2) || 0} ₽`,
+            figure: <Wallet className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "Всего заказов",
+            value: paymentStats?.orders_count || 0,
+            figure: <ShoppingCart className="h-8 w-8" />,
+            color: "success"
+          },
+          {
+            title: "Уникальных пользователей",
+            value: attendanceStats?.unique_users || 0,
+            figure: <Users className="h-8 w-8" />,
+            color: "info"
+          },
+          {
+            title: "Заявок на рассмотрении",
+            value: pendingRequests,
+            figure: <ClipboardList className="h-8 w-8" />,
+            color: "warning"
+          }
+        ]}
+      />
 
-        <StatCard
-          title="Всего заказов"
-          value={paymentStats?.orders_count || 0}
-          figure={<ShoppingCart className="h-8 w-8" />}
-          color="success"
-        />
-
-        <StatCard
-          title="Уникальных пользователей"
-          value={attendanceStats?.unique_users || 0}
-          figure={<Users className="h-8 w-8" />}
-          color="info"
-        />
-
-        <StatCard
-          title="Заявок на рассмотрении"
-          value={pendingRequests}
-          figure={<ClipboardList className="h-8 w-8" />}
-          color="warning"
-        />
-      </div>
-
-      {/* Additional Stats */}
+      {/* Additional Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card bg-base-100 shadow">
           <div className="card-body">
@@ -105,22 +102,25 @@ const AdminDashboard = () => {
               <TrendingUp className="h-5 w-5" />
               Статистика оплат
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <StatCard
-                title="Средний чек"
-                value={`${paymentStats?.average_order_value?.toFixed(2) || 0} ₽`}
-                figure={<TrendingUp className="h-8 w-8" />}
-                color="primary"
-                className="text-center"
-              />
-              <StatCard
-                title="Всего заказов"
-                value={paymentStats?.orders_count || 0}
-                figure={<ShoppingCart className="h-8 w-8" />}
-                color="success"
-                className="text-center"
-              />
-            </div>
+            <DashboardStatsGrid 
+              layout="two-col"
+              stats={[
+                {
+                  title: "Средний чек",
+                  value: `${paymentStats?.average_order_value?.toFixed(2) || 0} ₽`,
+                  figure: <TrendingUp className="h-8 w-8" />,
+                  color: "primary",
+                  className: "text-center"
+                },
+                {
+                  title: "Всего заказов",
+                  value: paymentStats?.orders_count || 0,
+                  figure: <ShoppingCart className="h-8 w-8" />,
+                  color: "success",
+                  className: "text-center"
+                }
+              ]}
+            />
           </div>
         </div>
 
@@ -130,86 +130,71 @@ const AdminDashboard = () => {
               <Users className="h-5 w-5" />
               Статистика посещаемости
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <StatCard
-                title="Уникальных учеников"
-                value={attendanceStats?.unique_users || 0}
-                figure={<Users className="h-8 w-8" />}
-                color="info"
-                className="text-center"
-              />
-              <StatCard
-                title="Заказов на ученика"
-                value={
-                  attendanceStats?.average_orders_per_user?.toFixed(1) || 0
+            <DashboardStatsGrid 
+              layout="two-col"
+              stats={[
+                {
+                  title: "Уникальных учеников",
+                  value: attendanceStats?.unique_users || 0,
+                  figure: <Users className="h-8 w-8" />,
+                  color: "info",
+                  className: "text-center"
+                },
+                {
+                  title: "Заказов на ученика",
+                  value: attendanceStats?.average_orders_per_user?.toFixed(1) || 0,
+                  figure: <TrendingUp className="h-8 w-8" />,
+                  color: "secondary",
+                  className: "text-center"
                 }
-                figure={<TrendingUp className="h-8 w-8" />}
-                color="secondary"
-                className="text-center"
-              />
-            </div>
+              ]}
+            />
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link
-          to="/admin/dishes"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <UtensilsCrossed className="h-12 w-12 text-primary" />
-            <h3 className="card-title text-sm sm:text-base">Управление меню</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              Добавить, изменить или удалить блюда
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          to="/admin/requests"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <ClipboardList className="h-12 w-12 text-secondary" />
-            <h3 className="card-title text-sm sm:text-base">
-              Заявки на закупку
-            </h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              {pendingRequests > 0
-                ? `${pendingRequests} ожидают рассмотрения`
-                : "Все заявки обработаны"}
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          to="/admin/reports"
-          className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
-        >
-          <div className="card-body items-center text-center">
-            <FileText className="h-12 w-12 text-accent" />
-            <h3 className="card-title text-sm sm:text-base">Отчеты</h3>
-            <p className="text-base-content/60 text-xs sm:text-sm">
-              Формирование отчетов по питанию
-            </p>
-          </div>
-        </Link>
-      </div>
+      <DashboardQuickActions 
+        actions={[
+          {
+            to: "/admin/dishes",
+            icon: <UtensilsCrossed className="h-12 w-12 text-primary" />,
+            title: "Управление меню",
+            description: "Добавить, изменить или удалить блюда"
+          },
+          {
+            to: "/admin/requests",
+            icon: <ClipboardList className="h-12 w-12 text-secondary" />,
+            title: "Заявки на закупку",
+            description: pendingRequests > 0
+              ? `${pendingRequests} ожидают рассмотрения`
+              : "Все заявки обработаны"
+          },
+          {
+            to: "/admin/reports",
+            icon: <FileText className="h-12 w-12 text-accent" />,
+            title: "Отчеты",
+            description: "Формирование отчетов по питанию"
+          }
+        ]}
+      />
 
       {/* Pending Requests Alert */}
       {pendingRequests > 0 && (
-        <div className="alert alert-warning shadow-lg">
-          <ClipboardList className="h-6 w-6" />
-          <div>
-            <h3 className="font-bold">Требуется внимание!</h3>
-            <p>{pendingRequests} заявок на закупку ожидают рассмотрения</p>
-          </div>
-          <Link to="/admin/requests" className="btn btn-sm">
-            Рассмотреть
-          </Link>
-        </div>
+        <DashboardAlerts 
+          alerts={[
+            {
+              type: "warning",
+              icon: <ClipboardList className="h-6 w-6" />,
+              title: "Требуется внимание!",
+              message: `${pendingRequests} заявок на закупку ожидают рассмотрения`,
+              link: {
+                to: "/admin/requests",
+                text: "Рассмотреть"
+              }
+            }
+          ]}
+        />
       )}
     </div>
   );

@@ -3,6 +3,9 @@ import { adminApi } from "../../api/admin";
 import { studentApi } from "../../api/student";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
+import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
+import PageHeader from "../../components/common/PageHeader";
+import DataTable from "../../components/dashboard/DataTable";
 import { Plus, Edit2, Trash2, X, UtensilsCrossed } from "lucide-react";
 
 const ManageDishesPage = () => {
@@ -126,126 +129,105 @@ const ManageDishesPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Управление меню</h1>
-          <p className="text-base-content/60">
-            Добавление и редактирование блюд
-          </p>
-        </div>
-        <button className="btn btn-primary" onClick={openAddModal}>
-          <Plus className="h-5 w-5" />
-          Добавить блюдо
-        </button>
-      </div>
+      <PageHeader 
+        title="Управление меню"
+        subtitle="Добавление и редактирование блюд"
+        actions={
+          <button className="btn btn-primary" onClick={openAddModal}>
+            <Plus className="h-5 w-5" />
+            Добавить блюдо
+          </button>
+        }
+      />
 
       {/* Stats */}
-      <div className="stats shadow w-full">
-        <StatCard
-          title="Всего блюд"
-          value={dishes.length}
-          figure={<UtensilsCrossed className="h-8 w-8" />}
-          color="primary"
-        />
-        <StatCard
-          title="Завтраков"
-          value={breakfastDishes.length}
-          figure={<UtensilsCrossed className="h-8 w-8" />}
-          color="warning"
-        />
-        <StatCard
-          title="Обедов"
-          value={lunchDishes.length}
-          figure={<UtensilsCrossed className="h-8 w-8" />}
-          color="info"
-        />
-      </div>
+      <DataStatsGrid 
+        layout="vertical"
+        stats={[
+          {
+            title: "Всего блюд",
+            value: dishes.length,
+            figure: <UtensilsCrossed className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "Завтраков",
+            value: breakfastDishes.length,
+            figure: <UtensilsCrossed className="h-8 w-8" />,
+            color: "warning"
+          },
+          {
+            title: "Обедов",
+            value: lunchDishes.length,
+            figure: <UtensilsCrossed className="h-8 w-8" />,
+            color: "info"
+          }
+        ]}
+      />
 
       {/* Dishes Table */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Название</th>
-                  <th>Тип</th>
-                  <th>Цена</th>
-                  <th>Аллергены</th>
-                  <th>Остаток</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dishes.map((dish) => (
-                  <tr key={dish.id}>
-                    <td>{dish.id}</td>
-                    <td>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">
-                          {dish.is_breakfast ? "🥐" : "🍝"}
-                        </span>
-                        <div>
-                          <div className="font-bold">{dish.name}</div>
-                          <div className="text-sm text-base-content/60">
-                            {dish.description}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <span
-                        className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
-                      >
-                        {dish.is_breakfast ? "Завтрак" : "Обед"}
-                      </span>
-                    </td>
-                    <td className="font-semibold">{dish.price} ₽</td>
-                    <td>
-                      {dish.allergens ? (
-                        <span className="text-sm text-error">
-                          {dish.allergens}
-                        </span>
-                      ) : (
-                        <span className="text-sm text-base-content/40">-</span>
-                      )}
-                    </td>
-                    <td>
-                      <span
-                        className={`badge ${
-                          dish.stock_quantity === 0
-                            ? "badge-error"
-                            : dish.stock_quantity < 5
-                              ? "badge-warning"
-                              : "badge-success"
-                        }`}
-                      >
-                        {dish.stock_quantity}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="flex gap-2">
-                        <button
-                          className="btn btn-ghost btn-sm"
-                          onClick={() => openEditModal(dish)}
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button
-                          className="btn btn-ghost btn-sm text-error"
-                          onClick={() => handleDelete(dish.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+          <DataTable 
+            headers={["ID", "Название", "Тип", "Цена", "Аллергены", "Остаток", "Действия"]}
+            rows={dishes.map((dish) => [
+              dish.id,
+              <div className="flex items-center gap-2" key={`name-${dish.id}`}>
+                <span className="text-xl">
+                  {dish.is_breakfast ? "🥐" : "🍝"}
+                </span>
+                <div>
+                  <div className="font-bold">{dish.name}</div>
+                  <div className="text-sm text-base-content/60">
+                    {dish.description}
+                  </div>
+                </div>
+              </div>,
+              <span
+                className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
+                key={`type-${dish.id}`}
+              >
+                {dish.is_breakfast ? "Завтрак" : "Обед"}
+              </span>,
+              <span className="font-semibold" key={`price-${dish.id}`}>{dish.price} ₽</span>,
+              dish.allergens ? (
+                <span className="text-sm text-error" key={`allergen-${dish.id}`}>
+                  {dish.allergens}
+                </span>
+              ) : (
+                <span className="text-sm text-base-content/40" key={`allergen-${dish.id}`}>-</span>
+              ),
+              <span
+                className={`badge ${
+                  dish.stock_quantity === 0
+                    ? "badge-error"
+                    : dish.stock_quantity < 5
+                      ? "badge-warning"
+                      : "badge-success"
+                }`}
+                key={`stock-${dish.id}`}
+              >
+                {dish.stock_quantity}
+              </span>,
+              <div className="flex gap-2" key={`actions-${dish.id}`}>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => openEditModal(dish)}
+                >
+                  <Edit2 className="h-4 w-4" />
+                </button>
+                <button
+                  className="btn btn-ghost btn-sm text-error"
+                  onClick={() => handleDelete(dish.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ])}
+            emptyMessage="Блюд пока нет"
+            showEmptyRow={false}
+          />
+          
           {dishes.length === 0 && (
             <div className="text-center py-12">
               <UtensilsCrossed className="h-16 w-16 mx-auto text-base-content/30 mb-4" />

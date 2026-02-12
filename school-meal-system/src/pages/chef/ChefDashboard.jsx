@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { chefApi } from "../../api/chef";
 import StatCard from "../../components/common/StatCard";
+import DashboardWelcomeSection from "../../components/dashboard/DashboardWelcomeSection";
+import DashboardStatsGrid from "../../components/dashboard/DashboardStatsGrid";
+import DashboardQuickActions from "../../components/dashboard/DashboardQuickActions";
+import DashboardAlerts from "../../components/dashboard/DashboardAlerts";
+import DashboardTable from "../../components/dashboard/DashboardTable";
 import {
   Package,
   ClipboardList,
@@ -64,48 +69,41 @@ const ChefDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-[#6B46C1] text-white rounded-box p-6">
-        <div className="flex items-center gap-4">
-          <ChefHat className="h-12 w-12" />
-          <div>
-            <h1 className="text-3xl font-bold">
-              Добрый день, {user?.full_name}! 👨‍🍳
-            </h1>
-            <p className="mt-2 opacity-90">Панель управления повара</p>
-          </div>
-        </div>
-      </div>
+      <DashboardWelcomeSection 
+        title={`Добрый день, ${user?.full_name}! 👨‍🍳`}
+        subtitle="Панель управления повара"
+        icon={<ChefHat className="h-12 w-12" />}
+      />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Заказов сегодня"
-          value={todayOrders.length}
-          figure={<ClipboardList className="h-8 w-8" />}
-          color="primary"
-        />
-
-        <StatCard
-          title="Выдано"
-          value={receivedOrders}
-          figure={<CheckCircle className="h-8 w-8" />}
-          color="success"
-        />
-
-        <StatCard
-          title="Ожидают выдачи"
-          value={pendingOrders}
-          figure={<Clock className="h-8 w-8" />}
-          color="warning"
-        />
-
-        <StatCard
-          title="Мало на складе"
-          value={lowStockDishes}
-          figure={<Package className="h-8 w-8" />}
-          color="error"
-        />
-      </div>
+      <DashboardStatsGrid 
+        stats={[
+          {
+            title: "Заказов сегодня",
+            value: todayOrders.length,
+            figure: <ClipboardList className="h-8 w-8" />,
+            color: "primary"
+          },
+          {
+            title: "Выдано",
+            value: receivedOrders,
+            figure: <CheckCircle className="h-8 w-8" />,
+            color: "success"
+          },
+          {
+            title: "Ожидают выдачи",
+            value: pendingOrders,
+            figure: <Clock className="h-8 w-8" />,
+            color: "warning"
+          },
+          {
+            title: "Мало на складе",
+            value: lowStockDishes,
+            figure: <Package className="h-8 w-8" />,
+            color: "error"
+          }
+        ]}
+      />
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -159,74 +157,51 @@ const ChefDashboard = () => {
               Заказов пока нет
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="table table-zebra">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Ученик ID</th>
-                    <th>Блюдо</th>
-                    <th>Тип оплаты</th>
-                    <th>Статус</th>
-                    <th>Дата заказа</th>
-                    <th>Время</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {todayOrders.slice(0, 10).map((order) => (
-                    <tr key={order.id}>
-                      <td>#{order.id}</td>
-                      <td>{order.student_id}</td>
-                      <td>{order.dish?.name || `ID: ${order.dish_id}`}</td>
-                      <td>
-                        <span
-                          className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
-                        >
-                          {order.payment_type === "subscription"
-                            ? "Абонемент"
-                            : "Разовый"}
-                        </span>
-                      </td>
-                      <td>
-                        <span
-                          className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
-                        >
-                          {order.is_received ? "Выдано" : "Ожидает"}
-                        </span>
-                      </td>
-                      <td>
-                        {order.order_date
-                          ? new Date(order.order_date).toLocaleDateString(
-                              "ru-RU",
-                            )
-                          : new Date(order.created_at).toLocaleDateString(
-                              "ru-RU",
-                            )}
-                      </td>
-                      <td>
-                        {new Date(order.created_at).toLocaleTimeString("ru-RU")}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <DashboardTable 
+              headers={["ID", "Ученик ID", "Блюдо", "Тип оплаты", "Статус", "Дата заказа", "Время"]}
+              rows={todayOrders.slice(0, 10).map((order) => [
+                `#${order.id}`,
+                order.student_id,
+                order.dish?.name || `ID: ${order.dish_id}`,
+                <span
+                  className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
+                >
+                  {order.payment_type === "subscription"
+                    ? "Абонемент"
+                    : "Разовый"}
+                </span>,
+                <span
+                  className={`badge ${order.is_received ? "badge-success" : "badge-warning"}`}
+                >
+                  {order.is_received ? "Выдано" : "Ожидает"}
+                </span>,
+                order.order_date
+                  ? new Date(order.order_date).toLocaleDateString("ru-RU")
+                  : new Date(order.created_at).toLocaleDateString("ru-RU"),
+                new Date(order.created_at).toLocaleTimeString("ru-RU")
+              ])}
+              emptyMessage="Заказов пока нет"
+            />
           )}
         </div>
       </div>
 
       {/* Low Stock Alert */}
       {lowStockDishes > 0 && (
-        <div className="alert alert-warning shadow-lg">
-          <Package className="h-6 w-6" />
-          <div>
-            <h3 className="font-bold">Внимание!</h3>
-            <p>{lowStockDishes} блюд имеют низкий остаток (менее 5 порций)</p>
-          </div>
-          <Link to="/chef/stock" className="btn btn-sm">
-            Проверить
-          </Link>
-        </div>
+        <DashboardAlerts 
+          alerts={[
+            {
+              type: "warning",
+              icon: <Package className="h-6 w-6" />,
+              title: "Внимание!",
+              message: `${lowStockDishes} блюд имеют низкий остаток (менее 5 порций)`,
+              link: {
+                to: "/chef/stock",
+                text: "Проверить"
+              }
+            }
+          ]}
+        />
       )}
     </div>
   );
