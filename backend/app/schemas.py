@@ -104,6 +104,13 @@ class DishInfo(BaseModel):
     class Config:
         from_attributes = True
 
+class StudentInfo(BaseModel):
+    id: int
+    full_name: str
+
+    class Config:
+        from_attributes = True
+
 class Order(OrderBase):
     id: int
     student_id: int
@@ -111,6 +118,18 @@ class Order(OrderBase):
     created_at: datetime
     order_date: Optional[datetime] = None
     dish: Optional[DishInfo] = None
+
+    class Config:
+        from_attributes = True
+
+class OrderWithStudent(OrderBase):
+    id: int
+    student_id: int
+    is_received: bool
+    created_at: datetime
+    order_date: Optional[datetime] = None
+    dish: Optional[DishInfo] = None
+    student: Optional[StudentInfo] = None
 
     class Config:
         from_attributes = True

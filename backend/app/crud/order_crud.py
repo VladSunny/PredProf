@@ -106,6 +106,11 @@ def get_all_orders(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Order).options(joinedload(models.Order.dish)).offset(skip).limit(limit).all()
 
 
+def get_all_orders_with_student(db: Session, skip: int = 0, limit: int = 100):
+    """Получить все заказы с информацией о студенте (для повара/админа)"""
+    return db.query(models.Order).options(joinedload(models.Order.dish), joinedload(models.Order.student)).offset(skip).limit(limit).all()
+
+
 def mark_order_received(db: Session, order_id: int, user_id: int):
     """Отметить заказ как полученный"""
     order = db.query(models.Order).filter(models.Order.id == order_id).first()
@@ -121,7 +126,16 @@ def mark_order_received(db: Session, order_id: int, user_id: int):
 def get_today_orders(db: Session):
     """Получить заказы на сегодня (для повара)"""
     today = datetime.now().date()
-    
+
     return db.query(models.Order).options(joinedload(models.Order.dish)).filter(
+        func.date(func.coalesce(models.Order.order_date, models.Order.created_at)) == today
+    ).all()
+
+
+def get_today_orders_with_student(db: Session):
+    """Получить заказы на сегодня с информацией о студенте (для повара)"""
+    today = datetime.now().date()
+
+    return db.query(models.Order).options(joinedload(models.Order.dish), joinedload(models.Order.student)).filter(
         func.date(func.coalesce(models.Order.order_date, models.Order.created_at)) == today
     ).all()

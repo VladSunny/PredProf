@@ -23,7 +23,7 @@ const OrderCard = ({
               <h3 className="font-bold">Заказ #{order.id}</h3>
               {showStudentId && (
                 <p className="text-sm text-base-content/60">
-                  Ученик ID: {order.student_id}
+                  {order.student ? `Ученик: ${order.student.full_name} (ID: ${order.student_id})` : `Ученик ID: ${order.student_id}`}
                 </p>
               )}
               <p className="text-sm text-base-content/60">

@@ -8,7 +8,7 @@ from ..database import get_db
 router = APIRouter()
 
 
-@router.get("/chef/orders", response_model=list[schemas.Order])
+@router.get("/chef/orders", response_model=list[schemas.OrderWithStudent])
 def get_all_orders(
     skip: int = 0,
     limit: int = 100,
@@ -16,16 +16,16 @@ def get_all_orders(
     current_user: schemas.User = Depends(dependencies.require_chef)
 ):
     """Просмотр всех заказов (для учета выданных блюд)"""
-    return crud.get_all_orders(db, skip=skip, limit=limit)
+    return crud.get_all_orders_with_student(db, skip=skip, limit=limit)
 
 
-@router.get("/chef/orders/today", response_model=list[schemas.Order])
+@router.get("/chef/orders/today", response_model=list[schemas.OrderWithStudent])
 def get_today_orders(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(dependencies.require_chef)
 ):
     """Получить заказы на сегодня"""
-    return crud.get_today_orders(db)
+    return crud.get_today_orders_with_student(db)
 
 
 @router.get("/chef/dishes", response_model=list[schemas.Dish])

@@ -21,8 +21,10 @@ from .order_crud import (
     create_order,
     get_user_orders,
     get_all_orders,
+    get_all_orders_with_student,
     mark_order_received,
-    get_today_orders
+    get_today_orders,
+    get_today_orders_with_student
 )
 
 from .purchase_request_crud import (
@@ -63,8 +65,10 @@ __all__ = [
     "create_order",
     "get_user_orders",
     "get_all_orders",
+    "get_all_orders_with_student",
     "mark_order_received",
     "get_today_orders",
+    "get_today_orders_with_student",
     
     # Purchase request CRUD functions
     "create_purchase_request",
