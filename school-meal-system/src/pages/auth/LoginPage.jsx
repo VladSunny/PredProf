@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LogIn, Eye, EyeOff } from "lucide-react";
+import { LogIn, Eye, EyeOff, Home } from "lucide-react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -37,6 +37,15 @@ const LoginPage = () => {
     <div className="min-h-screen bg-lavender-blue-100 flex items-center justify-center p-4">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
+          <div className="flex justify-between items-center mb-4">
+            <Link
+              to="/"
+              className="btn btn-ghost btn-sm gap-2 text-base-content/70"
+            >
+              <Home className="h-4 w-4" />
+              На главную
+            </Link>
+          </div>
           <div className="text-center mb-6">
             <h1 className="text-4xl mb-2">🍽️</h1>
             <h2 className="text-2xl font-bold">Школьная столовая</h2>

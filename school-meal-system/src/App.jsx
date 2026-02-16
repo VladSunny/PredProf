@@ -4,7 +4,8 @@ import { useAuth } from "./context/AuthContext";
 // Layouts
 import MainLayout from "./components/layout/MainLayout";
 
-// Auth Pages
+// Landing & Auth Pages
+import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 
@@ -78,6 +79,7 @@ const App = () => {
   return (
     <Routes>
       {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
       <Route
         path="/login"
         element={
@@ -141,7 +143,6 @@ const App = () => {
       </Route>
 
       {/* Default Route */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
