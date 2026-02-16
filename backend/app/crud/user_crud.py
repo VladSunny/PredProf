@@ -1,5 +1,6 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from .. import models, schemas, auth
+from . import allergen_crud
 from typing import List, Optional
 
 
@@ -26,20 +27,39 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    
+    # Handle allergens if allergen_ids provided
+    if user.allergen_ids:
+        allergens = allergen_crud.get_allergens_by_ids(db, user.allergen_ids)
+        db_user.allergens_rel = allergens
+        db.commit()
+        db.refresh(db_user)
+    
     return db_user
 
 
 def update_user_profile(db: Session, user_id: int, profile_update: schemas.UserProfileUpdate):
     """Обновление профиля пользователя (аллергии, предпочтения)"""
-    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user = db.query(models.User).options(joinedload(models.User.allergens_rel)).filter(models.User.id == user_id).first()
     if not db_user:
         return None
 
-    update_data = profile_update.model_dump(exclude_unset=True)
+    update_data = profile_update.model_dump(exclude_unset=True, exclude={'allergen_ids'})
     for key, value in update_data.items():
         setattr(db_user, key, value)
+    
+    # Handle allergens update
+    if 'allergen_ids' in profile_update.model_dump(exclude_unset=True):
+        allergen_ids = profile_update.allergen_ids
+        if allergen_ids is not None:
+            allergens = allergen_crud.get_allergens_by_ids(db, allergen_ids)
+            db_user.allergens_rel = allergens
+        else:
+            db_user.allergens_rel = []
 
     db.commit()
+    db.refresh(db_user)
+    # Reload allergens relationship
     db.refresh(db_user)
     return db_user
 

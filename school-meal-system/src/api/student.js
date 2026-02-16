@@ -1,11 +1,12 @@
 import { API_BASE_URL, getAuthHeaders, handleResponse } from "./config";
 
 export const studentApi = {
-  getMenu: async (isBreakfast = null) => {
+  getMenu: async (isBreakfast = null, excludeAllergens = true) => {
     const params = new URLSearchParams();
     if (isBreakfast !== null) {
       params.append("is_breakfast", isBreakfast);
     }
+    params.append("exclude_allergens", excludeAllergens);
     const response = await fetch(`${API_BASE_URL}/menu?${params}`, {
       headers: getAuthHeaders(),
     });

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { adminApi } from "../../api/admin";
 import { studentApi } from "../../api/student";
+import { allergenApi } from "../../api/allergen";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
 import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
@@ -22,10 +23,22 @@ const ManageDishesPage = () => {
     stock_quantity: "",
     allergens: "",
   });
+  const [allergens, setAllergens] = useState([]);
+  const [selectedAllergenIds, setSelectedAllergenIds] = useState([]);
 
   useEffect(() => {
     fetchDishes();
+    fetchAllergens();
   }, []);
+
+  const fetchAllergens = async () => {
+    try {
+      const data = await allergenApi.getAllergens();
+      setAllergens(data);
+    } catch (error) {
+      console.error("Error fetching allergens:", error);
+    }
+  };
 
   const fetchDishes = async () => {
     try {
@@ -47,6 +60,7 @@ const ManageDishesPage = () => {
       stock_quantity: "",
       allergens: "",
     });
+    setSelectedAllergenIds([]);
     setEditingDish(null);
   };
 
@@ -64,6 +78,12 @@ const ManageDishesPage = () => {
       stock_quantity: dish.stock_quantity.toString(),
       allergens: dish.allergens || "",
     });
+    // Set selected allergen IDs from dish.allergens_rel if available
+    if (dish.allergens_rel && dish.allergens_rel.length > 0) {
+      setSelectedAllergenIds(dish.allergens_rel.map(a => a.id));
+    } else {
+      setSelectedAllergenIds([]);
+    }
     setEditingDish(dish);
     setShowModal(true);
   };
@@ -82,7 +102,7 @@ const ManageDishesPage = () => {
         price: parseFloat(formData.price),
         is_breakfast: formData.is_breakfast,
         stock_quantity: parseInt(formData.stock_quantity),
-        allergens: formData.allergens || null,
+        allergen_ids: selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
       };
 
       if (editingDish) {
@@ -101,6 +121,14 @@ const ManageDishesPage = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const toggleAllergen = (allergenId) => {
+    setSelectedAllergenIds(prev => 
+      prev.includes(allergenId)
+        ? prev.filter(id => id !== allergenId)
+        : [...prev, allergenId]
+    );
   };
 
   const handleDelete = async (dishId) => {
@@ -200,7 +228,15 @@ const ManageDishesPage = () => {
               <span className="font-semibold" key={`price-${dish.id}`}>
                 {dish.price} ₽
               </span>,
-              dish.allergens ? (
+              (dish.allergens_rel && dish.allergens_rel.length > 0) ? (
+                <div className="flex flex-wrap gap-1" key={`allergen-${dish.id}`}>
+                  {dish.allergens_rel.map((allergen) => (
+                    <span key={allergen.id} className="badge badge-error badge-sm">
+                      {allergen.name}
+                    </span>
+                  ))}
+                </div>
+              ) : dish.allergens ? (
                 <span
                   className="text-sm text-error"
                   key={`allergen-${dish.id}`}
@@ -305,15 +341,30 @@ const ManageDishesPage = () => {
                 <label className="label">
                   <span className="label-text">Аллергены</span>
                 </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  placeholder="Аллергены через запятую (например: Глютен, Молоко)"
-                  value={formData.allergens}
-                  onChange={(e) =>
-                    setFormData({ ...formData, allergens: e.target.value })
-                  }
-                />
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {allergens.map((allergen) => (
+                    <button
+                      key={allergen.id}
+                      type="button"
+                      className={`badge badge-lg cursor-pointer ${
+                        selectedAllergenIds.includes(allergen.id)
+                          ? "badge-error"
+                          : "badge-outline"
+                      }`}
+                      onClick={() => toggleAllergen(allergen.id)}
+                    >
+                      {allergen.name}
+                      {selectedAllergenIds.includes(allergen.id) && (
+                        <X className="h-3 w-3 ml-1" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+                {selectedAllergenIds.length > 0 && (
+                  <div className="text-sm text-base-content/60">
+                    Выбрано: {selectedAllergenIds.length} аллерген(ов)
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">

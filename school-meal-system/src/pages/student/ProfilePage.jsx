@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { studentApi } from "../../api/student";
+import { allergenApi } from "../../api/allergen";
 import toast from "react-hot-toast";
-import { User, Wallet, AlertTriangle, Heart, Save } from "lucide-react";
+import { User, Wallet, AlertTriangle, Heart, Save, X } from "lucide-react";
 
 const ProfilePage = () => {
   const { user, refreshUser } = useAuth();
@@ -12,6 +13,8 @@ const ProfilePage = () => {
     allergies: user?.allergies || "",
     preferences: user?.preferences || "",
   });
+  const [allergens, setAllergens] = useState([]);
+  const [selectedAllergenIds, setSelectedAllergenIds] = useState([]);
   const [personalInfoData, setPersonalInfoData] = useState({
     full_name: user?.full_name || "",
     parallel: user?.parallel || "",
@@ -22,6 +25,31 @@ const ProfilePage = () => {
     confirm_new_password: "",
   });
   const [activeTab, setActiveTab] = useState("profile");
+
+  useEffect(() => {
+    fetchAllergens();
+    // Initialize selected allergens from user data
+    if (user?.allergens_rel && user.allergens_rel.length > 0) {
+      setSelectedAllergenIds(user.allergens_rel.map(a => a.id));
+    }
+  }, [user]);
+
+  const fetchAllergens = async () => {
+    try {
+      const data = await allergenApi.getAllergens();
+      setAllergens(data);
+    } catch (error) {
+      console.error("Error fetching allergens:", error);
+    }
+  };
+
+  const toggleAllergen = (allergenId) => {
+    setSelectedAllergenIds(prev => 
+      prev.includes(allergenId)
+        ? prev.filter(id => id !== allergenId)
+        : [...prev, allergenId]
+    );
+  };
 
   const handleTopUp = async () => {
     const amount = parseFloat(topUpAmount);
@@ -46,7 +74,11 @@ const ProfilePage = () => {
   const handleProfileUpdate = async () => {
     setLoading(true);
     try {
-      await studentApi.updateProfile(profileData);
+      const updateData = {
+        ...profileData,
+        allergen_ids: selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
+      };
+      await studentApi.updateProfile(updateData);
       toast.success("Профиль обновлен");
       await refreshUser();
     } catch (error) {
@@ -375,29 +407,37 @@ const ProfilePage = () => {
                   Пищевые аллергии
                 </h2>
                 <p className="text-sm text-base-content/60">
-                  Укажите продукты, на которые у вас аллергия
+                  Выберите аллергены из списка
                 </p>
                 <div className="form-control mt-4">
-                  <textarea
-                    className="textarea textarea-bordered h-24"
-                    placeholder="Например: молоко, орехи, глютен..."
-                    value={profileData.allergies}
-                    onChange={(e) =>
-                      setProfileData({
-                        ...profileData,
-                        allergies: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                {user?.allergies && (
-                  <div className="alert alert-warning mt-2">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span className="text-sm">
-                      Текущие аллергии: {user.allergies}
-                    </span>
+                  <div className="flex flex-wrap gap-2">
+                    {allergens.map((allergen) => (
+                      <button
+                        key={allergen.id}
+                        type="button"
+                        className={`badge badge-lg cursor-pointer ${
+                          selectedAllergenIds.includes(allergen.id)
+                            ? "badge-error"
+                            : "badge-outline"
+                        }`}
+                        onClick={() => toggleAllergen(allergen.id)}
+                      >
+                        {allergen.name}
+                        {selectedAllergenIds.includes(allergen.id) && (
+                          <X className="h-3 w-3 ml-1" />
+                        )}
+                      </button>
+                    ))}
                   </div>
-                )}
+                  {selectedAllergenIds.length > 0 && (
+                    <div className="alert alert-warning mt-4">
+                      <AlertTriangle className="h-4 w-4" />
+                      <span className="text-sm">
+                        Выбрано аллергенов: {selectedAllergenIds.length}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

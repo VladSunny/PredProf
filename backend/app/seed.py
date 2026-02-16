@@ -12,6 +12,34 @@ def seed_database(db: Session):
     
     print("Начало заполнения базы данных тестовыми данными...")
     
+    # 0. Создаем аллергены
+    allergens_data = [
+        {"name": "Глютен", "description": "Содержится в пшенице, ржи, ячмене"},
+        {"name": "Молоко", "description": "Лактоза и молочные белки"},
+        {"name": "Яйца", "description": "Куриные яйца и продукты из них"},
+        {"name": "Рыба", "description": "Рыба и рыбные продукты"},
+        {"name": "Моллюски", "description": "Ракообразные и моллюски"},
+        {"name": "Орехи", "description": "Арахис, миндаль, грецкие орехи и др."},
+        {"name": "Арахис", "description": "Арахис и продукты из него"},
+        {"name": "Соя", "description": "Соевые бобы и продукты из них"},
+        {"name": "Кунжут", "description": "Семена кунжута"},
+        {"name": "Горчица", "description": "Горчица и продукты из неё"},
+    ]
+    
+    created_allergens = {}
+    for allergen_data in allergens_data:
+        # Check if allergen already exists
+        existing = db.query(models.Allergen).filter(models.Allergen.name == allergen_data["name"]).first()
+        if existing:
+            created_allergens[allergen_data["name"]] = existing
+        else:
+            db_allergen = models.Allergen(**allergen_data)
+            db.add(db_allergen)
+            db.commit()
+            db.refresh(db_allergen)
+            created_allergens[allergen_data["name"]] = db_allergen
+            print(f"Создан аллерген: {allergen_data['name']}")
+    
     # 1. Создаем пользователей
     users_data = [
         {
@@ -82,6 +110,18 @@ def seed_database(db: Session):
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
+        
+        # Associate allergens with user if specified
+        if user_data.get("allergies"):
+            allergen_names = [a.strip() for a in user_data["allergies"].split(",")]
+            user_allergens = []
+            for allergen_name in allergen_names:
+                if allergen_name in created_allergens:
+                    user_allergens.append(created_allergens[allergen_name])
+            db_user.allergens_rel = user_allergens
+            db.commit()
+            db.refresh(db_user)
+        
         created_users[user_data["full_name"]] = db_user
         print(f"Создан пользователь: {user_data['full_name']} ({user_data['role']})")
     
@@ -106,10 +146,23 @@ def seed_database(db: Session):
     
     created_dishes = []
     for dish_data in dishes_data:
+        allergens_text = dish_data.pop("allergens", None)
         db_dish = models.Dish(**dish_data)
         db.add(db_dish)
         db.commit()
         db.refresh(db_dish)
+        
+        # Associate allergens with dish if specified
+        if allergens_text:
+            allergen_names = [a.strip() for a in allergens_text.split(",")]
+            dish_allergens = []
+            for allergen_name in allergen_names:
+                if allergen_name in created_allergens:
+                    dish_allergens.append(created_allergens[allergen_name])
+            db_dish.allergens_rel = dish_allergens
+            db.commit()
+            db.refresh(db_dish)
+        
         created_dishes.append(db_dish)
         print(f"Создано блюдо: {dish_data['name']} ({'Завтрак' if dish_data['is_breakfast'] else 'Обед'})")
     
@@ -209,6 +262,7 @@ def seed_database(db: Session):
     print("Заполнение базы данных завершено успешно!")
     print("="*60)
     print("Создано:")
+    print(f"  - Аллергенов: {len(created_allergens)}")
     print(f"  - Пользователей: {len(created_users)}")
     print(f"  - Блюд: {len(created_dishes)}")
     print(f"  - Заказов: 30")
@@ -219,6 +273,7 @@ def seed_database(db: Session):
     return {
         "message": "База данных успешно заполнена тестовыми данными",
         "stats": {
+            "allergens": len(created_allergens),
             "users": len(created_users),
             "dishes": len(created_dishes),
             "orders": 30,

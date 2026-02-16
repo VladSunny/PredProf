@@ -26,9 +26,9 @@ const DishCard = ({
         <p className="text-base-content/60 text-xs sm:text-sm">
           {dish.description || "Вкусное блюдо"}
         </p>
-        {dish.allergens && (
+        {(dish.allergens || (dish.allergens_rel && dish.allergens_rel.length > 0)) && (
           <div className="mt-2">
-            <div className="text-xs font-medium text-error flex items-center gap-1">
+            <div className="text-xs font-medium text-error flex items-center gap-1 flex-wrap">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -41,7 +41,18 @@ const DishCard = ({
                   clipRule="evenodd"
                 />
               </svg>
-              Аллергены: {dish.allergens}
+              <span>Аллергены:</span>
+              {dish.allergens_rel && dish.allergens_rel.length > 0 ? (
+                <div className="flex flex-wrap gap-1">
+                  {dish.allergens_rel.map((allergen) => (
+                    <span key={allergen.id} className="badge badge-error badge-sm">
+                      {allergen.name}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span>{dish.allergens}</span>
+              )}
             </div>
           </div>
         )}

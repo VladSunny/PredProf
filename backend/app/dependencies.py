@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from . import auth, crud, schemas
+from . import auth, crud, schemas, models
 from .database import get_db
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 security = HTTPBearer()
 
@@ -21,7 +21,9 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = crud.get_user_by_email(db, email=token_data["email"])
+    user = db.query(models.User).options(
+        joinedload(models.User.allergens_rel)
+    ).filter(models.User.email == token_data["email"]).first()
     if user is None or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

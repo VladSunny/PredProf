@@ -12,6 +12,7 @@ const MenuPage = () => {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [excludeAllergens, setExcludeAllergens] = useState(true);
   const [selectedDish, setSelectedDish] = useState(null);
   const [orderModal, setOrderModal] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);
@@ -23,13 +24,13 @@ const MenuPage = () => {
 
   useEffect(() => {
     fetchDishes();
-  }, [filter]);
+  }, [filter, excludeAllergens]);
 
   const fetchDishes = async () => {
     setLoading(true);
     try {
       const isBreakfast = filter === "all" ? null : filter === "breakfast";
-      const data = await studentApi.getMenu(isBreakfast);
+      const data = await studentApi.getMenu(isBreakfast, excludeAllergens);
       // Sort dishes alphabetically by name
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
       setDishes(sortedData);
@@ -117,39 +118,65 @@ const MenuPage = () => {
       />
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          {
-            key: "all",
-            label: "Все",
-            activeButtonClass: "btn-primary",
-            inactiveButtonClass: "btn-outline",
-          },
-          {
-            key: "breakfast",
-            label: "🌅 Завтраки",
-            activeButtonClass: "btn-warning",
-            inactiveButtonClass: "btn-outline btn-warning",
-          },
-          {
-            key: "lunch",
-            label: "🌞 Обеды",
-            activeButtonClass: "btn-info",
-            inactiveButtonClass: "btn-outline btn-info",
-          },
-        ].map((filterItem) => (
-          <button
-            key={filterItem.key}
-            className={`btn btn-sm ${
-              filter === filterItem.key
-                ? filterItem.activeButtonClass
-                : filterItem.inactiveButtonClass
-            }`}
-            onClick={() => setFilter(filterItem.key)}
-          >
-            {filterItem.label}
-          </button>
-        ))}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          {[
+            {
+              key: "all",
+              label: "Все",
+              activeButtonClass: "btn-primary",
+              inactiveButtonClass: "btn-outline",
+            },
+            {
+              key: "breakfast",
+              label: "🌅 Завтраки",
+              activeButtonClass: "btn-warning",
+              inactiveButtonClass: "btn-outline btn-warning",
+            },
+            {
+              key: "lunch",
+              label: "🌞 Обеды",
+              activeButtonClass: "btn-info",
+              inactiveButtonClass: "btn-outline btn-info",
+            },
+          ].map((filterItem) => (
+            <button
+              key={filterItem.key}
+              className={`btn btn-sm ${
+                filter === filterItem.key
+                  ? filterItem.activeButtonClass
+                  : filterItem.inactiveButtonClass
+              }`}
+              onClick={() => setFilter(filterItem.key)}
+            >
+              {filterItem.label}
+            </button>
+          ))}
+        </div>
+        
+        {/* Allergy Filter */}
+        {user?.allergens_rel && user.allergens_rel.length > 0 && (
+          <div className="flex items-center gap-2">
+            <label className="label cursor-pointer gap-2">
+              <input
+                type="checkbox"
+                className="checkbox checkbox-warning"
+                checked={excludeAllergens}
+                onChange={(e) => setExcludeAllergens(e.target.checked)}
+              />
+              <span className="label-text">
+                Скрыть блюда с моими аллергенами
+              </span>
+            </label>
+            <div className="flex flex-wrap gap-1">
+              {user.allergens_rel.map((allergen) => (
+                <span key={allergen.id} className="badge badge-error badge-sm">
+                  {allergen.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Menu Grid */}
@@ -195,8 +222,8 @@ const MenuPage = () => {
                 <div className="text-2xl font-bold text-primary">
                   {selectedDish.price} ₽
                 </div>
-                {selectedDish.allergens && (
-                  <div className="text-sm text-error mt-1 flex items-center gap-1">
+                {(selectedDish.allergens || (selectedDish.allergens_rel && selectedDish.allergens_rel.length > 0)) && (
+                  <div className="text-sm text-error mt-1 flex items-center gap-1 flex-wrap">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4"
@@ -209,7 +236,18 @@ const MenuPage = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    Аллергены: {selectedDish.allergens}
+                    <span>Аллергены:</span>
+                    {selectedDish.allergens_rel && selectedDish.allergens_rel.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {selectedDish.allergens_rel.map((allergen) => (
+                          <span key={allergen.id} className="badge badge-error badge-sm">
+                            {allergen.name}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span>{selectedDish.allergens}</span>
+                    )}
                   </div>
                 )}
               </div>

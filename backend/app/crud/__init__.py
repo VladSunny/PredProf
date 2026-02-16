@@ -44,6 +44,14 @@ from .stats_crud import (
     get_attendance_statistics
 )
 
+from .allergen_crud import (
+    get_allergen_by_id,
+    get_allergen_by_name,
+    get_all_allergens,
+    create_allergen,
+    get_allergens_by_ids
+)
+
 __all__ = [
     # User CRUD functions
     "get_user_by_email",
@@ -82,5 +90,12 @@ __all__ = [
     
     # Statistics CRUD functions
     "get_payment_statistics",
-    "get_attendance_statistics"
+    "get_attendance_statistics",
+    
+    # Allergen CRUD functions
+    "get_allergen_by_id",
+    "get_allergen_by_name",
+    "get_all_allergens",
+    "create_allergen",
+    "get_allergens_by_ids"
 ]

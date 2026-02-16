@@ -17,11 +17,13 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8)
     role: Optional[UserRole] = UserRole.STUDENT
-    allergies: Optional[str] = None
+    allergies: Optional[str] = None  # Deprecated, use allergen_ids instead
+    allergen_ids: Optional[List[int]] = None
     preferences: Optional[str] = None
 
 class UserProfileUpdate(BaseModel):
-    allergies: Optional[str] = None
+    allergies: Optional[str] = None  # Deprecated, use allergen_ids instead
+    allergen_ids: Optional[List[int]] = None
     preferences: Optional[str] = None
 
 class UserPersonalInfoUpdate(BaseModel):
@@ -43,6 +45,7 @@ class User(UserBase):
     preferences: Optional[str]
     is_active: bool
     created_at: datetime
+    allergens_rel: Optional[List[Allergen]] = []
     
     class Config:
         from_attributes = True
@@ -68,7 +71,8 @@ class DishBase(BaseModel):
     price: float = Field(..., gt=0)
     is_breakfast: bool = True
     stock_quantity: int = Field(..., ge=0)
-    allergens: Optional[str] = None
+    allergens: Optional[str] = None  # Deprecated, use allergen_ids instead
+    allergen_ids: Optional[List[int]] = None
 
 class DishCreate(DishBase):
     pass
@@ -79,10 +83,12 @@ class DishUpdate(BaseModel):
     price: Optional[float] = None
     is_breakfast: Optional[bool] = None
     stock_quantity: Optional[int] = None
-    allergens: Optional[str] = None
+    allergens: Optional[str] = None  # Deprecated, use allergen_ids instead
+    allergen_ids: Optional[List[int]] = None
 
 class Dish(DishBase):
     id: int
+    allergens_rel: Optional[List[Allergen]] = []
 
     class Config:
         from_attributes = True
@@ -166,6 +172,20 @@ class ReviewCreate(ReviewBase):
 class Review(ReviewBase):
     id: int
     student_id: int
+    
+    class Config:
+        from_attributes = True
+
+# Схемы для аллергенов
+class AllergenBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class AllergenCreate(AllergenBase):
+    pass
+
+class Allergen(AllergenBase):
+    id: int
     
     class Config:
         from_attributes = True

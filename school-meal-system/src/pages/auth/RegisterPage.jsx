@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { UserPlus, Eye, EyeOff, Home } from "lucide-react";
+import { allergenApi } from "../../api/allergen";
+import { UserPlus, Eye, EyeOff, Home, X } from "lucide-react";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +14,34 @@ const RegisterPage = () => {
     allergies: "",
     preferences: "",
   });
+  const [allergens, setAllergens] = useState([]);
+  const [selectedAllergenIds, setSelectedAllergenIds] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllergens();
+  }, []);
+
+  const fetchAllergens = async () => {
+    try {
+      const data = await allergenApi.getAllergens();
+      setAllergens(data);
+    } catch (error) {
+      console.error("Error fetching allergens:", error);
+    }
+  };
+
+  const toggleAllergen = (allergenId) => {
+    setSelectedAllergenIds(prev => 
+      prev.includes(allergenId)
+        ? prev.filter(id => id !== allergenId)
+        : [...prev, allergenId]
+    );
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,7 +70,7 @@ const RegisterPage = () => {
       parallel: formData.parallel,
       password: formData.password,
       role: "student",
-      allergies: formData.allergies || null,
+      allergen_ids: selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
       preferences: formData.preferences || null,
     });
 
@@ -181,13 +205,33 @@ const RegisterPage = () => {
                   <label className="label">
                     <span className="label-text">Пищевые аллергии</span>
                   </label>
-                  <textarea
-                    name="allergies"
-                    placeholder="Укажите ваши аллергии"
-                    className="textarea textarea-bordered"
-                    value={formData.allergies}
-                    onChange={handleChange}
-                  />
+                  <p className="text-sm text-base-content/60 mb-2">
+                    Выберите аллергены из списка
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {allergens.map((allergen) => (
+                      <button
+                        key={allergen.id}
+                        type="button"
+                        className={`badge badge-lg cursor-pointer ${
+                          selectedAllergenIds.includes(allergen.id)
+                            ? "badge-error"
+                            : "badge-outline"
+                        }`}
+                        onClick={() => toggleAllergen(allergen.id)}
+                      >
+                        {allergen.name}
+                        {selectedAllergenIds.includes(allergen.id) && (
+                          <X className="h-3 w-3 ml-1" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedAllergenIds.length > 0 && (
+                    <div className="text-sm text-base-content/60 mt-2">
+                      Выбрано: {selectedAllergenIds.length} аллерген(ов)
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-control">

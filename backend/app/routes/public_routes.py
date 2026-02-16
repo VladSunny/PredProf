@@ -67,6 +67,16 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     }
 
 
+@router.get("/allergens", response_model=list[schemas.Allergen])
+def get_allergens(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Получить список всех аллергенов (публичный эндпоинт)"""
+    return crud.get_all_allergens(db, skip=skip, limit=limit)
+
+
 @router.post("/seed")
 def seed_test_data(
     db: Session = Depends(get_db)

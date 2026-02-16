@@ -1,8 +1,23 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Float, Enum, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Float, Enum, Text, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
 from .database import Base
+
+# Association tables for many-to-many relationships
+dish_allergen_association = Table(
+    'dish_allergen',
+    Base.metadata,
+    Column('dish_id', Integer, ForeignKey('dishes.id'), primary_key=True),
+    Column('allergen_id', Integer, ForeignKey('allergens.id'), primary_key=True)
+)
+
+user_allergen_association = Table(
+    'user_allergen',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id'), primary_key=True),
+    Column('allergen_id', Integer, ForeignKey('allergens.id'), primary_key=True)
+)
 
 class UserRole(str, enum.Enum):
     STUDENT = "student"
@@ -28,6 +43,7 @@ class User(Base):
 
     orders = relationship("Order", back_populates="student")
     reviews = relationship("Review", back_populates="student")
+    allergens_rel = relationship("Allergen", secondary=user_allergen_association, back_populates="users")
 
 class Dish(Base):
     """Меню завтраков и обедов"""
@@ -43,6 +59,7 @@ class Dish(Base):
 
     orders = relationship("Order", back_populates="dish")
     reviews = relationship("Review", back_populates="dish")
+    allergens_rel = relationship("Allergen", secondary=dish_allergen_association, back_populates="dishes")
 
 class Order(Base):
     """Учет выданных блюд и оплат"""
@@ -83,3 +100,14 @@ class Review(Base):
 
     student = relationship("User", back_populates="reviews")
     dish = relationship("Dish", back_populates="reviews")
+
+class Allergen(Base):
+    """Аллергены"""
+    __tablename__ = "allergens"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False, index=True)
+    description = Column(Text, nullable=True)
+    
+    dishes = relationship("Dish", secondary=dish_allergen_association, back_populates="allergens_rel")
+    users = relationship("User", secondary=user_allergen_association, back_populates="allergens_rel")

@@ -187,7 +187,15 @@ const StockPage = () => {
                 <span className="font-semibold" key={`price-${dish.id}`}>
                   {dish.price} ₽
                 </span>,
-                dish.allergens ? (
+                (dish.allergens_rel && dish.allergens_rel.length > 0) ? (
+                  <div className="flex flex-wrap gap-1" key={`allergen-${dish.id}`}>
+                    {dish.allergens_rel.map((allergen) => (
+                      <span key={allergen.id} className="badge badge-error badge-sm">
+                        {allergen.name}
+                      </span>
+                    ))}
+                  </div>
+                ) : dish.allergens ? (
                   <span
                     className="text-sm text-error"
                     key={`allergen-${dish.id}`}
