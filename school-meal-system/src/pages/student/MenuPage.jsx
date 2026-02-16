@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 import DishCard from "../../components/common/DishCard";
 import Modal from "../../components/common/Modal";
 import PageHeader from "../../components/common/PageHeader";
-import { ShoppingCart, Star, MessageSquare, X } from "lucide-react";
+import WeeklyPlanner from "../../components/common/WeeklyPlanner";
+import { ShoppingCart, Star, MessageSquare, X, Calendar, Grid } from "lucide-react";
 
 const MenuPage = () => {
   const { user, refreshUser } = useAuth();
@@ -21,15 +22,17 @@ const MenuPage = () => {
   const [orderDate, setOrderDate] = useState("");
   const [subscriptionWeeks, setSubscriptionWeeks] = useState(1);
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
+  const [viewMode, setViewMode] = useState("planner"); // "planner" or "grid"
 
   useEffect(() => {
     fetchDishes();
-  }, [filter, excludeAllergens]);
+  }, [filter, excludeAllergens, viewMode]);
 
   const fetchDishes = async () => {
     setLoading(true);
     try {
-      const isBreakfast = filter === "all" ? null : filter === "breakfast";
+      // In planner mode, always fetch all dishes regardless of filter
+      const isBreakfast = viewMode === "planner" ? null : (filter === "all" ? null : filter === "breakfast");
       const data = await studentApi.getMenu(isBreakfast, excludeAllergens);
       // Sort dishes alphabetically by name
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
@@ -65,6 +68,12 @@ const MenuPage = () => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+
+  const handleBulkOrder = async (orderData) => {
+    await studentApi.createOrder(orderData);
+    await refreshUser();
+    fetchDishes();
   };
 
   const openReviewModal = async (dish) => {
@@ -107,79 +116,109 @@ const MenuPage = () => {
       {/* Header */}
       <PageHeader
         title="Меню"
-        subtitle="Выберите блюда для заказа"
+        subtitle={
+          viewMode === "planner"
+            ? "Спланируйте питание на неделю"
+            : "Выберите блюда для заказа"
+        }
         actions={
-          <div className="flex items-center gap-2">
-            <div className="badge badge-primary badge-lg text-xs sm:text-sm">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+            <div className="badge badge-primary badge-lg text-xs sm:text-sm justify-center sm:justify-start">
               Баланс: {user?.balance?.toFixed(2)} ₽
+            </div>
+            <div className="btn-group w-full sm:w-auto">
+              <button
+                className={`btn btn-sm flex-1 sm:flex-none ${
+                  viewMode === "planner" ? "btn-primary" : "btn-outline"
+                }`}
+                onClick={() => setViewMode("planner")}
+                title="Планировщик недели"
+              >
+                <Calendar className="h-4 w-4" />
+                <span className="hidden sm:inline">Планировщик</span>
+                <span className="sm:hidden">План</span>
+              </button>
+              <button
+                className={`btn btn-sm flex-1 sm:flex-none ${
+                  viewMode === "grid" ? "btn-primary" : "btn-outline"
+                }`}
+                onClick={() => setViewMode("grid")}
+                title="Сетка блюд"
+              >
+                <Grid className="h-4 w-4" />
+                <span className="hidden sm:inline">Сетка</span>
+                <span className="sm:hidden">Список</span>
+              </button>
             </div>
           </div>
         }
       />
 
-      {/* Filters */}
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          {[
-            {
-              key: "all",
-              label: "Все",
-              activeButtonClass: "btn-primary",
-              inactiveButtonClass: "btn-outline",
-            },
-            {
-              key: "breakfast",
-              label: "🌅 Завтраки",
-              activeButtonClass: "btn-warning",
-              inactiveButtonClass: "btn-outline btn-warning",
-            },
-            {
-              key: "lunch",
-              label: "🌞 Обеды",
-              activeButtonClass: "btn-info",
-              inactiveButtonClass: "btn-outline btn-info",
-            },
-          ].map((filterItem) => (
-            <button
-              key={filterItem.key}
-              className={`btn btn-sm ${
-                filter === filterItem.key
-                  ? filterItem.activeButtonClass
-                  : filterItem.inactiveButtonClass
-              }`}
-              onClick={() => setFilter(filterItem.key)}
-            >
-              {filterItem.label}
-            </button>
-          ))}
-        </div>
-        
-        {/* Allergy Filter */}
-        {user?.allergens_rel && user.allergens_rel.length > 0 && (
-          <div className="flex items-center gap-2">
-            <label className="label cursor-pointer gap-2">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-warning"
-                checked={excludeAllergens}
-                onChange={(e) => setExcludeAllergens(e.target.checked)}
-              />
-              <span className="label-text">
-                Скрыть блюда с моими аллергенами
-              </span>
-            </label>
-            <div className="flex flex-wrap gap-1">
-              {user.allergens_rel.map((allergen) => (
-                <span key={allergen.id} className="badge badge-error badge-sm">
-                  {allergen.name}
-                </span>
-              ))}
-            </div>
+      {/* Filters - Only show in grid view */}
+      {viewMode === "grid" && (
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            {[
+              {
+                key: "all",
+                label: "Все",
+                activeButtonClass: "btn-primary",
+                inactiveButtonClass: "btn-outline",
+              },
+              {
+                key: "breakfast",
+                label: "🌅 Завтраки",
+                activeButtonClass: "btn-warning",
+                inactiveButtonClass: "btn-outline btn-warning",
+              },
+              {
+                key: "lunch",
+                label: "🌞 Обеды",
+                activeButtonClass: "btn-info",
+                inactiveButtonClass: "btn-outline btn-info",
+              },
+            ].map((filterItem) => (
+              <button
+                key={filterItem.key}
+                className={`btn btn-sm ${
+                  filter === filterItem.key
+                    ? filterItem.activeButtonClass
+                    : filterItem.inactiveButtonClass
+                }`}
+                onClick={() => setFilter(filterItem.key)}
+              >
+                {filterItem.label}
+              </button>
+            ))}
           </div>
-        )}
-      </div>
+          
+          {/* Allergy Filter */}
+          {user?.allergens_rel && user.allergens_rel.length > 0 && (
+            <div className="flex items-center gap-2">
+              <label className="label cursor-pointer gap-2">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-warning"
+                  checked={excludeAllergens}
+                  onChange={(e) => setExcludeAllergens(e.target.checked)}
+                />
+                <span className="label-text">
+                  Скрыть блюда с моими аллергенами
+                </span>
+              </label>
+              <div className="flex flex-wrap gap-1">
+                {user.allergens_rel.map((allergen) => (
+                  <span key={allergen.id} className="badge badge-error badge-sm">
+                    {allergen.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Menu Grid */}
+      {/* Content based on view mode */}
       {loading ? (
         <div className="flex justify-center py-12">
           <span className="loading loading-spinner loading-lg text-primary"></span>
@@ -188,6 +227,13 @@ const MenuPage = () => {
         <div className="text-center py-12">
           <p className="text-base-content/60">Блюда не найдены</p>
         </div>
+      ) : viewMode === "planner" ? (
+        <WeeklyPlanner
+          dishes={dishes}
+          balance={user?.balance || 0}
+          onBulkOrder={handleBulkOrder}
+          user={user}
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {dishes.map((dish) => (
