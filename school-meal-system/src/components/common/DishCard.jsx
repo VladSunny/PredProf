@@ -16,9 +16,9 @@ const DishCard = ({
     <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 ${className} animate-fade-in`}>
       <div className="card-body">
         <div className="flex items-start justify-between">
-          <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-300 hover:scale-110`}>
+          {/* <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-300 hover:scale-110`}>
             {dish.is_breakfast ? <CroissantIcon className="h-10 w-10" /> : <PlateIcon className="h-10 w-10" />}
-          </div>
+          </div> */}
           <div
             className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"} text-xs transition-all duration-200`}
           >
