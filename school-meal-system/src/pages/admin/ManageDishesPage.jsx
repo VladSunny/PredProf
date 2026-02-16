@@ -8,6 +8,7 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import { Plus, Edit2, Trash2, X, UtensilsCrossed } from "lucide-react";
+import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
 
 const ManageDishesPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -155,13 +156,13 @@ const ManageDishesPage = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-transition">
       {/* Header */}
       <PageHeader
         title="Управление меню"
         subtitle="Добавление и редактирование блюд"
         actions={
-          <button className="btn btn-primary" onClick={openAddModal}>
+          <button className="btn btn-primary transition-all duration-200 hover:scale-105" onClick={openAddModal}>
             <Plus className="h-5 w-5" />
             Добавить блюдо
           </button>
@@ -194,7 +195,7 @@ const ManageDishesPage = () => {
       />
 
       {/* Dishes Table */}
-      <div className="card bg-base-100 shadow">
+      <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="card-body">
           <DataTable
             headers={[
@@ -209,9 +210,9 @@ const ManageDishesPage = () => {
             rows={dishes.map((dish) => [
               dish.id,
               <div className="flex items-center gap-2" key={`name-${dish.id}`}>
-                <span className="text-xl">
-                  {dish.is_breakfast ? "🥐" : "🍝"}
-                </span>
+                <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
+                  {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                </div>
                 <div>
                   <div className="font-bold">{dish.name}</div>
                   <div className="text-sm text-base-content/60">
@@ -265,13 +266,13 @@ const ManageDishesPage = () => {
               </span>,
               <div className="flex gap-2" key={`actions-${dish.id}`}>
                 <button
-                  className="btn btn-ghost btn-sm"
+                  className="btn btn-ghost btn-sm transition-all duration-200 hover:scale-110 hover:bg-base-200"
                   onClick={() => openEditModal(dish)}
                 >
                   <Edit2 className="h-4 w-4" />
                 </button>
                 <button
-                  className="btn btn-ghost btn-sm text-error"
+                  className="btn btn-ghost btn-sm text-error transition-all duration-200 hover:scale-110 hover:bg-error/10"
                   onClick={() => handleDelete(dish.id)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -297,9 +298,9 @@ const ManageDishesPage = () => {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="modal modal-open">
-          <div className="modal-box">
+          <div className="modal-box animate-scale-in">
             <button
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 transition-all duration-200 hover:scale-110 hover:bg-base-200"
               onClick={() => setShowModal(false)}
             >
               <X className="h-4 w-4" />
@@ -410,7 +411,7 @@ const ManageDishesPage = () => {
                   <span className="label-text">Тип блюда</span>
                 </label>
                 <div className="flex gap-4">
-                  <label className="label cursor-pointer gap-2">
+                  <label className="label cursor-pointer gap-2 transition-all duration-200 hover:scale-105">
                     <input
                       type="radio"
                       name="meal-type"
@@ -420,9 +421,10 @@ const ManageDishesPage = () => {
                         setFormData({ ...formData, is_breakfast: true })
                       }
                     />
-                    <span>🌅 Завтрак</span>
+                    <SunriseIcon className="h-5 w-5 text-warning" />
+                    <span>Завтрак</span>
                   </label>
-                  <label className="label cursor-pointer gap-2">
+                  <label className="label cursor-pointer gap-2 transition-all duration-200 hover:scale-105">
                     <input
                       type="radio"
                       name="meal-type"
@@ -432,20 +434,21 @@ const ManageDishesPage = () => {
                         setFormData({ ...formData, is_breakfast: false })
                       }
                     />
-                    <span>🌞 Обед</span>
+                    <SunIcon className="h-5 w-5 text-info" />
+                    <span>Обед</span>
                   </label>
                 </div>
               </div>
             </div>
             <div className="modal-action">
               <button
-                className="btn btn-ghost"
+                className="btn btn-ghost transition-all duration-200 hover:scale-105"
                 onClick={() => setShowModal(false)}
               >
                 Отмена
               </button>
               <button
-                className={`btn btn-primary ${submitting ? "loading" : ""}`}
+                className={`btn btn-primary transition-all duration-200 hover:scale-105 ${submitting ? "loading" : ""}`}
                 onClick={handleSubmit}
                 disabled={submitting}
               >

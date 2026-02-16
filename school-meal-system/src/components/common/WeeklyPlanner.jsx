@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { X, Plus, Calendar, ShoppingCart, Repeat } from "lucide-react";
 import toast from "react-hot-toast";
 import Modal from "./Modal";
+import { CroissantIcon, PlateIcon } from "./Icons";
 
 const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [weekStart, setWeekStart] = useState(() => {
@@ -221,12 +222,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
     : [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 page-transition">
       {/* Week Navigation - Mobile Responsive */}
-      <div className="bg-base-100 p-3 sm:p-4 rounded-box shadow">
+      <div className="bg-base-100 p-3 sm:p-4 rounded-box shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <button
-            className="btn btn-sm btn-ghost order-2 sm:order-1"
+            className="btn btn-sm btn-ghost order-2 sm:order-1 transition-all duration-200 hover:scale-105"
             onClick={() => navigateWeek(-1)}
           >
             <span className="hidden sm:inline">← Предыдущая неделя</span>
@@ -234,7 +235,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
           </button>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 order-1 sm:order-2 flex-1">
             <button
-              className="btn btn-sm btn-ghost"
+              className="btn btn-sm btn-ghost transition-all duration-200 hover:scale-105"
               onClick={goToCurrentWeek}
             >
               <Calendar className="h-4 w-4" />
@@ -257,7 +258,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
             </div>
           </div>
           <button
-            className="btn btn-sm btn-ghost order-3"
+            className="btn btn-sm btn-ghost order-3 transition-all duration-200 hover:scale-105"
             onClick={() => navigateWeek(1)}
           >
             <span className="hidden sm:inline">Следующая неделя →</span>
@@ -267,7 +268,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
       </div>
 
       {/* Weekly Grid - Mobile Scrollable */}
-      <div className="bg-base-100 rounded-box shadow overflow-x-auto -mx-2 sm:mx-0 pb-2 sm:pb-0">
+      <div className="bg-base-100 rounded-box shadow-lg hover:shadow-xl transition-all duration-300 overflow-x-auto -mx-2 sm:mx-0 pb-2 sm:pb-0">
         <div className="min-w-[700px] sm:min-w-full">
           {/* Header - Sticky on mobile */}
           <div className="grid grid-cols-7 border-b border-base-300 sticky top-0 bg-base-100 z-10">
@@ -302,8 +303,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                   key={`breakfast-${day.dateString}`}
                   className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-warning/5"
                 >
-                  <div className="text-xs font-semibold mb-1 sm:mb-2 text-warning">
-                    🥐 <span className="hidden sm:inline">Завтрак</span>
+                  <div className="text-xs font-semibold mb-1 sm:mb-2 text-warning flex items-center gap-1">
+                    <CroissantIcon className="h-4 w-4 transition-transform duration-200 hover:scale-110" />
+                    <span className="hidden sm:inline">Завтрак</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
                     <div className="space-y-1 sm:space-y-2">
@@ -311,7 +313,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         {plannedMealsList.map((dish) => (
                           <div
                             key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group"
+                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group transition-all duration-200 hover:bg-base-300 hover:scale-105"
                           >
                             <div className="font-semibold truncate text-xs pr-6">
                               {dish.name}
@@ -333,7 +335,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         ))}
                       </div>
                       <button
-                        className={`btn btn-xs btn-outline btn-warning w-full ${
+                        className={`btn btn-xs btn-outline btn-warning w-full transition-all duration-200 hover:scale-105 ${
                           isPast ? "btn-disabled" : ""
                         }`}
                         onClick={() => {
@@ -352,7 +354,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     </div>
                   ) : (
                     <button
-                      className={`btn btn-xs btn-outline btn-warning w-full ${
+                      className={`btn btn-xs btn-outline btn-warning w-full transition-all duration-200 hover:scale-105 ${
                         isPast ? "btn-disabled" : ""
                       }`}
                       onClick={() => {
@@ -387,8 +389,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                   key={`lunch-${day.dateString}`}
                   className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-info/5"
                 >
-                  <div className="text-xs font-semibold mb-1 sm:mb-2 text-info">
-                    🍝 <span className="hidden sm:inline">Обед</span>
+                  <div className="text-xs font-semibold mb-1 sm:mb-2 text-info flex items-center gap-1">
+                    <PlateIcon className="h-4 w-4 transition-transform duration-200 hover:scale-110" />
+                    <span className="hidden sm:inline">Обед</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
                     <div className="space-y-1 sm:space-y-2">
@@ -396,7 +399,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         {plannedMealsList.map((dish) => (
                           <div
                             key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group"
+                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group transition-all duration-200 hover:bg-base-300 hover:scale-105"
                           >
                             <div className="font-semibold truncate text-xs pr-6">
                               {dish.name}
@@ -418,7 +421,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         ))}
                       </div>
                       <button
-                        className={`btn btn-xs btn-outline btn-info w-full ${
+                        className={`btn btn-xs btn-outline btn-info w-full transition-all duration-200 hover:scale-105 ${
                           isPast ? "btn-disabled" : ""
                         }`}
                         onClick={() => {
@@ -437,7 +440,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     </div>
                   ) : (
                     <button
-                      className={`btn btn-xs btn-outline btn-info w-full ${
+                      className={`btn btn-xs btn-outline btn-info w-full transition-all duration-200 hover:scale-105 ${
                         isPast ? "btn-disabled" : ""
                       }`}
                       onClick={() => {
@@ -463,7 +466,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
       {/* Summary and Order Buttons - Mobile Responsive */}
       {plannedCount > 0 && (
-        <div className="bg-base-100 p-4 rounded-box shadow">
+        <div className="bg-base-100 p-4 rounded-box shadow-lg hover:shadow-xl transition-all duration-300">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 flex-1">
               <div className="text-center sm:text-left">
@@ -493,7 +496,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
             </div>
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <button
-                className="btn btn-primary btn-sm sm:btn-lg flex-1 sm:flex-none"
+                className="btn btn-primary btn-sm sm:btn-lg flex-1 sm:flex-none transition-all duration-200 hover:scale-105"
                 onClick={() => handleBulkOrder("one-time", 1)}
                 disabled={isOrdering || balance < totalCost}
               >
@@ -512,7 +515,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                 )}
               </button>
               <button
-                className="btn btn-secondary btn-sm sm:btn-lg flex-1 sm:flex-none"
+                className="btn btn-secondary btn-sm sm:btn-lg flex-1 sm:flex-none transition-all duration-200 hover:scale-105"
                 onClick={() => setSubscriptionModal(true)}
                 disabled={isOrdering}
               >
@@ -574,18 +577,18 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                       }
                     }}
                     disabled={isAlreadyAdded}
-                    className={`bg-base-200 hover:bg-base-300 p-4 rounded-lg text-left transition-colors border-2 ${
+                    className={`bg-base-200 hover:bg-base-300 p-4 rounded-lg text-left transition-all duration-200 border-2 ${
                       isAlreadyAdded
                         ? "border-success opacity-60 cursor-not-allowed"
-                        : "border-transparent hover:border-primary"
+                        : "border-transparent hover:border-primary hover:scale-105"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-2xl">
-                            {dish.is_breakfast ? "🥐" : "🍝"}
-                          </span>
+                          <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
+                            {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                          </div>
                           <h4 className="font-semibold text-sm sm:text-base truncate">
                             {dish.name}
                             {isAlreadyAdded && (
@@ -697,7 +700,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
           <div className="modal-action">
             <button
-              className="btn btn-ghost"
+              className="btn btn-ghost transition-all duration-200 hover:scale-105"
               onClick={() => {
                 setSubscriptionModal(false);
                 setSubscriptionWeeks(1);
@@ -706,7 +709,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               Отмена
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary transition-all duration-200 hover:scale-105"
               onClick={() => handleBulkOrder("subscription", subscriptionWeeks)}
               disabled={
                 isOrdering ||

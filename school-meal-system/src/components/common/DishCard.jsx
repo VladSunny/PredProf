@@ -1,5 +1,6 @@
 import React from "react";
 import { ShoppingCart, MessageSquare } from "lucide-react";
+import { CroissantIcon, PlateIcon } from "./Icons";
 
 const DishCard = ({
   dish,
@@ -12,12 +13,14 @@ const DishCard = ({
   const canAfford = dish.price <= balance;
 
   return (
-    <div className={`card bg-base-100 shadow-lg ${className}`}>
+    <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 ${className} animate-fade-in`}>
       <div className="card-body">
         <div className="flex items-start justify-between">
-          <div className="text-4xl">{dish.is_breakfast ? "🥐" : "🍝"}</div>
+          <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-300 hover:scale-110`}>
+            {dish.is_breakfast ? <CroissantIcon className="h-10 w-10" /> : <PlateIcon className="h-10 w-10" />}
+          </div>
           <div
-            className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"} text-xs`}
+            className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"} text-xs transition-all duration-200`}
           >
             {dish.is_breakfast ? "Завтрак" : "Обед"}
           </div>
@@ -70,14 +73,14 @@ const DishCard = ({
         </div>
         <div className="card-actions justify-end mt-4 gap-2">
           <button
-            className="btn btn-ghost btn-sm"
+            className="btn btn-ghost btn-sm transition-all duration-200 hover:bg-base-200"
             onClick={() => onReviewClick && onReviewClick(dish)}
           >
-            <MessageSquare className="h-4 w-4" />
+            <MessageSquare className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
             Отзывы
           </button>
           <button
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm transition-all duration-200 hover:scale-105"
             disabled={!isAvailable || !canAfford}
             onClick={() => onOrderClick && onOrderClick(dish)}
           >

@@ -7,6 +7,7 @@ import Modal from "../../components/common/Modal";
 import PageHeader from "../../components/common/PageHeader";
 import WeeklyPlanner from "../../components/common/WeeklyPlanner";
 import { ShoppingCart, Star, MessageSquare, X, Calendar, Grid } from "lucide-react";
+import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
 
 const MenuPage = () => {
   const { user, refreshUser } = useAuth();
@@ -112,7 +113,7 @@ const MenuPage = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-transition">
       {/* Header */}
       <PageHeader
         title="Меню"
@@ -162,31 +163,35 @@ const MenuPage = () => {
               {
                 key: "all",
                 label: "Все",
+                icon: null,
                 activeButtonClass: "btn-primary",
                 inactiveButtonClass: "btn-outline",
               },
               {
                 key: "breakfast",
-                label: "🌅 Завтраки",
+                label: "Завтраки",
+                icon: <SunriseIcon className="h-4 w-4" />,
                 activeButtonClass: "btn-warning",
                 inactiveButtonClass: "btn-outline btn-warning",
               },
               {
                 key: "lunch",
-                label: "🌞 Обеды",
+                label: "Обеды",
+                icon: <SunIcon className="h-4 w-4" />,
                 activeButtonClass: "btn-info",
                 inactiveButtonClass: "btn-outline btn-info",
               },
             ].map((filterItem) => (
               <button
                 key={filterItem.key}
-                className={`btn btn-sm ${
+                className={`btn btn-sm transition-all duration-200 hover:scale-105 ${
                   filter === filterItem.key
                     ? filterItem.activeButtonClass
                     : filterItem.inactiveButtonClass
                 }`}
                 onClick={() => setFilter(filterItem.key)}
               >
+                {filterItem.icon && <span className="mr-1">{filterItem.icon}</span>}
                 {filterItem.label}
               </button>
             ))}
@@ -259,9 +264,9 @@ const MenuPage = () => {
           title="Оформление заказа"
         >
           <div>
-            <div className="flex items-center gap-4 p-4 bg-base-200 rounded-lg">
-              <div className="text-4xl">
-                {selectedDish.is_breakfast ? "🥐" : "🍝"}
+            <div className="flex items-center gap-4 p-4 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300">
+              <div className={`${selectedDish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
+                {selectedDish.is_breakfast ? <CroissantIcon className="h-12 w-12" /> : <PlateIcon className="h-12 w-12" />}
               </div>
               <div>
                 <div className="font-semibold">{selectedDish.name}</div>
@@ -387,17 +392,17 @@ const MenuPage = () => {
               </p>
             </div>
           </div>
-          <div className="modal-action">
-            <button
-              className="btn btn-ghost"
-              onClick={() => setOrderModal(false)}
-            >
-              Отмена
-            </button>
-            <button className="btn btn-primary" onClick={handleOrder}>
-              Оплатить
-            </button>
-          </div>
+            <div className="modal-action">
+              <button
+                className="btn btn-ghost transition-all duration-200 hover:scale-105"
+                onClick={() => setOrderModal(false)}
+              >
+                Отмена
+              </button>
+              <button className="btn btn-primary transition-all duration-200 hover:scale-105" onClick={handleOrder}>
+                Оплатить
+              </button>
+            </div>
         </Modal>
       )}
 
@@ -438,7 +443,7 @@ const MenuPage = () => {
               }
             />
             <button
-              className="btn btn-primary btn-sm mt-2"
+              className="btn btn-primary btn-sm mt-2 transition-all duration-200 hover:scale-105"
               onClick={handleReviewSubmit}
             >
               Отправить
@@ -476,7 +481,7 @@ const MenuPage = () => {
           </div>
 
           <div className="modal-action">
-            <button className="btn" onClick={() => setReviewModal(false)}>
+            <button className="btn transition-all duration-200 hover:scale-105" onClick={() => setReviewModal(false)}>
               Закрыть
             </button>
           </div>

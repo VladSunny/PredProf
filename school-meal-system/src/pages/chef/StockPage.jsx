@@ -6,6 +6,7 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import { Package, AlertTriangle, CheckCircle } from "lucide-react";
+import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
 
 const StockPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -61,7 +62,7 @@ const StockPage = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-transition">
       {/* Header */}
       <PageHeader
         title="Контроль остатков"
@@ -122,33 +123,36 @@ const StockPage = () => {
           },
           {
             key: "breakfast",
-            label: "🌅 Завтраки",
+            label: "Завтраки",
+            icon: <SunriseIcon className="h-4 w-4" />,
             activeButtonClass: "btn-info",
             inactiveButtonClass: "btn-outline btn-info",
           },
           {
             key: "lunch",
-            label: "🌞 Обеды",
+            label: "Обеды",
+            icon: <SunIcon className="h-4 w-4" />,
             activeButtonClass: "btn-secondary",
             inactiveButtonClass: "btn-outline btn-secondary",
           },
         ].map((filterItem) => (
           <button
             key={filterItem.key}
-            className={`btn btn-sm ${
+            className={`btn btn-sm transition-all duration-200 hover:scale-105 ${
               filter === filterItem.key
                 ? filterItem.activeButtonClass
                 : filterItem.inactiveButtonClass
             }`}
             onClick={() => setFilter(filterItem.key)}
           >
+            {filterItem.icon && <span className="mr-1">{filterItem.icon}</span>}
             {filterItem.label}
           </button>
         ))}
       </div>
 
       {/* Dishes Table */}
-      <div className="card bg-base-100 shadow">
+      <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="card-body">
           <DataTable
             headers={[
@@ -168,9 +172,9 @@ const StockPage = () => {
                   className="flex items-center gap-2"
                   key={`name-${dish.id}`}
                 >
-                  <span className="text-xl">
-                    {dish.is_breakfast ? "🥐" : "🍝"}
-                  </span>
+                  <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
+                    {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                  </div>
                   <div>
                     <div className="font-bold">{dish.name}</div>
                     <div className="text-sm text-base-content/60">
@@ -223,7 +227,7 @@ const StockPage = () => {
                   {dish.stock_quantity}
                 </span>,
                 <span
-                  className={`badge ${status.color} gap-1`}
+                  className={`badge ${status.color} gap-1 transition-all duration-200 hover:scale-105`}
                   key={`status-${dish.id}`}
                 >
                   {status.icon} {status.label}

@@ -15,6 +15,7 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
+import { SunriseIcon, SunIcon } from "../../components/common/Icons";
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -62,7 +63,7 @@ const StudentDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-transition">
       {/* Welcome Section */}
       <DashboardWelcomeSection
         title={`Привет, ${user?.full_name}!`}
@@ -145,17 +146,17 @@ const StudentDashboard = () => {
       )}
 
       {/* Recent Menu Items */}
-      <div className="card bg-base-100 shadow">
+      <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="card-body">
           <h2 className="card-title">Популярные блюда</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {menu.slice(0, 6).map((dish) => (
               <div
                 key={dish.id}
-                className="flex items-center gap-3 p-3 bg-base-200 rounded-lg"
+                className="flex items-center gap-3 p-3 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300 hover:scale-105 cursor-pointer"
               >
-                <div className="text-2xl">
-                  {dish.is_breakfast ? "🌅" : "🌞"}
+                <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
+                  {dish.is_breakfast ? <SunriseIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold">{dish.name}</div>
@@ -164,7 +165,7 @@ const StudentDashboard = () => {
                   </div>
                 </div>
                 <div
-                  className={`badge ${dish.stock_quantity > 0 ? "badge-success" : "badge-error"}`}
+                  className={`badge transition-all duration-200 hover:scale-105 ${dish.stock_quantity > 0 ? "badge-success" : "badge-error"}`}
                 >
                   {dish.stock_quantity > 0 ? "В наличии" : "Нет"}
                 </div>
@@ -172,7 +173,7 @@ const StudentDashboard = () => {
             ))}
           </div>
           <div className="card-actions justify-end mt-4">
-            <Link to="/student/menu" className="btn btn-primary btn-sm">
+            <Link to="/student/menu" className="btn btn-primary btn-sm transition-all duration-200 hover:scale-105">
               Все меню
             </Link>
           </div>
