@@ -20,7 +20,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [isOrdering, setIsOrdering] = useState(false);
   const [subscriptionModal, setSubscriptionModal] = useState(false);
   const [subscriptionWeeks, setSubscriptionWeeks] = useState(1);
-  const [dishSelectionModal, setDishSelectionModal] = useState(null); // { dateString, mealType }
+  const [editMode, setEditMode] = useState(null); // { dateString, mealType }
 
   // Generate week days (Monday to Sunday)
   const weekDays = useMemo(() => {
@@ -205,13 +205,11 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
   // Get selected day info for modal title
   const getSelectedDayInfo = () => {
-    if (!dishSelectionModal) return null;
-    const day = weekDays.find(
-      (d) => d.dateString === dishSelectionModal.dateString,
-    );
+    if (!editMode) return null;
+    const day = weekDays.find((d) => d.dateString === editMode.dateString);
     if (!day) return null;
     const mealTypeLabel =
-      dishSelectionModal.mealType === "breakfast" ? "Завтрак" : "Обед";
+      editMode.mealType === "breakfast" ? "Завтрак" : "Обед";
     return {
       date: day.date.toLocaleDateString("ru-RU", {
         weekday: "long",
@@ -223,8 +221,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   };
 
   const selectedDayInfo = getSelectedDayInfo();
-  const availableDishesForModal = dishSelectionModal
-    ? getAvailableDishes(dishSelectionModal.mealType)
+  const availableDishesForModal = editMode
+    ? getAvailableDishes(editMode.mealType)
     : [];
 
   return (
@@ -317,7 +315,6 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                   className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-warning/5"
                 >
                   <div className="text-xs font-semibold mb-1 sm:mb-2 text-warning flex items-center gap-1">
-                    <CroissantIcon className="h-4 w-4 transition-transform duration-200 hover:scale-110" />
                     <span className="hidden sm:inline">Завтрак</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
@@ -326,28 +323,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         {plannedMealsList.map((dish) => (
                           <div
                             key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group transition-all duration-200 hover:bg-base-300 hover:scale-105"
+                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
                           >
-                            <div className="font-semibold truncate text-xs pr-6">
+                            <div className="font-semibold truncate text-xs">
                               {dish.name}
                             </div>
                             <div className="text-primary font-bold text-xs sm:text-sm">
                               {dish.price} ₽
                             </div>
-                            <button
-                              className="btn btn-xs btn-circle btn-ghost btn-error absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                              onClick={() =>
-                                removeMealFromPlan(
-                                  day.dateString,
-                                  "breakfast",
-                                  dish.id,
-                                )
-                              }
-                              disabled={isPast}
-                              title="Удалить"
-                            >
-                              <X className="h-2 w-2" />
-                            </button>
                           </div>
                         ))}
                       </div>
@@ -357,7 +340,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         }`}
                         onClick={() => {
                           if (!isPast) {
-                            setDishSelectionModal({
+                            setEditMode({
                               dateString: day.dateString,
                               mealType: "breakfast",
                             });
@@ -365,8 +348,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         }}
                         disabled={isPast}
                       >
-                        <Plus className="h-3 w-3" />
-                        <span className="hidden sm:inline">Ещё</span>
+                        <span className="hidden sm:inline">Изменить</span>
+                        <span className="sm:hidden">Изм.</span>
                       </button>
                     </div>
                   ) : (
@@ -376,7 +359,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                       }`}
                       onClick={() => {
                         if (!isPast) {
-                          setDishSelectionModal({
+                          setEditMode({
                             dateString: day.dateString,
                             mealType: "breakfast",
                           });
@@ -407,7 +390,6 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                   className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-info/5"
                 >
                   <div className="text-xs font-semibold mb-1 sm:mb-2 text-info flex items-center gap-1">
-                    <PlateIcon className="h-4 w-4 transition-transform duration-200 hover:scale-110" />
                     <span className="hidden sm:inline">Обед</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
@@ -416,28 +398,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         {plannedMealsList.map((dish) => (
                           <div
                             key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs relative group transition-all duration-200 hover:bg-base-300 hover:scale-105"
+                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
                           >
-                            <div className="font-semibold truncate text-xs pr-6">
+                            <div className="font-semibold truncate text-xs">
                               {dish.name}
                             </div>
                             <div className="text-primary font-bold text-xs sm:text-sm">
                               {dish.price} ₽
                             </div>
-                            <button
-                              className="btn btn-xs btn-circle btn-ghost btn-error absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                              onClick={() =>
-                                removeMealFromPlan(
-                                  day.dateString,
-                                  "lunch",
-                                  dish.id,
-                                )
-                              }
-                              disabled={isPast}
-                              title="Удалить"
-                            >
-                              <X className="h-2 w-2" />
-                            </button>
                           </div>
                         ))}
                       </div>
@@ -447,7 +415,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         }`}
                         onClick={() => {
                           if (!isPast) {
-                            setDishSelectionModal({
+                            setEditMode({
                               dateString: day.dateString,
                               mealType: "lunch",
                             });
@@ -455,8 +423,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         }}
                         disabled={isPast}
                       >
-                        <Plus className="h-3 w-3" />
-                        <span className="hidden sm:inline">Ещё</span>
+                        <span className="hidden sm:inline">Изменить</span>
+                        <span className="sm:hidden">Изм.</span>
                       </button>
                     </div>
                   ) : (
@@ -466,7 +434,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                       }`}
                       onClick={() => {
                         if (!isPast) {
-                          setDishSelectionModal({
+                          setEditMode({
                             dateString: day.dateString,
                             mealType: "lunch",
                           });
@@ -559,8 +527,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
       {/* Dish Selection Modal */}
       <Modal
-        isOpen={!!dishSelectionModal}
-        onClose={() => setDishSelectionModal(null)}
+        isOpen={!!editMode}
+        onClose={() => setEditMode(null)}
         title={
           selectedDayInfo
             ? `${selectedDayInfo.mealType} - ${selectedDayInfo.date}`
@@ -569,20 +537,30 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         size="max-w-2xl"
       >
         <div className="space-y-4">
-          {dishSelectionModal &&
-            getPlannedMeals(
-              dishSelectionModal.dateString,
-              dishSelectionModal.mealType,
-            ).length > 0 && (
+          {editMode &&
+            getPlannedMeals(editMode.dateString, editMode.mealType).length >
+              0 && (
               <div className="bg-info/10 p-3 rounded-lg">
-                <p className="text-sm font-semibold mb-2">Уже добавлено:</p>
+                <p className="text-sm font-semibold mb-2">Добавлено:</p>
                 <div className="flex flex-wrap gap-2">
                   {getPlannedMeals(
-                    dishSelectionModal.dateString,
-                    dishSelectionModal.mealType,
+                    editMode.dateString,
+                    editMode.mealType,
                   ).map((dish) => (
-                    <span key={dish.id} className="badge badge-info badge-sm">
+                    <span
+                      key={dish.id}
+                      className="badge badge-info badge-sm gap-1 cursor-pointer hover:badge-error transition-colors"
+                      onClick={() =>
+                        removeMealFromPlan(
+                          editMode.dateString,
+                          editMode.mealType,
+                          dish.id,
+                        )
+                      }
+                      title="Нажмите, чтобы удалить"
+                    >
                       {dish.name}
+                      <X className="h-3 w-3" />
                     </span>
                   ))}
                 </div>
@@ -595,29 +573,35 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-2">
               {availableDishesForModal.map((dish) => {
-                const isAlreadyAdded = dishSelectionModal
-                  ? getPlannedMeals(
-                      dishSelectionModal.dateString,
-                      dishSelectionModal.mealType,
-                    ).some((d) => d.id === dish.id)
+                const isAlreadyAdded = editMode
+                  ? getPlannedMeals(editMode.dateString, editMode.mealType).some(
+                      (d) => d.id === dish.id,
+                    )
                   : false;
                 return (
                   <button
                     key={dish.id}
                     onClick={() => {
-                      if (dishSelectionModal && !isAlreadyAdded) {
-                        addMealToPlan(
-                          dish,
-                          dishSelectionModal.dateString,
-                          dishSelectionModal.mealType,
-                        );
+                      if (editMode) {
+                        if (isAlreadyAdded) {
+                          removeMealFromPlan(
+                            editMode.dateString,
+                            editMode.mealType,
+                            dish.id,
+                          );
+                        } else {
+                          addMealToPlan(
+                            dish,
+                            editMode.dateString,
+                            editMode.mealType,
+                          );
+                        }
                       }
                     }}
-                    disabled={isAlreadyAdded}
-                    className={`bg-base-200 hover:bg-base-300 p-4 rounded-lg text-left transition-all duration-200 border-2 ${
+                    className={`bg-base-200 p-4 rounded-lg text-left transition-all duration-200 border-2 ${
                       isAlreadyAdded
-                        ? "border-success opacity-60 cursor-not-allowed"
-                        : "border-transparent hover:border-primary hover:scale-105"
+                        ? "border-success bg-success/10"
+                        : "border-transparent hover:border-primary"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -626,17 +610,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                           <div
                             className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                           >
-                            {dish.is_breakfast ? (
-                              <CroissantIcon className="h-6 w-6" />
-                            ) : (
-                              <PlateIcon className="h-6 w-6" />
-                            )}
                           </div>
                           <h4 className="font-semibold text-sm sm:text-base truncate">
                             {dish.name}
                             {isAlreadyAdded && (
                               <span className="badge badge-success badge-xs ml-2">
-                                Добавлено
+                                Выбрано
                               </span>
                             )}
                           </h4>
