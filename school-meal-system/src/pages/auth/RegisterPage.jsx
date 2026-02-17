@@ -36,10 +36,10 @@ const RegisterPage = () => {
   };
 
   const toggleAllergen = (allergenId) => {
-    setSelectedAllergenIds(prev => 
+    setSelectedAllergenIds((prev) =>
       prev.includes(allergenId)
-        ? prev.filter(id => id !== allergenId)
-        : [...prev, allergenId]
+        ? prev.filter((id) => id !== allergenId)
+        : [...prev, allergenId],
     );
   };
 

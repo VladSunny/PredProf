@@ -155,8 +155,14 @@ const StudentDashboard = () => {
                 key={dish.id}
                 className="flex items-center gap-3 p-3 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300 hover:scale-105 cursor-pointer"
               >
-                <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
-                  {dish.is_breakfast ? <SunriseIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
+                <div
+                  className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                >
+                  {dish.is_breakfast ? (
+                    <SunriseIcon className="h-6 w-6" />
+                  ) : (
+                    <SunIcon className="h-6 w-6" />
+                  )}
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold">{dish.name}</div>
@@ -173,7 +179,10 @@ const StudentDashboard = () => {
             ))}
           </div>
           <div className="card-actions justify-end mt-4">
-            <Link to="/student/menu" className="btn btn-primary btn-sm transition-all duration-200 hover:scale-105">
+            <Link
+              to="/student/menu"
+              className="btn btn-primary btn-sm transition-all duration-200 hover:scale-105"
+            >
               Все меню
             </Link>
           </div>

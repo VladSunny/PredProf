@@ -16,7 +16,10 @@ const Modal = ({ isOpen, onClose, title, children, size = "modal-box" }) => {
         {title && <h3 className="font-bold text-lg">{title}</h3>}
         <div className="py-4">{children}</div>
       </div>
-      <div className="modal-backdrop bg-black/50 animate-fade-in" onClick={onClose}></div>
+      <div
+        className="modal-backdrop bg-black/50 animate-fade-in"
+        onClick={onClose}
+      ></div>
     </div>
   );
 };

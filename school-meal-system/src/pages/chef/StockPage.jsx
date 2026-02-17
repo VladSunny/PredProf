@@ -6,7 +6,12 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import { Package, AlertTriangle, CheckCircle } from "lucide-react";
-import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
+import {
+  CroissantIcon,
+  PlateIcon,
+  SunriseIcon,
+  SunIcon,
+} from "../../components/common/Icons";
 
 const StockPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -172,8 +177,14 @@ const StockPage = () => {
                   className="flex items-center gap-2"
                   key={`name-${dish.id}`}
                 >
-                  <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
-                    {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                  <div
+                    className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                  >
+                    {dish.is_breakfast ? (
+                      <CroissantIcon className="h-6 w-6" />
+                    ) : (
+                      <PlateIcon className="h-6 w-6" />
+                    )}
                   </div>
                   <div>
                     <div className="font-bold">{dish.name}</div>
@@ -191,10 +202,16 @@ const StockPage = () => {
                 <span className="font-semibold" key={`price-${dish.id}`}>
                   {dish.price} ₽
                 </span>,
-                (dish.allergens_rel && dish.allergens_rel.length > 0) ? (
-                  <div className="flex flex-wrap gap-1" key={`allergen-${dish.id}`}>
+                dish.allergens_rel && dish.allergens_rel.length > 0 ? (
+                  <div
+                    className="flex flex-wrap gap-1"
+                    key={`allergen-${dish.id}`}
+                  >
                     {dish.allergens_rel.map((allergen) => (
-                      <span key={allergen.id} className="badge badge-error badge-sm">
+                      <span
+                        key={allergen.id}
+                        className="badge badge-error badge-sm"
+                      >
                         {allergen.name}
                       </span>
                     ))}

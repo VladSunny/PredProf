@@ -13,7 +13,9 @@ const DishCard = ({
   const canAfford = dish.price <= balance;
 
   return (
-    <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 ${className} animate-fade-in`}>
+    <div
+      className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 ${className} animate-fade-in`}
+    >
       <div className="card-body">
         <div className="flex items-start justify-between">
           {/* <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-300 hover:scale-110`}>
@@ -29,7 +31,8 @@ const DishCard = ({
         <p className="text-base-content/60 text-xs sm:text-sm">
           {dish.description || "Вкусное блюдо"}
         </p>
-        {(dish.allergens || (dish.allergens_rel && dish.allergens_rel.length > 0)) && (
+        {(dish.allergens ||
+          (dish.allergens_rel && dish.allergens_rel.length > 0)) && (
           <div className="mt-2">
             <div className="text-xs font-medium text-error flex items-center gap-1 flex-wrap">
               <svg
@@ -48,7 +51,10 @@ const DishCard = ({
               {dish.allergens_rel && dish.allergens_rel.length > 0 ? (
                 <div className="flex flex-wrap gap-1">
                   {dish.allergens_rel.map((allergen) => (
-                    <span key={allergen.id} className="badge badge-error badge-sm">
+                    <span
+                      key={allergen.id}
+                      className="badge badge-error badge-sm"
+                    >
                       {allergen.name}
                     </span>
                   ))}

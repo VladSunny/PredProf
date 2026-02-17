@@ -36,7 +36,14 @@ export const PlateIcon = ({ className = "h-10 w-10", ...props }) => (
     className={className}
     {...props}
   >
-    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" fill="none" />
+    <circle
+      cx="12"
+      cy="12"
+      r="9"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      fill="none"
+    />
     <circle cx="12" cy="12" r="6" fill="currentColor" opacity="0.15" />
     <path
       d="M7 9c1.5 1.5 3.5 2.5 5 2.5s3.5-1 5-2.5M7 15c1.5-1.5 3.5-2.5 5-2.5s3.5 1 5 2.5"
@@ -80,7 +87,14 @@ export const SunriseIcon = ({ className = "h-5 w-5", ...props }) => (
       strokeWidth="2"
       strokeLinecap="round"
     />
-    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" fill="none" />
+    <circle
+      cx="12"
+      cy="12"
+      r="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+    />
     <circle cx="12" cy="12" r="2" fill="currentColor" />
   </svg>
 );

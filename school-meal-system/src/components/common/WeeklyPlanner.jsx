@@ -105,7 +105,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
     const baseCost = Object.values(plannedMeals).reduce((total, mealsArray) => {
       const mealsCost = Array.isArray(mealsArray)
         ? mealsArray.reduce((sum, dish) => sum + (dish.price || 0), 0)
-        : (mealsArray.price || 0);
+        : mealsArray.price || 0;
       return total + mealsCost;
     }, 0);
     return baseCost * weeks;
@@ -159,12 +159,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
       }
 
       if (successCount > 0) {
-        const totalOrders = paymentType === "subscription" 
-          ? successCount * weeks 
-          : successCount;
-        const message = paymentType === "subscription"
-          ? `Успешно оформлен абонемент: ${successCount} блюд на ${weeks} недел${weeks > 1 ? "и" : "ю"} (${totalOrders} заказов)`
-          : `Успешно заказано: ${successCount} блюд`;
+        const totalOrders =
+          paymentType === "subscription" ? successCount * weeks : successCount;
+        const message =
+          paymentType === "subscription"
+            ? `Успешно оформлен абонемент: ${successCount} блюд на ${weeks} недел${weeks > 1 ? "и" : "ю"} (${totalOrders} заказов)`
+            : `Успешно заказано: ${successCount} блюд`;
         toast.success(message);
         setPlannedMeals({});
         setSubscriptionModal(false);
@@ -196,16 +196,22 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   };
 
   const totalCost = calculateTotalCost();
-  const plannedCount = Object.values(plannedMeals).reduce((total, mealsArray) => {
-    return total + (Array.isArray(mealsArray) ? mealsArray.length : 1);
-  }, 0);
+  const plannedCount = Object.values(plannedMeals).reduce(
+    (total, mealsArray) => {
+      return total + (Array.isArray(mealsArray) ? mealsArray.length : 1);
+    },
+    0,
+  );
 
   // Get selected day info for modal title
   const getSelectedDayInfo = () => {
     if (!dishSelectionModal) return null;
-    const day = weekDays.find(d => d.dateString === dishSelectionModal.dateString);
+    const day = weekDays.find(
+      (d) => d.dateString === dishSelectionModal.dateString,
+    );
     if (!day) return null;
-    const mealTypeLabel = dishSelectionModal.mealType === "breakfast" ? "Завтрак" : "Обед";
+    const mealTypeLabel =
+      dishSelectionModal.mealType === "breakfast" ? "Завтрак" : "Обед";
     return {
       date: day.date.toLocaleDateString("ru-RU", {
         weekday: "long",
@@ -217,7 +223,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   };
 
   const selectedDayInfo = getSelectedDayInfo();
-  const availableDishesForModal = dishSelectionModal 
+  const availableDishesForModal = dishSelectionModal
     ? getAvailableDishes(dishSelectionModal.mealType)
     : [];
 
@@ -284,8 +290,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                 <div className="font-semibold text-xs sm:text-sm uppercase">
                   {day.dayName}
                 </div>
-                <div className="text-base sm:text-lg font-bold">{day.dayNumber}</div>
-                <div className="text-xs text-base-content/60 hidden sm:block">{day.month}</div>
+                <div className="text-base sm:text-lg font-bold">
+                  {day.dayNumber}
+                </div>
+                <div className="text-xs text-base-content/60 hidden sm:block">
+                  {day.month}
+                </div>
               </div>
             ))}
           </div>
@@ -293,7 +303,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
           {/* Breakfast Row */}
           <div className="grid grid-cols-7 border-b border-base-300">
             {weekDays.map((day) => {
-              const plannedMealsList = getPlannedMeals(day.dateString, "breakfast");
+              const plannedMealsList = getPlannedMeals(
+                day.dateString,
+                "breakfast",
+              );
               const isToday =
                 day.date.toDateString() === new Date().toDateString();
               const isPast = day.date < new Date() && !isToday;
@@ -324,7 +337,11 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                             <button
                               className="btn btn-xs btn-circle btn-ghost btn-error absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
                               onClick={() =>
-                                removeMealFromPlan(day.dateString, "breakfast", dish.id)
+                                removeMealFromPlan(
+                                  day.dateString,
+                                  "breakfast",
+                                  dish.id,
+                                )
                               }
                               disabled={isPast}
                               title="Удалить"
@@ -410,7 +427,11 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                             <button
                               className="btn btn-xs btn-circle btn-ghost btn-error absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
                               onClick={() =>
-                                removeMealFromPlan(day.dateString, "lunch", dish.id)
+                                removeMealFromPlan(
+                                  day.dateString,
+                                  "lunch",
+                                  dish.id,
+                                )
                               }
                               disabled={isPast}
                               title="Удалить"
@@ -473,18 +494,24 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                 <div className="text-xs sm:text-sm text-base-content/60">
                   Запланировано блюд
                 </div>
-                <div className="text-xl sm:text-2xl font-bold">{plannedCount}</div>
+                <div className="text-xl sm:text-2xl font-bold">
+                  {plannedCount}
+                </div>
               </div>
               <div className="divider divider-horizontal hidden sm:block"></div>
               <div className="text-center sm:text-left">
-                <div className="text-xs sm:text-sm text-base-content/60">Общая стоимость</div>
+                <div className="text-xs sm:text-sm text-base-content/60">
+                  Общая стоимость
+                </div>
                 <div className="text-xl sm:text-2xl font-bold text-primary">
                   {totalCost.toFixed(2)} ₽
                 </div>
               </div>
               <div className="divider divider-horizontal hidden sm:block"></div>
               <div className="text-center sm:text-left">
-                <div className="text-xs sm:text-sm text-base-content/60">Баланс после оплаты</div>
+                <div className="text-xs sm:text-sm text-base-content/60">
+                  Баланс после оплаты
+                </div>
                 <div
                   className={`text-xl sm:text-2xl font-bold ${
                     balance - totalCost >= 0 ? "text-success" : "text-error"
@@ -509,7 +536,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                 ) : (
                   <>
                     <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
-                    <span className="hidden sm:inline">Заказать ({plannedCount})</span>
+                    <span className="hidden sm:inline">
+                      Заказать ({plannedCount})
+                    </span>
                     <span className="sm:hidden">Заказать</span>
                   </>
                 )}
@@ -540,18 +569,25 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         size="max-w-2xl"
       >
         <div className="space-y-4">
-          {dishSelectionModal && getPlannedMeals(dishSelectionModal.dateString, dishSelectionModal.mealType).length > 0 && (
-            <div className="bg-info/10 p-3 rounded-lg">
-              <p className="text-sm font-semibold mb-2">Уже добавлено:</p>
-              <div className="flex flex-wrap gap-2">
-                {getPlannedMeals(dishSelectionModal.dateString, dishSelectionModal.mealType).map((dish) => (
-                  <span key={dish.id} className="badge badge-info badge-sm">
-                    {dish.name}
-                  </span>
-                ))}
+          {dishSelectionModal &&
+            getPlannedMeals(
+              dishSelectionModal.dateString,
+              dishSelectionModal.mealType,
+            ).length > 0 && (
+              <div className="bg-info/10 p-3 rounded-lg">
+                <p className="text-sm font-semibold mb-2">Уже добавлено:</p>
+                <div className="flex flex-wrap gap-2">
+                  {getPlannedMeals(
+                    dishSelectionModal.dateString,
+                    dishSelectionModal.mealType,
+                  ).map((dish) => (
+                    <span key={dish.id} className="badge badge-info badge-sm">
+                      {dish.name}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {availableDishesForModal.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-base-content/60">Нет доступных блюд</p>
@@ -560,9 +596,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-2">
               {availableDishesForModal.map((dish) => {
                 const isAlreadyAdded = dishSelectionModal
-                  ? getPlannedMeals(dishSelectionModal.dateString, dishSelectionModal.mealType).some(
-                      (d) => d.id === dish.id
-                    )
+                  ? getPlannedMeals(
+                      dishSelectionModal.dateString,
+                      dishSelectionModal.mealType,
+                    ).some((d) => d.id === dish.id)
                   : false;
                 return (
                   <button
@@ -586,8 +623,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
-                            {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                          <div
+                            className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                          >
+                            {dish.is_breakfast ? (
+                              <CroissantIcon className="h-6 w-6" />
+                            ) : (
+                              <PlateIcon className="h-6 w-6" />
+                            )}
                           </div>
                           <h4 className="font-semibold text-sm sm:text-base truncate">
                             {dish.name}
@@ -603,18 +646,19 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                             {dish.description}
                           </p>
                         )}
-                        {(dish.allergens_rel && dish.allergens_rel.length > 0) && (
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {dish.allergens_rel.map((allergen) => (
-                              <span
-                                key={allergen.id}
-                                className="badge badge-error badge-xs"
-                              >
-                                {allergen.name}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                        {dish.allergens_rel &&
+                          dish.allergens_rel.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {dish.allergens_rel.map((allergen) => (
+                                <span
+                                  key={allergen.id}
+                                  className="badge badge-error badge-xs"
+                                >
+                                  {allergen.name}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="text-lg sm:text-xl font-bold text-primary">
@@ -685,7 +729,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-base-content/60">Баланс после оплаты:</span>
+              <span className="text-sm text-base-content/60">
+                Баланс после оплаты:
+              </span>
               <span
                 className={`text-lg font-bold ${
                   balance - calculateTotalCost(subscriptionWeeks) >= 0
@@ -712,8 +758,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               className="btn btn-primary transition-all duration-200 hover:scale-105"
               onClick={() => handleBulkOrder("subscription", subscriptionWeeks)}
               disabled={
-                isOrdering ||
-                balance < calculateTotalCost(subscriptionWeeks)
+                isOrdering || balance < calculateTotalCost(subscriptionWeeks)
               }
             >
               {isOrdering ? (

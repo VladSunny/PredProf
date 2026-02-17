@@ -21,7 +21,10 @@ const Navbar = () => {
   return (
     <div className="navbar bg-primary text-primary-content shadow-lg transition-all duration-300">
       <div className="flex-none lg:hidden">
-        <label htmlFor="sidebar-drawer" className="btn btn-square btn-ghost hover:bg-primary-focus transition-all duration-200">
+        <label
+          htmlFor="sidebar-drawer"
+          className="btn btn-square btn-ghost hover:bg-primary-focus transition-all duration-200"
+        >
           <Menu className="h-6 w-6" />
         </label>
       </div>
@@ -61,7 +64,10 @@ const Navbar = () => {
                 </span>
               </li>
               <li>
-                <button onClick={logout} className="text-error transition-all duration-200 hover:scale-105">
+                <button
+                  onClick={logout}
+                  className="text-error transition-all duration-200 hover:scale-105"
+                >
                   <LogOut className="h-4 w-4" />
                   Выйти
                 </button>
@@ -95,7 +101,10 @@ const Navbar = () => {
                 </span>
               </li>
               <li>
-                <button onClick={logout} className="text-error transition-all duration-200 hover:scale-105">
+                <button
+                  onClick={logout}
+                  className="text-error transition-all duration-200 hover:scale-105"
+                >
                   <LogOut className="h-4 w-4" />
                   Выйти
                 </button>

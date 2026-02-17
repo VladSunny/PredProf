@@ -6,8 +6,20 @@ import DishCard from "../../components/common/DishCard";
 import Modal from "../../components/common/Modal";
 import PageHeader from "../../components/common/PageHeader";
 import WeeklyPlanner from "../../components/common/WeeklyPlanner";
-import { ShoppingCart, Star, MessageSquare, X, Calendar, Grid } from "lucide-react";
-import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
+import {
+  ShoppingCart,
+  Star,
+  MessageSquare,
+  X,
+  Calendar,
+  Grid,
+} from "lucide-react";
+import {
+  CroissantIcon,
+  PlateIcon,
+  SunriseIcon,
+  SunIcon,
+} from "../../components/common/Icons";
 
 const MenuPage = () => {
   const { user, refreshUser } = useAuth();
@@ -33,7 +45,12 @@ const MenuPage = () => {
     setLoading(true);
     try {
       // In planner mode, always fetch all dishes regardless of filter
-      const isBreakfast = viewMode === "planner" ? null : (filter === "all" ? null : filter === "breakfast");
+      const isBreakfast =
+        viewMode === "planner"
+          ? null
+          : filter === "all"
+            ? null
+            : filter === "breakfast";
       const data = await studentApi.getMenu(isBreakfast, excludeAllergens);
       // Sort dishes alphabetically by name
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
@@ -191,12 +208,14 @@ const MenuPage = () => {
                 }`}
                 onClick={() => setFilter(filterItem.key)}
               >
-                {filterItem.icon && <span className="mr-1">{filterItem.icon}</span>}
+                {filterItem.icon && (
+                  <span className="mr-1">{filterItem.icon}</span>
+                )}
                 {filterItem.label}
               </button>
             ))}
           </div>
-          
+
           {/* Allergy Filter */}
           {user?.allergens_rel && user.allergens_rel.length > 0 && (
             <div className="flex items-center gap-2">
@@ -213,7 +232,10 @@ const MenuPage = () => {
               </label>
               <div className="flex flex-wrap gap-1">
                 {user.allergens_rel.map((allergen) => (
-                  <span key={allergen.id} className="badge badge-error badge-sm">
+                  <span
+                    key={allergen.id}
+                    className="badge badge-error badge-sm"
+                  >
                     {allergen.name}
                   </span>
                 ))}
@@ -265,15 +287,23 @@ const MenuPage = () => {
         >
           <div>
             <div className="flex items-center gap-4 p-4 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300">
-              <div className={`${selectedDish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
-                {selectedDish.is_breakfast ? <CroissantIcon className="h-12 w-12" /> : <PlateIcon className="h-12 w-12" />}
+              <div
+                className={`${selectedDish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+              >
+                {selectedDish.is_breakfast ? (
+                  <CroissantIcon className="h-12 w-12" />
+                ) : (
+                  <PlateIcon className="h-12 w-12" />
+                )}
               </div>
               <div>
                 <div className="font-semibold">{selectedDish.name}</div>
                 <div className="text-2xl font-bold text-primary">
                   {selectedDish.price} ₽
                 </div>
-                {(selectedDish.allergens || (selectedDish.allergens_rel && selectedDish.allergens_rel.length > 0)) && (
+                {(selectedDish.allergens ||
+                  (selectedDish.allergens_rel &&
+                    selectedDish.allergens_rel.length > 0)) && (
                   <div className="text-sm text-error mt-1 flex items-center gap-1 flex-wrap">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -288,10 +318,14 @@ const MenuPage = () => {
                       />
                     </svg>
                     <span>Аллергены:</span>
-                    {selectedDish.allergens_rel && selectedDish.allergens_rel.length > 0 ? (
+                    {selectedDish.allergens_rel &&
+                    selectedDish.allergens_rel.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {selectedDish.allergens_rel.map((allergen) => (
-                          <span key={allergen.id} className="badge badge-error badge-sm">
+                          <span
+                            key={allergen.id}
+                            className="badge badge-error badge-sm"
+                          >
                             {allergen.name}
                           </span>
                         ))}
@@ -392,17 +426,20 @@ const MenuPage = () => {
               </p>
             </div>
           </div>
-            <div className="modal-action">
-              <button
-                className="btn btn-ghost transition-all duration-200 hover:scale-105"
-                onClick={() => setOrderModal(false)}
-              >
-                Отмена
-              </button>
-              <button className="btn btn-primary transition-all duration-200 hover:scale-105" onClick={handleOrder}>
-                Оплатить
-              </button>
-            </div>
+          <div className="modal-action">
+            <button
+              className="btn btn-ghost transition-all duration-200 hover:scale-105"
+              onClick={() => setOrderModal(false)}
+            >
+              Отмена
+            </button>
+            <button
+              className="btn btn-primary transition-all duration-200 hover:scale-105"
+              onClick={handleOrder}
+            >
+              Оплатить
+            </button>
+          </div>
         </Modal>
       )}
 
@@ -481,7 +518,10 @@ const MenuPage = () => {
           </div>
 
           <div className="modal-action">
-            <button className="btn transition-all duration-200 hover:scale-105" onClick={() => setReviewModal(false)}>
+            <button
+              className="btn transition-all duration-200 hover:scale-105"
+              onClick={() => setReviewModal(false)}
+            >
               Закрыть
             </button>
           </div>

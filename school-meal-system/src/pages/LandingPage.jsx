@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { Utensils, Calendar, CreditCard, Star, ArrowRight, ChefHat, Users } from "lucide-react";
+import {
+  Utensils,
+  Calendar,
+  CreditCard,
+  Star,
+  ArrowRight,
+  ChefHat,
+  Users,
+} from "lucide-react";
 
 const LandingPage = () => {
   const features = [
@@ -47,7 +55,8 @@ const LandingPage = () => {
                 Школьная столовая
               </h1>
               <p className="text-xl lg:text-2xl mb-8 text-white/90">
-                Современная система управления питанием для школьников, поваров и администраторов
+                Современная система управления питанием для школьников, поваров
+                и администраторов
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
@@ -82,7 +91,8 @@ const LandingPage = () => {
               Возможности системы
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Наша платформа предоставляет удобный инструмент для организации питания в школе
+              Наша платформа предоставляет удобный инструмент для организации
+              питания в школе
             </p>
           </div>
 
@@ -126,7 +136,8 @@ const LandingPage = () => {
       <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
-            © 2026 Школьная столовая. Московская предпрофессиональная олимпиада школьников.
+            © 2026 Школьная столовая. Московская предпрофессиональная олимпиада
+            школьников.
           </p>
           <p className="text-gray-500 text-sm mt-2">
             Профиль «Информационные технологии»

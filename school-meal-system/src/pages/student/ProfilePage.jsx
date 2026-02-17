@@ -30,7 +30,7 @@ const ProfilePage = () => {
     fetchAllergens();
     // Initialize selected allergens from user data
     if (user?.allergens_rel && user.allergens_rel.length > 0) {
-      setSelectedAllergenIds(user.allergens_rel.map(a => a.id));
+      setSelectedAllergenIds(user.allergens_rel.map((a) => a.id));
     }
   }, [user]);
 
@@ -44,10 +44,10 @@ const ProfilePage = () => {
   };
 
   const toggleAllergen = (allergenId) => {
-    setSelectedAllergenIds(prev => 
+    setSelectedAllergenIds((prev) =>
       prev.includes(allergenId)
-        ? prev.filter(id => id !== allergenId)
-        : [...prev, allergenId]
+        ? prev.filter((id) => id !== allergenId)
+        : [...prev, allergenId],
     );
   };
 
@@ -76,7 +76,8 @@ const ProfilePage = () => {
     try {
       const updateData = {
         ...profileData,
-        allergen_ids: selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
+        allergen_ids:
+          selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
       };
       await studentApi.updateProfile(updateData);
       toast.success("Профиль обновлен");

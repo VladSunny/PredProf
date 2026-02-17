@@ -8,7 +8,12 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import { Plus, Edit2, Trash2, X, UtensilsCrossed } from "lucide-react";
-import { CroissantIcon, PlateIcon, SunriseIcon, SunIcon } from "../../components/common/Icons";
+import {
+  CroissantIcon,
+  PlateIcon,
+  SunriseIcon,
+  SunIcon,
+} from "../../components/common/Icons";
 
 const ManageDishesPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -81,7 +86,7 @@ const ManageDishesPage = () => {
     });
     // Set selected allergen IDs from dish.allergens_rel if available
     if (dish.allergens_rel && dish.allergens_rel.length > 0) {
-      setSelectedAllergenIds(dish.allergens_rel.map(a => a.id));
+      setSelectedAllergenIds(dish.allergens_rel.map((a) => a.id));
     } else {
       setSelectedAllergenIds([]);
     }
@@ -103,7 +108,8 @@ const ManageDishesPage = () => {
         price: parseFloat(formData.price),
         is_breakfast: formData.is_breakfast,
         stock_quantity: parseInt(formData.stock_quantity),
-        allergen_ids: selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
+        allergen_ids:
+          selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
       };
 
       if (editingDish) {
@@ -125,10 +131,10 @@ const ManageDishesPage = () => {
   };
 
   const toggleAllergen = (allergenId) => {
-    setSelectedAllergenIds(prev => 
+    setSelectedAllergenIds((prev) =>
       prev.includes(allergenId)
-        ? prev.filter(id => id !== allergenId)
-        : [...prev, allergenId]
+        ? prev.filter((id) => id !== allergenId)
+        : [...prev, allergenId],
     );
   };
 
@@ -162,7 +168,10 @@ const ManageDishesPage = () => {
         title="Управление меню"
         subtitle="Добавление и редактирование блюд"
         actions={
-          <button className="btn btn-primary transition-all duration-200 hover:scale-105" onClick={openAddModal}>
+          <button
+            className="btn btn-primary transition-all duration-200 hover:scale-105"
+            onClick={openAddModal}
+          >
             <Plus className="h-5 w-5" />
             Добавить блюдо
           </button>
@@ -210,8 +219,14 @@ const ManageDishesPage = () => {
             rows={dishes.map((dish) => [
               dish.id,
               <div className="flex items-center gap-2" key={`name-${dish.id}`}>
-                <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}>
-                  {dish.is_breakfast ? <CroissantIcon className="h-6 w-6" /> : <PlateIcon className="h-6 w-6" />}
+                <div
+                  className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                >
+                  {dish.is_breakfast ? (
+                    <CroissantIcon className="h-6 w-6" />
+                  ) : (
+                    <PlateIcon className="h-6 w-6" />
+                  )}
                 </div>
                 <div>
                   <div className="font-bold">{dish.name}</div>
@@ -229,10 +244,16 @@ const ManageDishesPage = () => {
               <span className="font-semibold" key={`price-${dish.id}`}>
                 {dish.price} ₽
               </span>,
-              (dish.allergens_rel && dish.allergens_rel.length > 0) ? (
-                <div className="flex flex-wrap gap-1" key={`allergen-${dish.id}`}>
+              dish.allergens_rel && dish.allergens_rel.length > 0 ? (
+                <div
+                  className="flex flex-wrap gap-1"
+                  key={`allergen-${dish.id}`}
+                >
                   {dish.allergens_rel.map((allergen) => (
-                    <span key={allergen.id} className="badge badge-error badge-sm">
+                    <span
+                      key={allergen.id}
+                      className="badge badge-error badge-sm"
+                    >
                       {allergen.name}
                     </span>
                   ))}
