@@ -39,7 +39,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         dayName: date.toLocaleDateString("ru-RU", { weekday: "short" }),
         dayNumber: date.getDate(),
         month: date.toLocaleDateString("ru-RU", { month: "short" }),
-        dateString: date.toISOString().split("T")[0],
+        // Use locale string to avoid timezone issues (toISOString converts to UTC)
+        dateString: date.toLocaleDateString("en-CA"), // YYYY-MM-DD format
       });
     }
     return days;
@@ -171,7 +172,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
     // Flatten all meals into individual orders
     const allMeals = [];
     Object.entries(plannedMeals).forEach(([key, mealsArray]) => {
-      const [dateString, mealType] = key.split("-");
+      const lastDashIndex = key.lastIndexOf("-");
+      const dateString = key.substring(0, lastDashIndex);
+      const mealType = key.substring(lastDashIndex + 1);
       const dishes = Array.isArray(mealsArray) ? mealsArray : [mealsArray];
       dishes.forEach((dish) => {
         allMeals.push({ dateString, mealType, dish });
