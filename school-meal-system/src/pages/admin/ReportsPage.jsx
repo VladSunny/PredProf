@@ -23,32 +23,8 @@ const ReportsPage = () => {
   });
 
   useEffect(() => {
-    const loadInitialData = async () => {
-      await fetchStats();
-      setLoading(false);
-    };
-
-    loadInitialData();
+    setLoading(false);
   }, []);
-
-  const fetchStats = async () => {
-    try {
-      const [payment, attendance] = await Promise.all([
-        adminApi.getPaymentStatistics(),
-        adminApi.getAttendanceStatistics(),
-      ]);
-      console.log("Payment stats:", payment);
-      console.log("Attendance stats:", attendance);
-      setPaymentStats(payment);
-      setAttendanceStats(attendance);
-      setStatsError(null);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-      setStatsError(error.message || "Ошибка при загрузке статистики");
-    } finally {
-      setStatsLoading(false);
-    }
-  };
 
   const generateReport = async () => {
     setGenerating(true);
