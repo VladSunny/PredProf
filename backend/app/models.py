@@ -19,6 +19,13 @@ user_allergen_association = Table(
     Column('allergen_id', Integer, ForeignKey('allergens.id'), primary_key=True)
 )
 
+dish_meal_type_association = Table(
+    'dish_meal_type',
+    Base.metadata,
+    Column('dish_id', Integer, ForeignKey('dishes.id'), primary_key=True),
+    Column('meal_type_id', Integer, ForeignKey('meal_types.id'), primary_key=True)
+)
+
 class UserRole(str, enum.Enum):
     STUDENT = "student"
     CHEF = "chef"
@@ -45,6 +52,16 @@ class User(Base):
     reviews = relationship("Review", back_populates="student")
     allergens_rel = relationship("Allergen", secondary=user_allergen_association, back_populates="users")
 
+class MealType(Base):
+    """Типы приемов пищи (завтрак, обед)"""
+    __tablename__ = "meal_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False, index=True)  # "breakfast", "lunch"
+
+    dishes = relationship("Dish", secondary=dish_meal_type_association, back_populates="meal_types")
+
+
 class Dish(Base):
     """Меню завтраков и обедов"""
     __tablename__ = "dishes"
@@ -53,13 +70,13 @@ class Dish(Base):
     name = Column(String, nullable=False)
     description = Column(String)
     price = Column(Float, nullable=False)
-    is_breakfast = Column(Boolean, default=True)
     stock_quantity = Column(Integer, default=0)
     allergens = Column(Text, nullable=True)
 
     orders = relationship("Order", back_populates="dish")
     reviews = relationship("Review", back_populates="dish")
     allergens_rel = relationship("Allergen", secondary=dish_allergen_association, back_populates="dishes")
+    meal_types = relationship("MealType", secondary=dish_meal_type_association, back_populates="dishes")
 
 class Order(Base):
     """Учет выданных блюд и оплат"""

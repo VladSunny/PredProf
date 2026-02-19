@@ -64,15 +64,28 @@ class TokenData(BaseModel):
     email: Optional[str] = None
     role: Optional[UserRole] = None
 
+# Схемы для типов приемов пищи
+class MealTypeBase(BaseModel):
+    name: str
+
+class MealTypeCreate(MealTypeBase):
+    pass
+
+class MealType(MealTypeBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
 # Схемы для блюд
 class DishBase(BaseModel):
     name: str
     description: Optional[str] = None
     price: float = Field(..., gt=0)
-    is_breakfast: bool = True
     stock_quantity: int = Field(..., ge=0)
     allergens: Optional[str] = None  # Deprecated, use allergen_ids instead
     allergen_ids: Optional[List[int]] = None
+    meal_type_ids: Optional[List[int]] = None
 
 class DishCreate(DishBase):
     pass
@@ -81,14 +94,15 @@ class DishUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
-    is_breakfast: Optional[bool] = None
     stock_quantity: Optional[int] = None
     allergens: Optional[str] = None  # Deprecated, use allergen_ids instead
     allergen_ids: Optional[List[int]] = None
+    meal_type_ids: Optional[List[int]] = None
 
 class Dish(DishBase):
     id: int
     allergens_rel: Optional[List[Allergen]] = []
+    meal_types: Optional[List[MealType]] = []
 
     class Config:
         from_attributes = True

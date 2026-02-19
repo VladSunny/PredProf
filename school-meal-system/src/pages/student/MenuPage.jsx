@@ -37,6 +37,9 @@ const MenuPage = () => {
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
   const [viewMode, setViewMode] = useState("planner"); // "planner" or "grid"
 
+  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+
   useEffect(() => {
     fetchDishes();
   }, [filter, excludeAllergens, viewMode]);
@@ -45,13 +48,13 @@ const MenuPage = () => {
     setLoading(true);
     try {
       // In planner mode, always fetch all dishes regardless of filter
-      const isBreakfast =
+      const mealType =
         viewMode === "planner"
           ? null
           : filter === "all"
             ? null
-            : filter === "breakfast";
-      const data = await studentApi.getMenu(isBreakfast, excludeAllergens);
+            : filter;
+      const data = await studentApi.getMenu(mealType, excludeAllergens);
       // Sort dishes alphabetically by name
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
       setDishes(sortedData);
@@ -288,9 +291,9 @@ const MenuPage = () => {
           <div>
             <div className="flex items-center gap-4 p-4 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300">
               <div
-                className={`${selectedDish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                className={`${isBreakfast(selectedDish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
               >
-                {selectedDish.is_breakfast ? (
+                {isBreakfast(selectedDish) ? (
                   <CroissantIcon className="h-12 w-12" />
                 ) : (
                   <PlateIcon className="h-12 w-12" />

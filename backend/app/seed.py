@@ -39,6 +39,25 @@ def seed_database(db: Session):
             db.refresh(db_allergen)
             created_allergens[allergen_data["name"]] = db_allergen
             print(f"Создан аллерген: {allergen_data['name']}")
+
+    # 0.1. Создаем типы приемов пищи
+    meal_types_data = [
+        {"name": "breakfast", "description": "Завтрак"},
+        {"name": "lunch", "description": "Обед"},
+    ]
+
+    created_meal_types = {}
+    for meal_type_data in meal_types_data:
+        existing = db.query(models.MealType).filter(models.MealType.name == meal_type_data["name"]).first()
+        if existing:
+            created_meal_types[meal_type_data["name"]] = existing
+        else:
+            db_meal_type = models.MealType(name=meal_type_data["name"])
+            db.add(db_meal_type)
+            db.commit()
+            db.refresh(db_meal_type)
+            created_meal_types[meal_type_data["name"]] = db_meal_type
+            print(f"Создан тип приема пищи: {meal_type_data['name']}")
     
     # 1. Создаем пользователей
     users_data = [
@@ -128,30 +147,37 @@ def seed_database(db: Session):
     # 2. Создаем блюда (меню)
     dishes_data = [
         # Завтраки
-        {"name": "Овсяная каша с ягодами", "description": "Овсянка с свежими ягодами и медом", "price": 150.0, "is_breakfast": True, "stock_quantity": 50, "allergens": "Глютен, Молоко"},
-        {"name": "Омлет с сыром", "description": "Пушистый омлет с сыром и зеленью", "price": 180.0, "is_breakfast": True, "stock_quantity": 40, "allergens": "Яйца, Молоко"},
-        {"name": "Блинчики с творогом", "description": "Тонкие блинчики с начинкой из творога", "price": 200.0, "is_breakfast": True, "stock_quantity": 30, "allergens": "Глютен, Яйца, Молоко"},
-        {"name": "Сырники со сметаной", "description": "Домашние сырники с соусом из сметаны", "price": 190.0, "is_breakfast": True, "stock_quantity": 35, "allergens": "Яйца, Молоко"},
-        {"name": "Каша гречневая с молоком", "description": "Гречневая каша с теплым молоком", "price": 120.0, "is_breakfast": True, "stock_quantity": 45, "allergens": "Молоко"},
+        {"name": "Овсяная каша с ягодами", "description": "Овсянка с свежими ягодами и медом", "price": 150.0, "meal_types": ["breakfast"], "stock_quantity": 50, "allergens": "Глютен, Молоко"},
+        {"name": "Омлет с сыром", "description": "Пушистый омлет с сыром и зеленью", "price": 180.0, "meal_types": ["breakfast"], "stock_quantity": 40, "allergens": "Яйца, Молоко"},
+        {"name": "Блинчики с творогом", "description": "Тонкие блинчики с начинкой из творога", "price": 200.0, "meal_types": ["breakfast"], "stock_quantity": 30, "allergens": "Глютен, Яйца, Молоко"},
+        {"name": "Сырники со сметаной", "description": "Домашние сырники с соусом из сметаны", "price": 190.0, "meal_types": ["breakfast"], "stock_quantity": 35, "allergens": "Яйца, Молоко"},
+        {"name": "Каша гречневая с молоком", "description": "Гречневая каша с теплым молоком", "price": 120.0, "meal_types": ["breakfast"], "stock_quantity": 45, "allergens": "Молоко"},
 
         # Обеды
-        {"name": "Куриный суп с лапшой", "description": "Ароматный куриный суп с домашней лапшой", "price": 220.0, "is_breakfast": False, "stock_quantity": 60, "allergens": "Глютен, Яйца"},
-        {"name": "Пюре с котлетой", "description": "Картофельное пюре с куриной котлетой", "price": 250.0, "is_breakfast": False, "stock_quantity": 55, "allergens": "Молоко, Яйца"},
-        {"name": "Гречка с тефтелями", "description": "Гречневая каша с говяжьими тефтелями в томатном соусе", "price": 230.0, "is_breakfast": False, "stock_quantity": 50, "allergens": "Молоко, Яйца"},
-        {"name": "Рыба с овощами", "description": "Запеченная рыба с сезонными овощами", "price": 280.0, "is_breakfast": False, "stock_quantity": 40, "allergens": "Рыба, Моллюски"},
-        {"name": "Салат Цезарь с курицей", "description": "Классический салат Цезарь с куриной грудкой", "price": 210.0, "is_breakfast": False, "stock_quantity": 45, "allergens": "Яйца, Молоко, Глютен"},
-        {"name": "Плов с бараниной", "description": "Узбекский плов с бараниной и морковью", "price": 270.0, "is_breakfast": False, "stock_quantity": 35, "allergens": "Глютен"},
-        {"name": "Овощное рагу", "description": "Тушеные овощи с грибами в сметанном соусе", "price": 190.0, "is_breakfast": False, "stock_quantity": 40, "allergens": "Молоко"},
+        {"name": "Куриный суп с лапшой", "description": "Ароматный куриный суп с домашней лапшой", "price": 220.0, "meal_types": ["lunch"], "stock_quantity": 60, "allergens": "Глютен, Яйца"},
+        {"name": "Пюре с котлетой", "description": "Картофельное пюре с куриной котлетой", "price": 250.0, "meal_types": ["lunch"], "stock_quantity": 55, "allergens": "Молоко, Яйца"},
+        {"name": "Гречка с тефтелями", "description": "Гречневая каша с говяжьими тефтелями в томатном соусе", "price": 230.0, "meal_types": ["lunch"], "stock_quantity": 50, "allergens": "Молоко, Яйца"},
+        {"name": "Рыба с овощами", "description": "Запеченная рыба с сезонными овощами", "price": 280.0, "meal_types": ["lunch"], "stock_quantity": 40, "allergens": "Рыба, Моллюски"},
+        {"name": "Салат Цезарь с курицей", "description": "Классический салат Цезарь с куриной грудкой", "price": 210.0, "meal_types": ["lunch"], "stock_quantity": 45, "allergens": "Яйца, Молоко, Глютен"},
+        {"name": "Плов с бараниной", "description": "Узбекский плов с бараниной и морковью", "price": 270.0, "meal_types": ["lunch"], "stock_quantity": 35, "allergens": "Глютен"},
+        {"name": "Овощное рагу", "description": "Тушеные овощи с грибами в сметанном соусе", "price": 190.0, "meal_types": ["lunch"], "stock_quantity": 40, "allergens": "Молоко"},
     ]
-    
+
     created_dishes = []
     for dish_data in dishes_data:
         allergens_text = dish_data.pop("allergens", None)
+        meal_type_names = dish_data.pop("meal_types", [])
         db_dish = models.Dish(**dish_data)
+        
+        # Associate meal types
+        if meal_type_names:
+            meal_types = [created_meal_types[name] for name in meal_type_names if name in created_meal_types]
+            db_dish.meal_types = meal_types
+        
         db.add(db_dish)
         db.commit()
         db.refresh(db_dish)
-        
+
         # Associate allergens with dish if specified
         if allergens_text:
             allergen_names = [a.strip() for a in allergens_text.split(",")]
@@ -162,9 +188,10 @@ def seed_database(db: Session):
             db_dish.allergens_rel = dish_allergens
             db.commit()
             db.refresh(db_dish)
-        
+
         created_dishes.append(db_dish)
-        print(f"Создано блюдо: {dish_data['name']} ({'Завтрак' if dish_data['is_breakfast'] else 'Обед'})")
+        meal_type_str = ", ".join(meal_type_names)
+        print(f"Создано блюдо: {dish_data['name']} ({meal_type_str})")
     
     # 3. Создаем заказы за последние 7 дней
     payment_types = ["one-time", "subscription"]

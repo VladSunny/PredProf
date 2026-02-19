@@ -33,6 +33,9 @@ const StockPage = () => {
     }
   };
 
+  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+
   const getStockStatus = (quantity) => {
     if (quantity === 0)
       return { label: "Нет в наличии", color: "badge-error", icon: "❌" };
@@ -47,8 +50,8 @@ const StockPage = () => {
     if (filter === "all") return true;
     if (filter === "low") return dish.stock_quantity < 5;
     if (filter === "out") return dish.stock_quantity === 0;
-    if (filter === "breakfast") return dish.is_breakfast;
-    if (filter === "lunch") return !dish.is_breakfast;
+    if (filter === "breakfast") return isBreakfast(dish);
+    if (filter === "lunch") return isLunch(dish);
     return true;
   });
 
@@ -178,9 +181,9 @@ const StockPage = () => {
                   key={`name-${dish.id}`}
                 >
                   <div
-                    className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                    className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                   >
-                    {dish.is_breakfast ? (
+                    {isBreakfast(dish) ? (
                       <CroissantIcon className="h-6 w-6" />
                     ) : (
                       <PlateIcon className="h-6 w-6" />
@@ -194,10 +197,10 @@ const StockPage = () => {
                   </div>
                 </div>,
                 <span
-                  className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
+                  className={`badge ${isBreakfast(dish) ? "badge-warning" : "badge-info"}`}
                   key={`type-${dish.id}`}
                 >
-                  {dish.is_breakfast ? "Завтрак" : "Обед"}
+                  {isBreakfast(dish) && isLunch(dish) ? "Завтрак + Обед" : isBreakfast(dish) ? "Завтрак" : "Обед"}
                 </span>,
                 <span className="font-semibold" key={`price-${dish.id}`}>
                   {dish.price} ₽

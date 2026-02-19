@@ -23,6 +23,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [editMode, setEditMode] = useState(null); // { dateString, mealType }
   const [dishQuantities, setDishQuantities] = useState({}); // { [key]: quantity }
 
+  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBoth = (dish) => isBreakfast(dish) && isLunch(dish);
+
   // Generate week days (Monday to Saturday)
   const weekDays = useMemo(() => {
     const days = [];
@@ -46,11 +50,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
   const addMealToPlan = (dish, dateString, mealType, quantity = 1) => {
     // Check if dish matches meal type
-    if (dish.is_breakfast && mealType !== "breakfast") {
+    const dishIsBreakfast = isBreakfast(dish);
+    const dishIsLunch = isLunch(dish);
+    
+    if (dishIsBreakfast && !dishIsLunch && mealType !== "breakfast") {
       toast.error("Это блюдо для завтрака");
       return;
     }
-    if (!dish.is_breakfast && mealType !== "lunch") {
+    if (dishIsLunch && !dishIsBreakfast && mealType !== "lunch") {
       toast.error("Это блюдо для обеда");
       return;
     }
@@ -139,9 +146,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const getAvailableDishes = (mealType) => {
     return dishes.filter((dish) => {
       if (mealType === "breakfast") {
-        return dish.is_breakfast && dish.stock_quantity > 0;
+        return isBreakfast(dish) && dish.stock_quantity > 0;
       } else {
-        return !dish.is_breakfast && dish.stock_quantity > 0;
+        return isLunch(dish) && dish.stock_quantity > 0;
       }
     });
   };

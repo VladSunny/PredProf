@@ -25,7 +25,7 @@ const ManageDishesPage = () => {
     name: "",
     description: "",
     price: "",
-    is_breakfast: true,
+    meal_type_ids: [],
     stock_quantity: "",
     allergens: "",
   });
@@ -62,7 +62,7 @@ const ManageDishesPage = () => {
       name: "",
       description: "",
       price: "",
-      is_breakfast: true,
+      meal_type_ids: [],
       stock_quantity: "",
       allergens: "",
     });
@@ -80,7 +80,7 @@ const ManageDishesPage = () => {
       name: dish.name,
       description: dish.description || "",
       price: dish.price.toString(),
-      is_breakfast: dish.is_breakfast,
+      meal_type_ids: dish.meal_types ? dish.meal_types.map(mt => mt.id) : [],
       stock_quantity: dish.stock_quantity.toString(),
       allergens: dish.allergens || "",
     });
@@ -106,7 +106,7 @@ const ManageDishesPage = () => {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
-        is_breakfast: formData.is_breakfast,
+        meal_type_ids: formData.meal_type_ids.length > 0 ? formData.meal_type_ids : null,
         stock_quantity: parseInt(formData.stock_quantity),
         allergen_ids:
           selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
@@ -150,8 +150,10 @@ const ManageDishesPage = () => {
     }
   };
 
-  const breakfastDishes = dishes.filter((d) => d.is_breakfast);
-  const lunchDishes = dishes.filter((d) => !d.is_breakfast);
+  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const breakfastDishes = dishes.filter(isBreakfast);
+  const lunchDishes = dishes.filter(isLunch);
 
   if (loading) {
     return (
@@ -220,9 +222,9 @@ const ManageDishesPage = () => {
               dish.id,
               <div className="flex items-center gap-2" key={`name-${dish.id}`}>
                 <div
-                  className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                  className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                 >
-                  {dish.is_breakfast ? (
+                  {isBreakfast(dish) ? (
                     <CroissantIcon className="h-6 w-6" />
                   ) : (
                     <PlateIcon className="h-6 w-6" />
@@ -236,10 +238,10 @@ const ManageDishesPage = () => {
                 </div>
               </div>,
               <span
-                className={`badge ${dish.is_breakfast ? "badge-warning" : "badge-info"}`}
+                className={`badge ${isBreakfast(dish) ? "badge-warning" : "badge-info"}`}
                 key={`type-${dish.id}`}
               >
-                {dish.is_breakfast ? "Завтрак" : "Обед"}
+                {isBreakfast(dish) && isLunch(dish) ? "Завтрак + Обед" : isBreakfast(dish) ? "Завтрак" : "Обед"}
               </span>,
               <span className="font-semibold" key={`price-${dish.id}`}>
                 {dish.price} ₽
@@ -434,26 +436,32 @@ const ManageDishesPage = () => {
                 <div className="flex gap-4">
                   <label className="label cursor-pointer gap-2 transition-all duration-200 hover:scale-105">
                     <input
-                      type="radio"
-                      name="meal-type"
-                      className="radio radio-warning"
-                      checked={formData.is_breakfast}
-                      onChange={() =>
-                        setFormData({ ...formData, is_breakfast: true })
-                      }
+                      type="checkbox"
+                      className="checkbox checkbox-warning"
+                      checked={formData.meal_type_ids.includes(1)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData({ ...formData, meal_type_ids: [...formData.meal_type_ids, 1] });
+                        } else {
+                          setFormData({ ...formData, meal_type_ids: formData.meal_type_ids.filter(id => id !== 1) });
+                        }
+                      }}
                     />
                     <SunriseIcon className="h-5 w-5 text-warning" />
                     <span>Завтрак</span>
                   </label>
                   <label className="label cursor-pointer gap-2 transition-all duration-200 hover:scale-105">
                     <input
-                      type="radio"
-                      name="meal-type"
-                      className="radio radio-info"
-                      checked={!formData.is_breakfast}
-                      onChange={() =>
-                        setFormData({ ...formData, is_breakfast: false })
-                      }
+                      type="checkbox"
+                      className="checkbox checkbox-info"
+                      checked={formData.meal_type_ids.includes(2)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData({ ...formData, meal_type_ids: [...formData.meal_type_ids, 2] });
+                        } else {
+                          setFormData({ ...formData, meal_type_ids: formData.meal_type_ids.filter(id => id !== 2) });
+                        }
+                      }}
                     />
                     <SunIcon className="h-5 w-5 text-info" />
                     <span>Обед</span>

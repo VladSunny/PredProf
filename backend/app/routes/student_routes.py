@@ -81,7 +81,7 @@ def get_my_topup_requests(
 
 @router.get("/menu", response_model=list[schemas.Dish])
 def get_menu(
-    is_breakfast: Optional[bool] = Query(None, description="Фильтр по типу: true - завтрак, false - обед"),
+    meal_type: Optional[str] = Query(None, description="Фильтр по типу приема пищи: breakfast - завтрак, lunch - обед"),
     exclude_allergens: Optional[bool] = Query(True, description="Исключить блюда с аллергенами пользователя"),
     skip: int = 0,
     limit: int = 100,
@@ -92,12 +92,12 @@ def get_menu(
     exclude_allergen_ids = None
     if exclude_allergens and current_user.allergens_rel:
         exclude_allergen_ids = [allergen.id for allergen in current_user.allergens_rel]
-    
+
     dishes = crud.get_dishes(
-        db, 
-        skip=skip, 
-        limit=limit, 
-        is_breakfast=is_breakfast,
+        db,
+        skip=skip,
+        limit=limit,
+        meal_type=meal_type,
         exclude_allergen_ids=exclude_allergen_ids
     )
     return dishes

@@ -54,6 +54,9 @@ const StudentDashboard = () => {
   const pendingOrders = orders.filter((o) => !o.is_received).length;
   const completedOrders = orders.filter((o) => o.is_received).length;
 
+  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -156,9 +159,9 @@ const StudentDashboard = () => {
                 className="flex items-center gap-3 p-3 bg-base-200 rounded-lg transition-all duration-200 hover:bg-base-300 hover:scale-105 cursor-pointer"
               >
                 <div
-                  className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
+                  className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                 >
-                  {dish.is_breakfast ? (
+                  {isBreakfast(dish) ? (
                     <SunriseIcon className="h-6 w-6" />
                   ) : (
                     <SunIcon className="h-6 w-6" />
