@@ -52,6 +52,15 @@ from .allergen_crud import (
     get_allergens_by_ids
 )
 
+from .balance_topup_crud import (
+    create_topup_request,
+    get_student_topup_requests,
+    get_all_topup_requests,
+    get_topup_request_by_id,
+    update_topup_request_status,
+    get_pending_topup_requests_count
+)
+
 __all__ = [
     # User CRUD functions
     "get_user_by_email",
@@ -61,14 +70,14 @@ __all__ = [
     "update_user_balance",
     "update_user_personal_info",
     "update_user_password",
-    
+
     # Dish CRUD functions
     "get_dishes",
     "get_dish_by_id",
     "create_dish",
     "update_dish",
     "delete_dish",
-    
+
     # Order CRUD functions
     "create_order",
     "get_user_orders",
@@ -77,25 +86,33 @@ __all__ = [
     "mark_order_received",
     "get_today_orders",
     "get_today_orders_with_student",
-    
+
     # Purchase request CRUD functions
     "create_purchase_request",
     "get_purchase_requests",
     "update_purchase_request_status",
-    
+
     # Review CRUD functions
     "create_review",
     "get_dish_reviews",
     "get_user_reviews",
-    
+
     # Statistics CRUD functions
     "get_payment_statistics",
     "get_attendance_statistics",
-    
+
     # Allergen CRUD functions
     "get_allergen_by_id",
     "get_allergen_by_name",
     "get_all_allergens",
     "create_allergen",
-    "get_allergens_by_ids"
+    "get_allergens_by_ids",
+
+    # Balance top-up request CRUD functions
+    "create_topup_request",
+    "get_student_topup_requests",
+    "get_all_topup_requests",
+    "get_topup_request_by_id",
+    "update_topup_request_status",
+    "get_pending_topup_requests_count"
 ]

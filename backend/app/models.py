@@ -80,13 +80,32 @@ class Order(Base):
 class PurchaseRequest(Base):
     """Заявки на закупку продуктов от повара"""
     __tablename__ = "purchase_requests"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     item_name = Column(String, nullable=False)
     quantity = Column(String, nullable=False)
     status = Column(String, default="pending")
     chef_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class BalanceTopupRequest(Base):
+    """Заявки на пополнение баланса от студентов (требуют подтверждения админа)"""
+    __tablename__ = "balance_topup_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    amount = Column(Float, nullable=False)
+    status = Column(String, default="pending", nullable=False)  # pending, approved, rejected
+    admin_comment = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    student = relationship("User", back_populates="topup_requests")
+
+
+# Add relationship to User model
+User.topup_requests = relationship("BalanceTopupRequest", back_populates="student")
 
 class Review(Base):
     """Отзывы о блюдах"""

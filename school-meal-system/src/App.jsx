@@ -26,6 +26,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageDishesPage from "./pages/admin/ManageDishesPage";
 import ManageRequestsPage from "./pages/admin/ManageRequestsPage";
 import ReportsPage from "./pages/admin/ReportsPage";
+import BalanceTopupRequestsPage from "./pages/admin/BalanceTopupRequestsPage";
 
 // Protected Route Components
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -139,6 +140,7 @@ const App = () => {
         <Route index element={<AdminDashboard />} />
         <Route path="dishes" element={<ManageDishesPage />} />
         <Route path="requests" element={<ManageRequestsPage />} />
+        <Route path="balance-topups" element={<BalanceTopupRequestsPage />} />
         <Route path="reports" element={<ReportsPage />} />
       </Route>
 

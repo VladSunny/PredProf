@@ -160,6 +160,34 @@ class PurchaseRequest(PurchaseRequestBase):
 class PurchaseRequestUpdate(BaseModel):
     status: str = Field(..., pattern="^(pending|approved|rejected)$")
 
+
+# Схемы для заявок на пополнение баланса
+class BalanceTopupRequestBase(BaseModel):
+    amount: float = Field(..., gt=0)
+
+
+class BalanceTopupRequestCreate(BalanceTopupRequestBase):
+    pass
+
+
+class BalanceTopupRequestUpdate(BaseModel):
+    status: str = Field(..., pattern="^(pending|approved|rejected)$")
+    admin_comment: Optional[str] = None
+
+
+class BalanceTopupRequest(BalanceTopupRequestBase):
+    id: int
+    student_id: int
+    status: str
+    admin_comment: Optional[str] = None
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    student: Optional[StudentInfo] = None
+
+    class Config:
+        from_attributes = True
+
+
 # Схемы для отзывов
 class ReviewBase(BaseModel):
     dish_id: int

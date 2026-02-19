@@ -57,6 +57,37 @@ def update_purchase_request_status(
     return request
 
 
+@router.get("/admin/balance-topup-requests", response_model=list[schemas.BalanceTopupRequest])
+def get_all_balance_topup_requests(
+    status: Optional[str] = Query(None, pattern="^(pending|approved|rejected)$"),
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.require_admin)
+):
+    """Получить все заявки на пополнение баланса"""
+    return crud.get_all_topup_requests(db, skip=skip, limit=limit, status=status)
+
+
+@router.patch("/admin/balance-topup-requests/{request_id}", response_model=schemas.BalanceTopupRequest)
+def update_balance_topup_request_status(
+    request_id: int,
+    status_update: schemas.BalanceTopupRequestUpdate,
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.require_admin)
+):
+    """Обновить статус заявки на пополнение баланса (согласование)"""
+    request = crud.update_topup_request_status(
+        db,
+        request_id,
+        status_update.status,
+        status_update.admin_comment
+    )
+    if not request:
+        raise HTTPException(status_code=404, detail="Заявка не найдена")
+    return request
+
+
 @router.post("/admin/dishes", response_model=schemas.Dish, status_code=status.HTTP_201_CREATED)
 def create_dish(
     dish: schemas.DishCreate,

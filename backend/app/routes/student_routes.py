@@ -56,17 +56,27 @@ def update_password(
     return {"message": "Пароль успешно обновлен"}
 
 
-@router.post("/me/balance", response_model=schemas.User)
-def add_balance(
+@router.post("/me/balance/topup", response_model=schemas.BalanceTopupRequest, status_code=status.HTTP_201_CREATED)
+def request_balance_topup(
     balance_update: schemas.UserBalanceUpdate,
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(dependencies.require_student)
 ):
-    """Пополнить баланс"""
-    updated_user = crud.update_user_balance(db, current_user.id, balance_update.amount)
-    if not updated_user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
-    return updated_user
+    """Создать заявку на пополнение баланса (требует подтверждения админа)"""
+    topup_request = crud.create_topup_request(db, current_user.id, balance_update.amount)
+    return topup_request
+
+
+@router.get("/me/balance/requests", response_model=list[schemas.BalanceTopupRequest])
+def get_my_topup_requests(
+    skip: int = 0,
+    limit: int = 100,
+    status: Optional[str] = Query(None, pattern="^(pending|approved|rejected)$"),
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(dependencies.require_student)
+):
+    """Получить мои заявки на пополнение баланса"""
+    return crud.get_student_topup_requests(db, current_user.id, skip=skip, limit=limit, status=status)
 
 
 @router.get("/menu", response_model=list[schemas.Dish])

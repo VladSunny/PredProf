@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { studentApi } from "../../api/student";
 import { allergenApi } from "../../api/allergen";
 import toast from "react-hot-toast";
-import { User, Wallet, AlertTriangle, Heart, Save, X } from "lucide-react";
+import { User, Wallet, AlertTriangle, Heart, Save, X, Clock, CheckCircle, XCircle } from "lucide-react";
 
 const ProfilePage = () => {
   const { user, refreshUser } = useAuth();
@@ -25,9 +25,11 @@ const ProfilePage = () => {
     confirm_new_password: "",
   });
   const [activeTab, setActiveTab] = useState("profile");
+  const [topupRequests, setTopupRequests] = useState([]);
 
   useEffect(() => {
     fetchAllergens();
+    fetchTopupRequests();
     // Initialize selected allergens from user data
     if (user?.allergens_rel && user.allergens_rel.length > 0) {
       setSelectedAllergenIds(user.allergens_rel.map((a) => a.id));
@@ -40,6 +42,15 @@ const ProfilePage = () => {
       setAllergens(data);
     } catch (error) {
       console.error("Error fetching allergens:", error);
+    }
+  };
+
+  const fetchTopupRequests = async () => {
+    try {
+      const data = await studentApi.getMyTopupRequests();
+      setTopupRequests(data);
+    } catch (error) {
+      console.error("Error fetching topup requests:", error);
     }
   };
 
@@ -61,9 +72,10 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       await studentApi.addBalance(amount);
-      toast.success(`Баланс пополнен на ${amount} ₽`);
+      toast.success("Заявка на пополнение баланса создана и ожидает подтверждения администратора");
       await refreshUser();
       setTopUpAmount("");
+      fetchTopupRequests();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -397,6 +409,80 @@ const ProfilePage = () => {
                     </button>
                   ))}
                 </div>
+
+                {/* Top-up Requests History */}
+                {topupRequests.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="font-semibold text-lg mb-3">История заявок на пополнение</h3>
+                    <div className="space-y-2">
+                      {topupRequests.map((request) => (
+                        <div
+                          key={request.id}
+                          className={`p-4 rounded-lg border-2 ${
+                            request.status === "approved"
+                              ? "border-success bg-success/10"
+                              : request.status === "rejected"
+                              ? "border-error bg-error/10"
+                              : "border-warning bg-warning/10"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              {request.status === "pending" && (
+                                <Clock className="h-5 w-5 text-warning" />
+                              )}
+                              {request.status === "approved" && (
+                                <CheckCircle className="h-5 w-5 text-success" />
+                              )}
+                              {request.status === "rejected" && (
+                                <XCircle className="h-5 w-5 text-error" />
+                              )}
+                              <div>
+                                <div className="font-semibold">
+                                  {request.amount.toFixed(2)} ₽
+                                </div>
+                                <div className="text-xs text-base-content/60">
+                                  {new Date(request.created_at).toLocaleDateString("ru-RU", {
+                                    day: "numeric",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="badge gap-2">
+                              {request.status === "pending" && (
+                                <>
+                                  <span className="loading loading-spinner loading-xs"></span>
+                                  Ожидает подтверждения
+                                </>
+                              )}
+                              {request.status === "approved" && (
+                                <>
+                                  <CheckCircle className="h-4 w-4" />
+                                  Подтверждено
+                                </>
+                              )}
+                              {request.status === "rejected" && (
+                                <>
+                                  <XCircle className="h-4 w-4" />
+                                  Отклонено
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          {request.admin_comment && (
+                            <div className="mt-2 text-sm text-base-content/70">
+                              <strong>Комментарий администратора:</strong> {request.admin_comment}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

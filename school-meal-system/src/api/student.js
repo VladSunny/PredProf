@@ -41,10 +41,19 @@ export const studentApi = {
   },
 
   addBalance: async (amount) => {
-    const response = await fetch(`${API_BASE_URL}/me/balance`, {
+    const response = await fetch(`${API_BASE_URL}/me/balance/topup`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify({ amount }),
+    });
+    return handleResponse(response);
+  },
+
+  getMyTopupRequests: async (status = null) => {
+    const params = new URLSearchParams();
+    if (status) params.append("status", status);
+    const response = await fetch(`${API_BASE_URL}/me/balance/requests?${params}`, {
+      headers: getAuthHeaders(),
     });
     return handleResponse(response);
   },

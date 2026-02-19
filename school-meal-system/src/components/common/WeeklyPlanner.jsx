@@ -543,26 +543,25 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               <div className="bg-info/10 p-3 rounded-lg">
                 <p className="text-sm font-semibold mb-2">Добавлено:</p>
                 <div className="flex flex-wrap gap-2">
-                  {getPlannedMeals(
-                    editMode.dateString,
-                    editMode.mealType,
-                  ).map((dish) => (
-                    <span
-                      key={dish.id}
-                      className="badge badge-info badge-sm gap-1 cursor-pointer hover:badge-error transition-colors"
-                      onClick={() =>
-                        removeMealFromPlan(
-                          editMode.dateString,
-                          editMode.mealType,
-                          dish.id,
-                        )
-                      }
-                      title="Нажмите, чтобы удалить"
-                    >
-                      {dish.name}
-                      <X className="h-3 w-3" />
-                    </span>
-                  ))}
+                  {getPlannedMeals(editMode.dateString, editMode.mealType).map(
+                    (dish) => (
+                      <span
+                        key={dish.id}
+                        className="badge badge-info badge-sm gap-1 cursor-pointer hover:badge-error transition-colors"
+                        onClick={() =>
+                          removeMealFromPlan(
+                            editMode.dateString,
+                            editMode.mealType,
+                            dish.id,
+                          )
+                        }
+                        title="Нажмите, чтобы удалить"
+                      >
+                        {dish.name}
+                        <X className="h-3 w-3" />
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
             )}
@@ -574,9 +573,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-2">
               {availableDishesForModal.map((dish) => {
                 const isAlreadyAdded = editMode
-                  ? getPlannedMeals(editMode.dateString, editMode.mealType).some(
-                      (d) => d.id === dish.id,
-                    )
+                  ? getPlannedMeals(
+                      editMode.dateString,
+                      editMode.mealType,
+                    ).some((d) => d.id === dish.id)
                   : false;
                 return (
                   <button
@@ -609,8 +609,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                         <div className="flex items-center gap-2 mb-1">
                           <div
                             className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
-                          >
-                          </div>
+                          ></div>
                           <h4 className="font-semibold text-sm sm:text-base truncate">
                             {dish.name}
                             {isAlreadyAdded && (

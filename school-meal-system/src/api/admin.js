@@ -51,6 +51,30 @@ export const adminApi = {
     return handleResponse(response);
   },
 
+  getAllBalanceTopupRequests: async (status = null) => {
+    const params = new URLSearchParams();
+    if (status) params.append("status", status);
+    const response = await fetch(
+      `${API_BASE_URL}/admin/balance-topup-requests?${params}`,
+      {
+        headers: getAuthHeaders(),
+      },
+    );
+    return handleResponse(response);
+  },
+
+  updateBalanceTopupRequestStatus: async (requestId, status, adminComment = null) => {
+    const response = await fetch(
+      `${API_BASE_URL}/admin/balance-topup-requests/${requestId}`,
+      {
+        method: "PATCH",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status, admin_comment: adminComment }),
+      },
+    );
+    return handleResponse(response);
+  },
+
   createDish: async (dishData) => {
     const response = await fetch(`${API_BASE_URL}/admin/dishes`, {
       method: "POST",
