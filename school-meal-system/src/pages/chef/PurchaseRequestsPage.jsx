@@ -16,6 +16,7 @@ import {
 const PurchaseRequestsPage = () => {
   const [requests, setRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
+  const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
@@ -38,8 +39,18 @@ const PurchaseRequestsPage = () => {
     }
   };
 
+  const fetchDishes = async () => {
+    try {
+      const data = await chefApi.getDishesWithStock();
+      setDishes(data);
+    } catch (error) {
+      toast.error("Ошибка загрузки блюд");
+    }
+  };
+
   useEffect(() => {
     fetchAllRequests();
+    fetchDishes();
   }, []);
 
   useEffect(() => {
@@ -220,17 +231,24 @@ const PurchaseRequestsPage = () => {
           <div className="space-y-6">
             <div className="form-control">
               <div className="mb-2">
-                <span className="text-base font-medium">Название продукта</span>
+                <span className="text-base font-medium">Блюдо</span>
               </div>
-              <input
-                type="text"
-                className="input input-bordered"
-                placeholder="Французская булка"
+              <select
+                className="select select-bordered"
                 value={newRequest.item_name}
                 onChange={(e) =>
                   setNewRequest({ ...newRequest, item_name: e.target.value })
                 }
-              />
+              >
+                <option value="" disabled>
+                  Выберите блюдо
+                </option>
+                {dishes.map((dish) => (
+                  <option key={dish.id} value={dish.name}>
+                    {dish.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-control">
               <div className="mb-2">
