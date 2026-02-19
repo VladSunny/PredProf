@@ -3,7 +3,17 @@ import { useAuth } from "../../context/AuthContext";
 import { studentApi } from "../../api/student";
 import { allergenApi } from "../../api/allergen";
 import toast from "react-hot-toast";
-import { User, Wallet, AlertTriangle, Heart, Save, X, Clock, CheckCircle, XCircle } from "lucide-react";
+import {
+  User,
+  Wallet,
+  AlertTriangle,
+  Heart,
+  Save,
+  X,
+  Clock,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 const ProfilePage = () => {
   const { user, refreshUser } = useAuth();
@@ -72,7 +82,9 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       await studentApi.addBalance(amount);
-      toast.success("Заявка на пополнение баланса создана и ожидает подтверждения администратора");
+      toast.success(
+        "Заявка на пополнение баланса создана и ожидает подтверждения администратора",
+      );
       await refreshUser();
       setTopUpAmount("");
       fetchTopupRequests();
@@ -413,7 +425,9 @@ const ProfilePage = () => {
                 {/* Top-up Requests History */}
                 {topupRequests.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="font-semibold text-lg mb-3">История заявок на пополнение</h3>
+                    <h3 className="font-semibold text-lg mb-3">
+                      История заявок на пополнение
+                    </h3>
                     <div className="space-y-2">
                       {topupRequests.map((request) => (
                         <div
@@ -422,8 +436,8 @@ const ProfilePage = () => {
                             request.status === "approved"
                               ? "border-success bg-success/10"
                               : request.status === "rejected"
-                              ? "border-error bg-error/10"
-                              : "border-warning bg-warning/10"
+                                ? "border-error bg-error/10"
+                                : "border-warning bg-warning/10"
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -442,7 +456,9 @@ const ProfilePage = () => {
                                   {request.amount.toFixed(2)} ₽
                                 </div>
                                 <div className="text-xs text-base-content/60">
-                                  {new Date(request.created_at).toLocaleDateString("ru-RU", {
+                                  {new Date(
+                                    request.created_at,
+                                  ).toLocaleDateString("ru-RU", {
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
@@ -475,7 +491,8 @@ const ProfilePage = () => {
                           </div>
                           {request.admin_comment && (
                             <div className="mt-2 text-sm text-base-content/70">
-                              <strong>Комментарий администратора:</strong> {request.admin_comment}
+                              <strong>Комментарий администратора:</strong>{" "}
+                              {request.admin_comment}
                             </div>
                           )}
                         </div>

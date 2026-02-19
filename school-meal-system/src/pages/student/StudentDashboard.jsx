@@ -54,8 +54,9 @@ const StudentDashboard = () => {
   const pendingOrders = orders.filter((o) => !o.is_received).length;
   const completedOrders = orders.filter((o) => o.is_received).length;
 
-  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
-  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBreakfast = (dish) =>
+    dish.meal_types?.some((mt) => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some((mt) => mt.name === "lunch");
 
   if (loading) {
     return (

@@ -80,7 +80,7 @@ const ManageDishesPage = () => {
       name: dish.name,
       description: dish.description || "",
       price: dish.price.toString(),
-      meal_type_ids: dish.meal_types ? dish.meal_types.map(mt => mt.id) : [],
+      meal_type_ids: dish.meal_types ? dish.meal_types.map((mt) => mt.id) : [],
       stock_quantity: dish.stock_quantity.toString(),
       allergens: dish.allergens || "",
     });
@@ -106,7 +106,8 @@ const ManageDishesPage = () => {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
-        meal_type_ids: formData.meal_type_ids.length > 0 ? formData.meal_type_ids : null,
+        meal_type_ids:
+          formData.meal_type_ids.length > 0 ? formData.meal_type_ids : null,
         stock_quantity: parseInt(formData.stock_quantity),
         allergen_ids:
           selectedAllergenIds.length > 0 ? selectedAllergenIds : null,
@@ -150,8 +151,9 @@ const ManageDishesPage = () => {
     }
   };
 
-  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
-  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBreakfast = (dish) =>
+    dish.meal_types?.some((mt) => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some((mt) => mt.name === "lunch");
   const breakfastDishes = dishes.filter(isBreakfast);
   const lunchDishes = dishes.filter(isLunch);
 
@@ -241,7 +243,11 @@ const ManageDishesPage = () => {
                 className={`badge ${isBreakfast(dish) ? "badge-warning" : "badge-info"}`}
                 key={`type-${dish.id}`}
               >
-                {isBreakfast(dish) && isLunch(dish) ? "Завтрак + Обед" : isBreakfast(dish) ? "Завтрак" : "Обед"}
+                {isBreakfast(dish) && isLunch(dish)
+                  ? "Завтрак + Обед"
+                  : isBreakfast(dish)
+                    ? "Завтрак"
+                    : "Обед"}
               </span>,
               <span className="font-semibold" key={`price-${dish.id}`}>
                 {dish.price} ₽
@@ -441,9 +447,17 @@ const ManageDishesPage = () => {
                       checked={formData.meal_type_ids.includes(1)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setFormData({ ...formData, meal_type_ids: [...formData.meal_type_ids, 1] });
+                          setFormData({
+                            ...formData,
+                            meal_type_ids: [...formData.meal_type_ids, 1],
+                          });
                         } else {
-                          setFormData({ ...formData, meal_type_ids: formData.meal_type_ids.filter(id => id !== 1) });
+                          setFormData({
+                            ...formData,
+                            meal_type_ids: formData.meal_type_ids.filter(
+                              (id) => id !== 1,
+                            ),
+                          });
                         }
                       }}
                     />
@@ -457,9 +471,17 @@ const ManageDishesPage = () => {
                       checked={formData.meal_type_ids.includes(2)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setFormData({ ...formData, meal_type_ids: [...formData.meal_type_ids, 2] });
+                          setFormData({
+                            ...formData,
+                            meal_type_ids: [...formData.meal_type_ids, 2],
+                          });
                         } else {
-                          setFormData({ ...formData, meal_type_ids: formData.meal_type_ids.filter(id => id !== 2) });
+                          setFormData({
+                            ...formData,
+                            meal_type_ids: formData.meal_type_ids.filter(
+                              (id) => id !== 2,
+                            ),
+                          });
                         }
                       }}
                     />

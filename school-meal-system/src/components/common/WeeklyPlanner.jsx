@@ -23,8 +23,9 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [editMode, setEditMode] = useState(null); // { dateString, mealType }
   const [dishQuantities, setDishQuantities] = useState({}); // { [key]: quantity }
 
-  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
-  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBreakfast = (dish) =>
+    dish.meal_types?.some((mt) => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some((mt) => mt.name === "lunch");
   const isBoth = (dish) => isBreakfast(dish) && isLunch(dish);
 
   // Generate week days (Monday to Saturday)
@@ -52,7 +53,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
     // Check if dish matches meal type
     const dishIsBreakfast = isBreakfast(dish);
     const dishIsLunch = isLunch(dish);
-    
+
     if (dishIsBreakfast && !dishIsLunch && mealType !== "breakfast") {
       toast.error("Это блюдо для завтрака");
       return;
@@ -64,7 +65,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
     const key = getMealKey(dateString, mealType);
     const dishKey = getDishKey(dateString, mealType, dish.id);
-    
+
     setPlannedMeals((prev) => {
       const currentMeals = prev[key] || [];
       // Check if dish is already added
@@ -77,12 +78,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         [key]: [...currentMeals, { ...dish, quantity }],
       };
     });
-    
+
     setDishQuantities((prev) => ({
       ...prev,
       [dishKey]: quantity,
     }));
-    
+
     toast.success(`${dish.name} x${quantity} добавлено в план`);
     // Keep modal open so user can add more dishes
   };
@@ -90,7 +91,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const removeMealFromPlan = (dateString, mealType, dishId) => {
     const key = getMealKey(dateString, mealType);
     const dishKey = getDishKey(dateString, mealType, dishId);
-    
+
     setPlannedMeals((prev) => {
       const currentMeals = prev[key] || [];
       const updatedMeals = currentMeals.filter((d) => d.id !== dishId);
@@ -104,7 +105,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         [key]: updatedMeals,
       };
     });
-    
+
     setDishQuantities((prev) => {
       const newQuantities = { ...prev };
       delete newQuantities[dishKey];
@@ -114,22 +115,22 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
 
   const updateDishQuantity = (dateString, mealType, dishId, quantity) => {
     const dishKey = getDishKey(dateString, mealType, dishId);
-    
+
     if (quantity <= 0) {
       removeMealFromPlan(dateString, mealType, dishId);
       return;
     }
-    
+
     setDishQuantities((prev) => ({
       ...prev,
       [dishKey]: quantity,
     }));
-    
+
     setPlannedMeals((prev) => {
       const key = getMealKey(dateString, mealType);
       const currentMeals = prev[key] || [];
       const updatedMeals = currentMeals.map((d) =>
-        d.id === dishId ? { ...d, quantity } : d
+        d.id === dishId ? { ...d, quantity } : d,
       );
       return {
         ...prev,
@@ -156,7 +157,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const calculateTotalCost = (weeks = 1) => {
     const baseCost = Object.values(plannedMeals).reduce((total, mealsArray) => {
       const mealsCost = Array.isArray(mealsArray)
-        ? mealsArray.reduce((sum, dish) => sum + (dish.price || 0) * (dish.quantity || 1), 0)
+        ? mealsArray.reduce(
+            (sum, dish) => sum + (dish.price || 0) * (dish.quantity || 1),
+            0,
+          )
         : (mealsArray.price || 0) * (mealsArray.quantity || 1);
       return total + mealsCost;
     }, 0);
@@ -373,9 +377,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     <div className="space-y-1 sm:space-y-2">
                       <div className="space-y-1">
                         {plannedMealsList.map((dish) => {
-                          const dishKey = getDishKey(day.dateString, "breakfast", dish.id);
-                          const quantity = dishQuantities[dishKey] || dish.quantity || 1;
-                          
+                          const dishKey = getDishKey(
+                            day.dateString,
+                            "breakfast",
+                            dish.id,
+                          );
+                          const quantity =
+                            dishQuantities[dishKey] || dish.quantity || 1;
+
                           return (
                             <div
                               key={dish.id}
@@ -388,14 +397,30 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                                 <div className="flex items-center gap-1 flex-shrink-0">
                                   <button
                                     className="btn btn-xs btn-square btn-ghost h-6 w-6"
-                                    onClick={() => updateDishQuantity(day.dateString, "breakfast", dish.id, quantity - 1)}
+                                    onClick={() =>
+                                      updateDishQuantity(
+                                        day.dateString,
+                                        "breakfast",
+                                        dish.id,
+                                        quantity - 1,
+                                      )
+                                    }
                                   >
                                     -
                                   </button>
-                                  <span className="text-xs font-bold w-4 text-center">{quantity}</span>
+                                  <span className="text-xs font-bold w-4 text-center">
+                                    {quantity}
+                                  </span>
                                   <button
                                     className="btn btn-xs btn-square btn-ghost h-6 w-6"
-                                    onClick={() => updateDishQuantity(day.dateString, "breakfast", dish.id, quantity + 1)}
+                                    onClick={() =>
+                                      updateDishQuantity(
+                                        day.dateString,
+                                        "breakfast",
+                                        dish.id,
+                                        quantity + 1,
+                                      )
+                                    }
                                   >
                                     +
                                   </button>
@@ -470,9 +495,14 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     <div className="space-y-1 sm:space-y-2">
                       <div className="space-y-1">
                         {plannedMealsList.map((dish) => {
-                          const dishKey = getDishKey(day.dateString, "lunch", dish.id);
-                          const quantity = dishQuantities[dishKey] || dish.quantity || 1;
-                          
+                          const dishKey = getDishKey(
+                            day.dateString,
+                            "lunch",
+                            dish.id,
+                          );
+                          const quantity =
+                            dishQuantities[dishKey] || dish.quantity || 1;
+
                           return (
                             <div
                               key={dish.id}
@@ -485,14 +515,30 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                                 <div className="flex items-center gap-1 flex-shrink-0">
                                   <button
                                     className="btn btn-xs btn-square btn-ghost h-6 w-6"
-                                    onClick={() => updateDishQuantity(day.dateString, "lunch", dish.id, quantity - 1)}
+                                    onClick={() =>
+                                      updateDishQuantity(
+                                        day.dateString,
+                                        "lunch",
+                                        dish.id,
+                                        quantity - 1,
+                                      )
+                                    }
                                   >
                                     -
                                   </button>
-                                  <span className="text-xs font-bold w-4 text-center">{quantity}</span>
+                                  <span className="text-xs font-bold w-4 text-center">
+                                    {quantity}
+                                  </span>
                                   <button
                                     className="btn btn-xs btn-square btn-ghost h-6 w-6"
-                                    onClick={() => updateDishQuantity(day.dateString, "lunch", dish.id, quantity + 1)}
+                                    onClick={() =>
+                                      updateDishQuantity(
+                                        day.dateString,
+                                        "lunch",
+                                        dish.id,
+                                        quantity + 1,
+                                      )
+                                    }
                                   >
                                     +
                                   </button>

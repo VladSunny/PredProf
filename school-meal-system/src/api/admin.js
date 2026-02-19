@@ -63,7 +63,11 @@ export const adminApi = {
     return handleResponse(response);
   },
 
-  updateBalanceTopupRequestStatus: async (requestId, status, adminComment = null) => {
+  updateBalanceTopupRequestStatus: async (
+    requestId,
+    status,
+    adminComment = null,
+  ) => {
     const response = await fetch(
       `${API_BASE_URL}/admin/balance-topup-requests/${requestId}`,
       {

@@ -11,8 +11,10 @@ const DishCard = ({
 }) => {
   const isAvailable = dish.stock_quantity > 0;
   const canAfford = dish.price <= balance;
-  const dishIsBreakfast = dish.meal_types?.some(mt => mt.name === "breakfast");
-  const dishIsLunch = dish.meal_types?.some(mt => mt.name === "lunch");
+  const dishIsBreakfast = dish.meal_types?.some(
+    (mt) => mt.name === "breakfast",
+  );
+  const dishIsLunch = dish.meal_types?.some((mt) => mt.name === "lunch");
 
   return (
     <div
@@ -26,7 +28,11 @@ const DishCard = ({
           <div
             className={`badge ${dishIsBreakfast ? "badge-warning" : "badge-info"} text-xs transition-all duration-200`}
           >
-            {dishIsBreakfast && dishIsLunch ? "Завтрак + Обед" : dishIsBreakfast ? "Завтрак" : "Обед"}
+            {dishIsBreakfast && dishIsLunch
+              ? "Завтрак + Обед"
+              : dishIsBreakfast
+                ? "Завтрак"
+                : "Обед"}
           </div>
         </div>
         <h3 className="card-title text-sm sm:text-base">{dish.name}</h3>

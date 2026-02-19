@@ -29,12 +29,13 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [payment, attendance, requestsData, balanceTopupData] = await Promise.all([
-          adminApi.getPaymentStatistics(),
-          adminApi.getAttendanceStatistics(),
-          adminApi.getAllPurchaseRequests(),
-          adminApi.getAllBalanceTopupRequests(),
-        ]);
+        const [payment, attendance, requestsData, balanceTopupData] =
+          await Promise.all([
+            adminApi.getPaymentStatistics(),
+            adminApi.getAttendanceStatistics(),
+            adminApi.getAllPurchaseRequests(),
+            adminApi.getAllBalanceTopupRequests(),
+          ]);
         setPaymentStats(payment);
         setAttendanceStats(attendance);
         setRequests(requestsData);
@@ -49,7 +50,9 @@ const AdminDashboard = () => {
   }, []);
 
   const pendingRequests = requests.filter((r) => r.status === "pending").length;
-  const pendingBalanceTopups = balanceTopupRequests.filter((r) => r.status === "pending").length;
+  const pendingBalanceTopups = balanceTopupRequests.filter(
+    (r) => r.status === "pending",
+  ).length;
 
   if (loading) {
     return (
@@ -198,26 +201,34 @@ const AdminDashboard = () => {
       {(pendingRequests > 0 || pendingBalanceTopups > 0) && (
         <DashboardAlerts
           alerts={[
-            ...(pendingRequests > 0 ? [{
-              type: "warning",
-              icon: <ClipboardList className="h-6 w-6" />,
-              title: "Требуется внимание!",
-              message: `${pendingRequests} заявок на закупку ожидают рассмотрения`,
-              link: {
-                to: "/admin/requests",
-                text: "Рассмотреть",
-              },
-            }] : []),
-            ...(pendingBalanceTopups > 0 ? [{
-              type: "warning",
-              icon: <Wallet className="h-6 w-6" />,
-              title: "Требуется внимание!",
-              message: `${pendingBalanceTopups} заявок на пополнение баланса ожидают рассмотрения`,
-              link: {
-                to: "/admin/balance-topups",
-                text: "Рассмотреть",
-              },
-            }] : []),
+            ...(pendingRequests > 0
+              ? [
+                  {
+                    type: "warning",
+                    icon: <ClipboardList className="h-6 w-6" />,
+                    title: "Требуется внимание!",
+                    message: `${pendingRequests} заявок на закупку ожидают рассмотрения`,
+                    link: {
+                      to: "/admin/requests",
+                      text: "Рассмотреть",
+                    },
+                  },
+                ]
+              : []),
+            ...(pendingBalanceTopups > 0
+              ? [
+                  {
+                    type: "warning",
+                    icon: <Wallet className="h-6 w-6" />,
+                    title: "Требуется внимание!",
+                    message: `${pendingBalanceTopups} заявок на пополнение баланса ожидают рассмотрения`,
+                    link: {
+                      to: "/admin/balance-topups",
+                      text: "Рассмотреть",
+                    },
+                  },
+                ]
+              : []),
           ]}
         />
       )}

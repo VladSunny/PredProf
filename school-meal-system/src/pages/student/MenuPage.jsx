@@ -37,8 +37,9 @@ const MenuPage = () => {
   const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
   const [viewMode, setViewMode] = useState("planner"); // "planner" or "grid"
 
-  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
-  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBreakfast = (dish) =>
+    dish.meal_types?.some((mt) => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some((mt) => mt.name === "lunch");
 
   useEffect(() => {
     fetchDishes();
@@ -49,11 +50,7 @@ const MenuPage = () => {
     try {
       // In planner mode, always fetch all dishes regardless of filter
       const mealType =
-        viewMode === "planner"
-          ? null
-          : filter === "all"
-            ? null
-            : filter;
+        viewMode === "planner" ? null : filter === "all" ? null : filter;
       const data = await studentApi.getMenu(mealType, excludeAllergens);
       // Sort dishes alphabetically by name
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));

@@ -52,9 +52,12 @@ export const studentApi = {
   getMyTopupRequests: async (status = null) => {
     const params = new URLSearchParams();
     if (status) params.append("status", status);
-    const response = await fetch(`${API_BASE_URL}/me/balance/requests?${params}`, {
-      headers: getAuthHeaders(),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/me/balance/requests?${params}`,
+      {
+        headers: getAuthHeaders(),
+      },
+    );
     return handleResponse(response);
   },
 

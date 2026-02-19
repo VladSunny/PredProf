@@ -33,8 +33,9 @@ const StockPage = () => {
     }
   };
 
-  const isBreakfast = (dish) => dish.meal_types?.some(mt => mt.name === "breakfast");
-  const isLunch = (dish) => dish.meal_types?.some(mt => mt.name === "lunch");
+  const isBreakfast = (dish) =>
+    dish.meal_types?.some((mt) => mt.name === "breakfast");
+  const isLunch = (dish) => dish.meal_types?.some((mt) => mt.name === "lunch");
 
   const getStockStatus = (quantity) => {
     if (quantity === 0)
@@ -200,7 +201,11 @@ const StockPage = () => {
                   className={`badge ${isBreakfast(dish) ? "badge-warning" : "badge-info"}`}
                   key={`type-${dish.id}`}
                 >
-                  {isBreakfast(dish) && isLunch(dish) ? "Завтрак + Обед" : isBreakfast(dish) ? "Завтрак" : "Обед"}
+                  {isBreakfast(dish) && isLunch(dish)
+                    ? "Завтрак + Обед"
+                    : isBreakfast(dish)
+                      ? "Завтрак"
+                      : "Обед"}
                 </span>,
                 <span className="font-semibold" key={`price-${dish.id}`}>
                   {dish.price} ₽

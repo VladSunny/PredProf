@@ -66,13 +66,13 @@ const BalanceTopupRequestsPage = () => {
 
   const handleReject = async () => {
     if (!selectedRequestId) return;
-    
+
     setProcessing(selectedRequestId);
     try {
       await adminApi.updateBalanceTopupRequestStatus(
         selectedRequestId,
         "rejected",
-        adminComment
+        adminComment,
       );
       toast.success("Заявка отклонена");
       fetchAllRequests();
@@ -238,7 +238,9 @@ const BalanceTopupRequestsPage = () => {
                           {request.amount.toFixed(2)} ₽
                         </h3>
                         <p className="text-base-content/60">
-                          Студент: {request.student?.full_name || `ID: ${request.student_id}`}
+                          Студент:{" "}
+                          {request.student?.full_name ||
+                            `ID: ${request.student_id}`}
                         </p>
                         <p className="text-sm text-base-content/60">
                           Создано:{" "}
@@ -246,7 +248,8 @@ const BalanceTopupRequestsPage = () => {
                         </p>
                         {request.admin_comment && (
                           <p className="text-sm text-base-content/70 mt-1">
-                            <strong>Комментарий:</strong> {request.admin_comment}
+                            <strong>Комментарий:</strong>{" "}
+                            {request.admin_comment}
                           </p>
                         )}
                       </div>
