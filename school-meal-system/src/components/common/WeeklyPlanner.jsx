@@ -21,11 +21,12 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [subscriptionModal, setSubscriptionModal] = useState(false);
   const [subscriptionWeeks, setSubscriptionWeeks] = useState(1);
   const [editMode, setEditMode] = useState(null); // { dateString, mealType }
+  const [dishQuantities, setDishQuantities] = useState({}); // { [key]: quantity }
 
-  // Generate week days (Monday to Sunday)
+  // Generate week days (Monday to Saturday)
   const weekDays = useMemo(() => {
     const days = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 6; i++) {
       const date = new Date(weekStart);
       date.setDate(weekStart.getDate() + i);
       days.push({
@@ -40,8 +41,10 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   }, [weekStart]);
 
   const getMealKey = (dateString, mealType) => `${dateString}-${mealType}`;
+  const getDishKey = (dateString, mealType, dishId) =>
+    `${dateString}-${mealType}-${dishId}`;
 
-  const addMealToPlan = (dish, dateString, mealType) => {
+  const addMealToPlan = (dish, dateString, mealType, quantity = 1) => {
     // Check if dish matches meal type
     if (dish.is_breakfast && mealType !== "breakfast") {
       toast.error("Это блюдо для завтрака");
@@ -53,6 +56,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
     }
 
     const key = getMealKey(dateString, mealType);
+    const dishKey = getDishKey(dateString, mealType, dish.id);
+    
     setPlannedMeals((prev) => {
       const currentMeals = prev[key] || [];
       // Check if dish is already added
@@ -62,15 +67,23 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
       }
       return {
         ...prev,
-        [key]: [...currentMeals, dish],
+        [key]: [...currentMeals, { ...dish, quantity }],
       };
     });
-    toast.success(`${dish.name} добавлено в план`);
+    
+    setDishQuantities((prev) => ({
+      ...prev,
+      [dishKey]: quantity,
+    }));
+    
+    toast.success(`${dish.name} x${quantity} добавлено в план`);
     // Keep modal open so user can add more dishes
   };
 
   const removeMealFromPlan = (dateString, mealType, dishId) => {
     const key = getMealKey(dateString, mealType);
+    const dishKey = getDishKey(dateString, mealType, dishId);
+    
     setPlannedMeals((prev) => {
       const currentMeals = prev[key] || [];
       const updatedMeals = currentMeals.filter((d) => d.id !== dishId);
@@ -79,6 +92,38 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
         delete newPlanned[key];
         return newPlanned;
       }
+      return {
+        ...prev,
+        [key]: updatedMeals,
+      };
+    });
+    
+    setDishQuantities((prev) => {
+      const newQuantities = { ...prev };
+      delete newQuantities[dishKey];
+      return newQuantities;
+    });
+  };
+
+  const updateDishQuantity = (dateString, mealType, dishId, quantity) => {
+    const dishKey = getDishKey(dateString, mealType, dishId);
+    
+    if (quantity <= 0) {
+      removeMealFromPlan(dateString, mealType, dishId);
+      return;
+    }
+    
+    setDishQuantities((prev) => ({
+      ...prev,
+      [dishKey]: quantity,
+    }));
+    
+    setPlannedMeals((prev) => {
+      const key = getMealKey(dateString, mealType);
+      const currentMeals = prev[key] || [];
+      const updatedMeals = currentMeals.map((d) =>
+        d.id === dishId ? { ...d, quantity } : d
+      );
       return {
         ...prev,
         [key]: updatedMeals,
@@ -104,8 +149,8 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const calculateTotalCost = (weeks = 1) => {
     const baseCost = Object.values(plannedMeals).reduce((total, mealsArray) => {
       const mealsCost = Array.isArray(mealsArray)
-        ? mealsArray.reduce((sum, dish) => sum + (dish.price || 0), 0)
-        : mealsArray.price || 0;
+        ? mealsArray.reduce((sum, dish) => sum + (dish.price || 0) * (dish.quantity || 1), 0)
+        : (mealsArray.price || 0) * (mealsArray.quantity || 1);
       return total + mealsCost;
     }, 0);
     return baseCost * weeks;
@@ -253,7 +298,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                   month: "long",
                 })}{" "}
                 -{" "}
-                {weekDays[6].date.toLocaleDateString("ru-RU", {
+                {weekDays[5].date.toLocaleDateString("ru-RU", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -275,7 +320,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
       <div className="bg-base-100 rounded-box shadow-lg hover:shadow-xl transition-all duration-300 overflow-x-auto -mx-2 sm:mx-0 pb-2 sm:pb-0">
         <div className="min-w-[700px] sm:min-w-full">
           {/* Header - Sticky on mobile */}
-          <div className="grid grid-cols-7 border-b border-base-300 sticky top-0 bg-base-100 z-10">
+          <div className="grid grid-cols-6 border-b border-base-300 sticky top-0 bg-base-100 z-10">
             {weekDays.map((day) => (
               <div
                 key={day.dateString}
@@ -299,7 +344,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
           </div>
 
           {/* Breakfast Row */}
-          <div className="grid grid-cols-7 border-b border-base-300">
+          <div className="grid grid-cols-6 border-b border-base-300">
             {weekDays.map((day) => {
               const plannedMealsList = getPlannedMeals(
                 day.dateString,
@@ -312,27 +357,49 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               return (
                 <div
                   key={`breakfast-${day.dateString}`}
-                  className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-warning/5"
+                  className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 bg-warning/5"
                 >
                   <div className="text-xs font-semibold mb-1 sm:mb-2 text-warning flex items-center gap-1">
                     <span className="hidden sm:inline">Завтрак</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
                     <div className="space-y-1 sm:space-y-2">
-                      <div className="space-y-1 max-h-[60px] sm:max-h-[80px] overflow-y-auto">
-                        {plannedMealsList.map((dish) => (
-                          <div
-                            key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
-                          >
-                            <div className="font-semibold truncate text-xs">
-                              {dish.name}
+                      <div className="space-y-1">
+                        {plannedMealsList.map((dish) => {
+                          const dishKey = getDishKey(day.dateString, "breakfast", dish.id);
+                          const quantity = dishQuantities[dishKey] || dish.quantity || 1;
+                          
+                          return (
+                            <div
+                              key={dish.id}
+                              className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="font-semibold truncate text-xs flex-1">
+                                  {dish.name}
+                                </div>
+                                <div className="flex items-center gap-1 flex-shrink-0">
+                                  <button
+                                    className="btn btn-xs btn-square btn-ghost h-6 w-6"
+                                    onClick={() => updateDishQuantity(day.dateString, "breakfast", dish.id, quantity - 1)}
+                                  >
+                                    -
+                                  </button>
+                                  <span className="text-xs font-bold w-4 text-center">{quantity}</span>
+                                  <button
+                                    className="btn btn-xs btn-square btn-ghost h-6 w-6"
+                                    onClick={() => updateDishQuantity(day.dateString, "breakfast", dish.id, quantity + 1)}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="text-primary font-bold text-xs sm:text-sm">
+                                {(dish.price * quantity).toFixed(2)} ₽
+                              </div>
                             </div>
-                            <div className="text-primary font-bold text-xs sm:text-sm">
-                              {dish.price} ₽
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                       <button
                         className={`btn btn-xs btn-outline btn-warning w-full transition-all duration-200 hover:scale-105 ${
@@ -377,7 +444,7 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
           </div>
 
           {/* Lunch Row */}
-          <div className="grid grid-cols-7">
+          <div className="grid grid-cols-6">
             {weekDays.map((day) => {
               const plannedMealsList = getPlannedMeals(day.dateString, "lunch");
               const isToday =
@@ -387,27 +454,49 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
               return (
                 <div
                   key={`lunch-${day.dateString}`}
-                  className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 min-h-[100px] sm:min-h-[120px] bg-info/5"
+                  className="p-2 sm:p-3 border-r border-base-300 last:border-r-0 bg-info/5"
                 >
                   <div className="text-xs font-semibold mb-1 sm:mb-2 text-info flex items-center gap-1">
                     <span className="hidden sm:inline">Обед</span>
                   </div>
                   {plannedMealsList.length > 0 ? (
                     <div className="space-y-1 sm:space-y-2">
-                      <div className="space-y-1 max-h-[60px] sm:max-h-[80px] overflow-y-auto">
-                        {plannedMealsList.map((dish) => (
-                          <div
-                            key={dish.id}
-                            className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
-                          >
-                            <div className="font-semibold truncate text-xs">
-                              {dish.name}
+                      <div className="space-y-1">
+                        {plannedMealsList.map((dish) => {
+                          const dishKey = getDishKey(day.dateString, "lunch", dish.id);
+                          const quantity = dishQuantities[dishKey] || dish.quantity || 1;
+                          
+                          return (
+                            <div
+                              key={dish.id}
+                              className="bg-base-200 p-1.5 sm:p-2 rounded text-xs transition-all duration-200"
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="font-semibold truncate text-xs flex-1">
+                                  {dish.name}
+                                </div>
+                                <div className="flex items-center gap-1 flex-shrink-0">
+                                  <button
+                                    className="btn btn-xs btn-square btn-ghost h-6 w-6"
+                                    onClick={() => updateDishQuantity(day.dateString, "lunch", dish.id, quantity - 1)}
+                                  >
+                                    -
+                                  </button>
+                                  <span className="text-xs font-bold w-4 text-center">{quantity}</span>
+                                  <button
+                                    className="btn btn-xs btn-square btn-ghost h-6 w-6"
+                                    onClick={() => updateDishQuantity(day.dateString, "lunch", dish.id, quantity + 1)}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="text-primary font-bold text-xs sm:text-sm">
+                                {(dish.price * quantity).toFixed(2)} ₽
+                              </div>
                             </div>
-                            <div className="text-primary font-bold text-xs sm:text-sm">
-                              {dish.price} ₽
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                       <button
                         className={`btn btn-xs btn-outline btn-info w-full transition-all duration-200 hover:scale-105 ${
@@ -578,24 +667,24 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                       editMode.mealType,
                     ).some((d) => d.id === dish.id)
                   : false;
+
                 return (
                   <button
                     key={dish.id}
                     onClick={() => {
-                      if (editMode) {
-                        if (isAlreadyAdded) {
-                          removeMealFromPlan(
-                            editMode.dateString,
-                            editMode.mealType,
-                            dish.id,
-                          );
-                        } else {
-                          addMealToPlan(
-                            dish,
-                            editMode.dateString,
-                            editMode.mealType,
-                          );
-                        }
+                      if (isAlreadyAdded) {
+                        removeMealFromPlan(
+                          editMode.dateString,
+                          editMode.mealType,
+                          dish.id,
+                        );
+                      } else {
+                        addMealToPlan(
+                          dish,
+                          editMode.dateString,
+                          editMode.mealType,
+                          1,
+                        );
                       }
                     }}
                     className={`bg-base-200 p-4 rounded-lg text-left transition-all duration-200 border-2 ${
@@ -607,9 +696,6 @@ const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <div
-                            className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
-                          ></div>
                           <h4 className="font-semibold text-sm sm:text-base truncate">
                             {dish.name}
                             {isAlreadyAdded && (
