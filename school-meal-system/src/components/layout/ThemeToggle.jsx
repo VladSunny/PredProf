@@ -1,12 +1,25 @@
-import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ThemeToggle = () => {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "retro";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  const isDark = theme === "synthwave";
 
   return (
     <label className="swap swap-rotate">
-      {/* this hidden checkbox controls the state */}
-      <input type="checkbox" className="theme-controller" value="synthwave" />
+      <input
+        type="checkbox"
+        className="theme-controller"
+        checked={isDark}
+        onChange={(e) => setTheme(e.target.checked ? "synthwave" : "retro")}
+      />
 
       {/* sun icon */}
       <svg

@@ -110,33 +110,33 @@ const StockPage = () => {
             key: "all",
             label: "Все",
             activeButtonClass: "btn-primary",
-            inactiveButtonClass: "btn-outline",
+            inactiveButtonClass: "btn-soft",
           },
           {
             key: "low",
             label: `Мало (${lowStock})`,
             activeButtonClass: "btn-warning",
-            inactiveButtonClass: "btn-outline btn-warning",
+            inactiveButtonClass: "btn-soft btn-warning",
           },
           {
             key: "out",
             label: `Нет в наличии (${outOfStock})`,
             activeButtonClass: "btn-error",
-            inactiveButtonClass: "btn-outline btn-error",
+            inactiveButtonClass: "btn-soft btn-error",
           },
           {
             key: "breakfast",
             label: "Завтраки",
             icon: <Sun className="h-4 w-4" />,
             activeButtonClass: "btn-info",
-            inactiveButtonClass: "btn-outline btn-info",
+            inactiveButtonClass: "btn-soft btn-info",
           },
           {
             key: "lunch",
             label: "Обеды",
             icon: <Sun className="h-4 w-4" />,
             activeButtonClass: "btn-secondary",
-            inactiveButtonClass: "btn-outline btn-secondary",
+            inactiveButtonClass: "btn-soft btn-accent",
           },
         ].map((filterItem) => (
           <button

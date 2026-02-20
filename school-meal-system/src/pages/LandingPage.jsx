@@ -62,7 +62,7 @@ const LandingPage = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
                   to="/register"
-                  className="btn btn-secondary btn-lg text-white border-none"
+                  className="btn btn-primary btn-lg text-white border-none"
                 >
                   Зарегистрироваться
                   <ArrowRight className="h-5 w-5 ml-2" />
@@ -90,10 +90,10 @@ const LandingPage = () => {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               Возможности системы
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto">
               Наша платформа предоставляет удобный инструмент для организации
               питания в школе
             </p>
