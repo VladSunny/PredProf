@@ -7,6 +7,9 @@
 
 ## Содержание
 - [Команда](#команда)
+- [Установка инструментов](#установка-инструментов)
+  - [Windows](#windows)
+  - [Linux](#linux)
 - [Backend-часть](#backend-часть)
 - [Frontend-часть](#frontend-часть)
 - [Запуск всего проекта](#запуск-всего-проекта)
@@ -19,6 +22,167 @@
 - Медведицков Тимофей, 10 класс, **Frontend**
 - Крымский Кирилл, 10 класс, **Frontend**
 - Волынец Павел, 10 класс, **Frontend**
+
+---
+
+## Установка инструментов
+
+### Windows
+
+#### 1. Docker Desktop
+
+1. Скачайте Docker Desktop для Windows с официального сайта: https://www.docker.com/products/docker-desktop/
+2. Запустите установщик и следуйте инструкциям
+3. После установки перезагрузите компьютер
+4. Запустите Docker Desktop и дождитесь полного запуска
+
+**Требования:**
+- Windows 10 64-bit: Pro, Enterprise, или Education (Build 19041 или выше)
+- Виртуализация должна быть включена в BIOS/UEFI
+- Минимум 4 ГБ ОЗУ
+
+#### 2. Python 3.14
+
+1. Перейдите на https://www.python.org/downloads/
+2. Скачайте установщик Python 3.14
+3. **Важно:** При установке отметьте галочку "Add Python to PATH"
+4. Нажмите "Install Now"
+
+#### 3. uv (менеджер зависимостей)
+
+Откройте PowerShell или Command Prompt и выполните:
+
+```powershell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Или через pip:
+
+```powershell
+pip install uv
+```
+
+#### 4. Node.js и npm
+
+1. Перейдите на https://nodejs.org/
+2. Скачайте LTS-версию (рекомендуется)
+3. Запустите установщик и следуйте инструкциям
+
+---
+
+### Linux
+
+#### 1. Docker и Docker Compose
+
+**Ubuntu/Debian:**
+
+```bash
+# Обновление пакетов
+sudo apt update
+
+# Установка необходимых пакетов
+sudo apt install -y ca-certificates curl gnupg
+
+# Добавление GPG-ключа Docker
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Добавление репозитория
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+# Установка Docker
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Добавление пользователя в группу docker (чтобы не использовать sudo)
+sudo usermod -aG docker $USER
+
+# Перезайдите в систему или выполните:
+newgrp docker
+```
+
+**Arch Linux/Manjaro:**
+
+```bash
+sudo pacman -S docker docker-compose
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### 2. Python 3.14
+
+**Ubuntu/Debian:**
+
+```bash
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.14 python3.14-venv python3.14-dev
+```
+
+**Arch Linux/Manjaro:**
+
+```bash
+sudo pacman -S python
+```
+
+#### 3. uv (менеджер зависимостей)
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Или через pip:
+
+```bash
+pip install uv
+```
+
+#### 4. Node.js и npm
+
+**Ubuntu/Debian:**
+
+```bash
+# Установка через NodeSource репозиторий
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Arch Linux/Manjaro:**
+
+```bash
+sudo pacman -S nodejs npm
+```
+
+---
+
+## Проверка установки
+
+После установки всех компонентов проверьте их работоспособность:
+
+```bash
+# Проверка Docker
+docker --version
+docker compose version
+
+# Проверка Python
+python --version
+
+# Проверка uv
+uv --version
+
+# Проверка Node.js и npm
+node --version
+npm --version
+```
 
 ---
 
