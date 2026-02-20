@@ -1,5 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import { Menu, LogOut, User, Utensils } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -32,6 +33,8 @@ const Navbar = () => {
         <span className="text-xl font-bold">Школьная столовая</span>
       </div>
       <div className="flex-none gap-2">
+        <ThemeToggle />
+
         {/* Desktop view - show username and avatar */}
         <div className="hidden sm:flex items-center gap-2">
           <div className="flex flex-col items-end">

@@ -378,7 +378,7 @@ const ProfilePage = () => {
                   <Wallet className="h-5 w-5" />
                   Пополнение баланса
                 </h2>
-                <div className="stat bg-[#6B46C1] text-primary-content rounded-box mt-4">
+                <div className="stat bg-purple-700 text-primary-content rounded-box mt-4">
                   <div className="stat-title text-primary-content/70">
                     Текущий баланс
                   </div>

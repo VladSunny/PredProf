@@ -10,7 +10,7 @@ const DashboardWelcomeSection = ({
   const { user } = useAuth();
 
   return (
-    <div className="bg-[#6B46C1] text-white rounded-box p-6">
+    <div className="bg-purple-700 text-white rounded-box p-6">
       <div className="flex items-center gap-4">
         {icon}
         <div>

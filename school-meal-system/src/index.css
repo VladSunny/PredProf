@@ -1,19 +1,6 @@
 @import "tailwindcss";
-@plugin "daisyui";
-
-@theme {
-  --color-purple-800: #6b46c1;
-  --color-lavender-blue-100: #e6e6fa;
-  --color-lavender-blue-200: #d1d1f0;
-  --color-lavender-blue-300: #b8b8e6;
-  --color-lavender-blue-400: #9f9fda;
-  --color-lavender-blue-500: #8b8cf0;
-  --color-lavender-blue-600: #777ac6;
-  --color-lavender-blue-700: #6368ac;
-  --color-lavender-blue-800: #4f5692;
-
-  --color-primary: #6b46c1;
-  --color-secondary: #8b8cf0;
+@plugin "daisyui" {
+  themes: dark --default, light --preferslight, retro, synthwave;
 }
 
 /* Custom calendar styles */

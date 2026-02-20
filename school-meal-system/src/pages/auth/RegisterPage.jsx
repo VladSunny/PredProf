@@ -82,7 +82,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E6E6FA] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-purple-100 flex items-center justify-center p-4">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex justify-between items-center mb-4">

@@ -8,6 +8,7 @@ import {
   ChefHat,
   Users,
 } from "lucide-react";
+import ThemeToggle from "../components/layout/ThemeToggle";
 
 const LandingPage = () => {
   const features = [
@@ -72,6 +73,8 @@ const LandingPage = () => {
                 >
                   Войти
                 </Link>
+
+                <ThemeToggle />
               </div>
             </div>
             <div className="flex-1 flex justify-center">
