@@ -47,13 +47,13 @@ const OrderCard = ({
 
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div
+              {/* <div
                 className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"}`}
               >
                 {order.payment_type === "subscription"
                   ? "Абонемент"
                   : "Разовый"}
-              </div>
+              </div> */}
               <div
                 className={`badge ml-2 ${isReceived ? "badge-success" : "badge-warning"}`}
               >

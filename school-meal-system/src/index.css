@@ -72,11 +72,19 @@
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background-color: var(--fallback-b2, oklch(var(--b2)));
+  background-color: var(--fallback-s, oklch(var(--s))) !important;
+  color: var(--fallback-sc, oklch(var(--sc))) !important;
 }
 
 .react-calendar__tile--now {
-  border: 2px solid var(--fallback-p, oklch(var(--p)));
+  border: 2px solid var(--fallback-p, oklch(var(--p))) !important;
+  font-weight: bold;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background-color: var(--fallback-s, oklch(var(--s))) !important;
+  color: var(--fallback-sc, oklch(var(--sc))) !important;
 }
 
 .react-calendar__tile--active {
@@ -91,12 +99,12 @@
 }
 
 .react-calendar__tile--active .react-calendar__tile__label {
-  color: var(--fallback-pc, oklch(var(--pc)));
+  color: var(--fallback-pc, oklch(var(--pc))) !important;
 }
 
 .react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: var(--fallback-p, oklch(var(--p)));
-  opacity: 0.2;
+  background-color: var(--fallback-s, oklch(var(--s))) !important;
+  opacity: 0.3;
 }
 
 /* Modern UI Enhancements */
