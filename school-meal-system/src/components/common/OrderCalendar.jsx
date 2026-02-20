@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { Clock, CheckCircle, Package } from "lucide-react";
 import OrderCard from "./OrderCard";
 
@@ -39,7 +38,7 @@ const OrderCalendar = ({
     if (view === "month") {
       const count = getOrderCountForDate(date);
       return count > 0 ? (
-        <div className="absolute bottom-1 right-1 text-[0.6rem] bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center">
+        <div className="absolute bottom-1 right-1 text-[0.6rem] bg-primary text-primary-content rounded-full w-4 h-4 flex items-center justify-center">
           {count}
         </div>
       ) : null;

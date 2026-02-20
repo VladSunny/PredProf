@@ -3,21 +3,22 @@
   themes: retro, synthwave;
 }
 
-/* Custom calendar styles */
+/* Custom calendar styles with DaisyUI theme variables */
 .react-calendar {
   width: 100% !important;
   max-width: 100%;
   border: none;
   border-radius: var(--rounded-box, 0.5rem);
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: var(--fallback-b1, oklch(var(--b1)));
+  color: var(--fallback-bc, oklch(var(--bc)));
   overflow: hidden;
 }
 
 .react-calendar__navigation {
   height: 44px;
   margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
 }
 
 .react-calendar__navigation button {
@@ -27,14 +28,19 @@
   outline: none;
   font-weight: bold;
   font-size: 1rem;
+  color: var(--fallback-bc, oklch(var(--bc)));
+  border-radius: var(--rounded-btn, 0.5rem);
 }
 
 .react-calendar__navigation button:disabled {
-  background-color: #f0f0f0;
+  background-color: var(--fallback-b2, oklch(var(--b2)));
+  color: var(--fallback-bc, oklch(var(--bc)));
+  opacity: 0.5;
 }
 
 .react-calendar__navigation button:hover:not(:disabled) {
-  background-color: #e6e6e6;
+  background-color: var(--fallback-p, oklch(var(--p)));
+  color: var(--fallback-pc, oklch(var(--pc)));
 }
 
 .react-calendar__month-view__weekdays {
@@ -42,6 +48,8 @@
   text-transform: uppercase;
   font-weight: bold;
   font-size: 0.75rem;
+  color: var(--fallback-bc, oklch(var(--bc)));
+  opacity: 0.7;
   abbr {
     text-decoration: none;
   }
@@ -58,32 +66,37 @@
   text-align: center;
   line-height: 16px;
   position: relative;
+  color: var(--fallback-bc, oklch(var(--bc)));
+  border-radius: var(--rounded-btn, 0.5rem);
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  background-color: #f8f9fa;
-  border-radius: var(--rounded-btn, 0.5rem);
+  background-color: var(--fallback-b2, oklch(var(--b2)));
 }
 
 .react-calendar__tile--now {
-  background: #ffffff;
   border: 2px solid var(--fallback-p, oklch(var(--p)));
 }
 
 .react-calendar__tile--active {
-  background: var(--fallback-p, oklch(var(--p)));
-  color: white;
-  border-radius: var(--rounded-btn, 0.5rem);
+  background: var(--fallback-p, oklch(var(--p))) !important;
+  color: var(--fallback-pc, oklch(var(--pc))) !important;
 }
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: var(--fallback-p, oklch(var(--p)));
+  background: var(--fallback-p, oklch(var(--p))) !important;
+  color: var(--fallback-pc, oklch(var(--pc))) !important;
+}
+
+.react-calendar__tile--active .react-calendar__tile__label {
+  color: var(--fallback-pc, oklch(var(--pc)));
 }
 
 .react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: #e6f7ff;
+  background-color: var(--fallback-p, oklch(var(--p)));
+  opacity: 0.2;
 }
 
 /* Modern UI Enhancements */

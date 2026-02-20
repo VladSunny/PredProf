@@ -172,7 +172,7 @@ const AdminDashboard = () => {
           },
           {
             to: "/admin/requests",
-            icon: <ClipboardList className="h-12 w-12 text-secondary" />,
+            icon: <ClipboardList className="h-12 w-12 text-info" />,
             title: "Заявки на закупку",
             description:
               pendingRequests > 0
@@ -190,7 +190,7 @@ const AdminDashboard = () => {
           },
           {
             to: "/admin/reports",
-            icon: <FileText className="h-12 w-12 text-accent" />,
+            icon: <FileText className="h-12 w-12 text-neutral" />,
             title: "Отчеты",
             description: "Формирование отчетов по питанию",
           },

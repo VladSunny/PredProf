@@ -118,11 +118,11 @@ const StudentDashboard = () => {
           },
           {
             to: "/student/orders",
-            icon: <ShoppingCart className="h-12 w-12 text-secondary" />,
+            icon: <ShoppingCart className="h-12 w-12 text-info" />,
             title: "Мои заказы",
             description: "История и текущие заказы",
             buttonText: "Перейти",
-            buttonStyle: "btn-secondary",
+            buttonStyle: "btn-info",
           },
           {
             to: "/student/profile",
