@@ -131,10 +131,10 @@ const MenuPage = () => {
             <div className="badge badge-primary badge-lg text-xs sm:text-sm justify-center sm:justify-start">
               Баланс: {user?.balance?.toFixed(2)} ₽
             </div>
-            <div className="btn-group w-full sm:w-auto">
+            <div className="flex flex-row gap-3 w-full sm:w-auto">
               <button
                 className={`btn btn-sm flex-1 sm:flex-none ${
-                  viewMode === "planner" ? "btn-primary" : "btn-outline"
+                  viewMode === "planner" ? "btn-secondary" : "btn-outline"
                 }`}
                 onClick={() => setViewMode("planner")}
                 title="Планировщик недели"
@@ -145,7 +145,7 @@ const MenuPage = () => {
               </button>
               <button
                 className={`btn btn-sm flex-1 sm:flex-none ${
-                  viewMode === "grid" ? "btn-primary" : "btn-outline"
+                  viewMode === "grid" ? "btn-secondary" : "btn-outline"
                 }`}
                 onClick={() => setViewMode("grid")}
                 title="Сетка блюд"

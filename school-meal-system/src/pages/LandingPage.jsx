@@ -103,7 +103,7 @@ const LandingPage = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
+                className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300"
               >
                 <div className="card-body items-center text-center">
                   <div className="text-primary mb-4">{feature.icon}</div>

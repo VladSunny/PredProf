@@ -167,21 +167,21 @@ const ProfilePage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="tabs tabs-lifted">
+      <div className="tabs tabs-lifted gap-2">
         <button
-          className={`tab ${activeTab === "profile" ? "tab-active" : ""}`}
+          className={`tab ${activeTab === "profile" ? "tab-active" : ""} bg-base-100 rounded-3xl`}
           onClick={() => setActiveTab("profile")}
         >
           Профиль
         </button>
         <button
-          className={`tab ${activeTab === "personal" ? "tab-active" : ""}`}
+          className={`tab ${activeTab === "personal" ? "tab-active" : ""} bg-base-100 rounded-3xl`}
           onClick={() => setActiveTab("personal")}
         >
           Личная информация
         </button>
         <button
-          className={`tab ${activeTab === "password" ? "tab-active" : ""}`}
+          className={`tab ${activeTab === "password" ? "tab-active" : ""} bg-base-100 rounded-3xl`}
           onClick={() => setActiveTab("password")}
         >
           Безопасность
@@ -329,37 +329,37 @@ const ProfilePage = () => {
         {activeTab === "profile" && (
           <>
             {/* User Info */}
-            <div className="card bg-base-100 shadow-lg">
+            <div className="card md:w-3/5 bg-base-100 shadow-lg">
               <div className="card-body">
                 <h2 className="card-title">
                   <User className="h-5 w-5" />
                   Информация об аккаунте
                 </h2>
                 <div className="space-y-4 mt-4">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">ФИО</span>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center p-3 bg-base-200 rounded-lg gap-2">
+                    <span className="text-accent font-bold">ФИО</span>
                     <span className="font-semibold text-right">
                       {user?.full_name}
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">Email</span>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center p-3 bg-base-200 rounded-lg gap-2">
+                    <span className="text-accent font-bold">Email</span>
                     <span className="font-semibold text-right">
                       {user?.email}
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">Параллель</span>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center p-3 bg-base-200 rounded-lg gap-2">
+                    <span className="text-accent font-bold">Параллель</span>
                     <span className="font-semibold text-right">
                       {user?.parallel}
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">Роль</span>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center p-3 bg-base-200 rounded-lg gap-2">
+                    <span className="text-accent font-bold">Роль</span>
                     <span className="badge badge-primary">Ученик</span>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-base-200 rounded-lg gap-2">
-                    <span className="text-base-content/60">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center p-3 bg-base-200 rounded-lg gap-2">
+                    <span className="text-accent font-bold">
                       Дата регистрации
                     </span>
                     <span className="font-semibold text-right">

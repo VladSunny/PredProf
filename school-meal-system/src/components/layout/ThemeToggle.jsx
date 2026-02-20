@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "retro";
+    return localStorage.getItem("theme") || "silk";
   });
 
   useEffect(() => {
@@ -10,7 +10,7 @@ const ThemeToggle = () => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  const isDark = theme === "synthwave";
+  const isDark = theme === "dim";
 
   return (
     <label className="swap swap-rotate">
@@ -18,7 +18,7 @@ const ThemeToggle = () => {
         type="checkbox"
         className="theme-controller"
         checked={isDark}
-        onChange={(e) => setTheme(e.target.checked ? "synthwave" : "retro")}
+        onChange={(e) => setTheme(e.target.checked ? "dim" : "silk")}
       />
 
       {/* sun icon */}

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: retro, synthwave;
+  themes: retro, synthwave, dim, silk;
 }
 
 /* Custom calendar styles with DaisyUI theme variables */

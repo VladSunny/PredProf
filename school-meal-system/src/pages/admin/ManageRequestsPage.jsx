@@ -130,7 +130,7 @@ const ManageRequestsPage = () => {
       />
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap bg-base-100 shadow-xl rounded-2xl border-primary border-2 p-5 gap-2">
         {[
           {
             key: "all",
