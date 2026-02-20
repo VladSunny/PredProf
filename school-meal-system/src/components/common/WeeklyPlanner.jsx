@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { X, Plus, Calendar, ShoppingCart, Repeat } from "lucide-react";
+import { X, Plus, Calendar, ShoppingCart, Repeat, Croissant, Utensils } from "lucide-react";
 import toast from "react-hot-toast";
 import Modal from "./Modal";
-import { CroissantIcon, PlateIcon } from "./Icons";
 
 const WeeklyPlanner = ({ dishes, balance, onBulkOrder, user }) => {
   const [weekStart, setWeekStart] = useState(() => {

@@ -1,5 +1,4 @@
-import { X } from "lucide-react";
-import { SunriseIcon, SunIcon } from "./Icons";
+import { X, Sun } from "lucide-react";
 
 const DishModal = ({
   isOpen,
@@ -149,7 +148,7 @@ const DishModal = ({
                     }
                   }}
                 />
-                <SunriseIcon className="h-5 w-5 text-warning" />
+                <Sun className="h-5 w-5 text-warning" />
                 <span>Завтрак</span>
               </label>
               <label className="label cursor-pointer gap-2 transition-all duration-200 hover:scale-105">
@@ -173,7 +172,7 @@ const DishModal = ({
                     }
                   }}
                 />
-                <SunIcon className="h-5 w-5 text-info" />
+                <Sun className="h-5 w-5 text-info" />
                 <span>Обед</span>
               </label>
             </div>

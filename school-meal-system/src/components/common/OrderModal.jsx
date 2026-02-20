@@ -1,4 +1,4 @@
-import { CroissantIcon, PlateIcon } from "./Icons";
+import { Croissant, Utensils } from "lucide-react";
 
 const OrderModal = ({
   isOpen,
@@ -34,9 +34,9 @@ const OrderModal = ({
             className={`${isBreakfast ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
           >
             {isBreakfast ? (
-              <CroissantIcon className="h-12 w-12" />
+              <Croissant className="h-12 w-12" />
             ) : (
-              <PlateIcon className="h-12 w-12" />
+              <Utensils className="h-12 w-12" />
             )}
           </div>
           <div>

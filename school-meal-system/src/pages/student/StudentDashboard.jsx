@@ -14,8 +14,8 @@ import {
   Wallet,
   Clock,
   CheckCircle,
+  Sun,
 } from "lucide-react";
-import { SunriseIcon, SunIcon } from "../../components/common/Icons";
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -163,9 +163,9 @@ const StudentDashboard = () => {
                   className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                 >
                   {isBreakfast(dish) ? (
-                    <SunriseIcon className="h-6 w-6" />
+                    <Sun className="h-6 w-6" />
                   ) : (
-                    <SunIcon className="h-6 w-6" />
+                    <Sun className="h-6 w-6" />
                   )}
                 </div>
                 <div className="flex-1">

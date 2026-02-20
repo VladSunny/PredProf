@@ -5,13 +5,7 @@ import StatCard from "../../components/common/StatCard";
 import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
-import { Package, AlertTriangle, CheckCircle } from "lucide-react";
-import {
-  CroissantIcon,
-  PlateIcon,
-  SunriseIcon,
-  SunIcon,
-} from "../../components/common/Icons";
+import { Package, AlertTriangle, CheckCircle, Croissant, Sun } from "lucide-react";
 
 const StockPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -133,14 +127,14 @@ const StockPage = () => {
           {
             key: "breakfast",
             label: "Завтраки",
-            icon: <SunriseIcon className="h-4 w-4" />,
+            icon: <Sun className="h-4 w-4" />,
             activeButtonClass: "btn-info",
             inactiveButtonClass: "btn-outline btn-info",
           },
           {
             key: "lunch",
             label: "Обеды",
-            icon: <SunIcon className="h-4 w-4" />,
+            icon: <Sun className="h-4 w-4" />,
             activeButtonClass: "btn-secondary",
             inactiveButtonClass: "btn-outline btn-secondary",
           },
@@ -185,9 +179,9 @@ const StockPage = () => {
                     className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                   >
                     {isBreakfast(dish) ? (
-                      <CroissantIcon className="h-6 w-6" />
+                      <Croissant className="h-6 w-6" />
                     ) : (
-                      <PlateIcon className="h-6 w-6" />
+                      <Sun className="h-6 w-6" />
                     )}
                   </div>
                   <div>

@@ -1,6 +1,5 @@
 import React from "react";
-import { ShoppingCart, MessageSquare } from "lucide-react";
-import { CroissantIcon, PlateIcon } from "./Icons";
+import { ShoppingCart, MessageSquare, Croissant, Utensils } from "lucide-react";
 
 const DishCard = ({
   dish,
@@ -22,9 +21,6 @@ const DishCard = ({
     >
       <div className="card-body">
         <div className="flex items-start justify-between">
-          {/* <div className={`${dish.is_breakfast ? "text-warning" : "text-info"} transition-transform duration-300 hover:scale-110`}>
-            {dish.is_breakfast ? <CroissantIcon className="h-10 w-10" /> : <PlateIcon className="h-10 w-10" />}
-          </div> */}
           <div
             className={`badge ${dishIsBreakfast ? "badge-warning" : "badge-info"} text-xs transition-all duration-200`}
           >

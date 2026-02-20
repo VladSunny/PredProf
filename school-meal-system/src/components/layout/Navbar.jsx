@@ -1,6 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
-import { Menu, LogOut, User } from "lucide-react";
-import { RestaurantIcon } from "../common/Icons";
+import { Menu, LogOut, User, Utensils } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -29,7 +28,7 @@ const Navbar = () => {
         </label>
       </div>
       <div className="flex-1 flex items-center gap-2">
-        <RestaurantIcon className="h-6 w-6 transition-transform duration-300 hover:rotate-12" />
+        <Utensils className="h-6 w-6 transition-transform duration-300 hover:rotate-12" />
         <span className="text-xl font-bold">Школьная столовая</span>
       </div>
       <div className="flex-none gap-2">

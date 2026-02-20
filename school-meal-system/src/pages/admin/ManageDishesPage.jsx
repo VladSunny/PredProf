@@ -8,13 +8,7 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import DishModal from "../../components/common/DishModal";
-import { Plus, Edit2, Trash2, UtensilsCrossed } from "lucide-react";
-import {
-  CroissantIcon,
-  PlateIcon,
-  SunriseIcon,
-  SunIcon,
-} from "../../components/common/Icons";
+import { Plus, Edit2, Trash2, UtensilsCrossed, Croissant, Sun } from "lucide-react";
 
 const ManageDishesPage = () => {
   const [dishes, setDishes] = useState([]);
@@ -228,9 +222,9 @@ const ManageDishesPage = () => {
                   className={`${isBreakfast(dish) ? "text-warning" : "text-info"} transition-transform duration-200 hover:scale-110`}
                 >
                   {isBreakfast(dish) ? (
-                    <CroissantIcon className="h-6 w-6" />
+                    <Croissant className="h-6 w-6" />
                   ) : (
-                    <PlateIcon className="h-6 w-6" />
+                    <Sun className="h-6 w-6" />
                   )}
                 </div>
                 <div>

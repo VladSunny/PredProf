@@ -7,13 +7,7 @@ import PageHeader from "../../components/common/PageHeader";
 import WeeklyPlanner from "../../components/common/WeeklyPlanner";
 import OrderModal from "../../components/common/OrderModal";
 import ReviewsModal from "../../components/common/ReviewsModal";
-import { Calendar, Grid } from "lucide-react";
-import {
-  CroissantIcon,
-  PlateIcon,
-  SunIcon,
-  SunriseIcon,
-} from "../../components/common/Icons";
+import { Calendar, Grid, Croissant, Sun } from "lucide-react";
 
 const MenuPage = () => {
   const { user, refreshUser } = useAuth();
@@ -180,14 +174,14 @@ const MenuPage = () => {
               {
                 key: "breakfast",
                 label: "Завтраки",
-                icon: <SunriseIcon className="h-4 w-4" />,
+                icon: <Sun className="h-4 w-4" />,
                 activeButtonClass: "btn-warning",
                 inactiveButtonClass: "btn-outline btn-warning",
               },
               {
                 key: "lunch",
                 label: "Обеды",
-                icon: <SunIcon className="h-4 w-4" />,
+                icon: <Sun className="h-4 w-4" />,
                 activeButtonClass: "btn-info",
                 inactiveButtonClass: "btn-outline btn-info",
               },
