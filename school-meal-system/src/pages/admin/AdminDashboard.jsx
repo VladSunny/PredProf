@@ -102,7 +102,7 @@ const AdminDashboard = () => {
       />
 
       {/* Additional Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card bg-base-100 shadow">
           <div className="card-body">
             <h2 className="card-title">
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Quick Actions */}
       <DashboardQuickActions

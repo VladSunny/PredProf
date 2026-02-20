@@ -399,10 +399,6 @@ const ChefOrdersPage = () => {
                   )}
                   {groupedOrders.future.length > 0 && (
                     <div>
-                      <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
-                        <Package className="h-5 w-5 text-info" />
-                        Позже
-                      </h3>
                       <div className="space-y-4">
                         {groupedOrders.future
                           .filter((order) => {

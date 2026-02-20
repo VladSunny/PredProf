@@ -2,15 +2,14 @@ import { useState, useEffect } from "react";
 import { chefApi } from "../../api/chef";
 import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
-import Modal from "../../components/common/Modal";
 import FilterTabs from "../../components/common/FilterTabs";
+import CreatePurchaseRequestModal from "../../components/common/CreatePurchaseRequestModal";
 import {
   Plus,
   Clock,
   CheckCircle,
   XCircle,
   ClipboardList,
-  X,
 } from "lucide-react";
 
 const PurchaseRequestsPage = () => {
@@ -222,66 +221,15 @@ const PurchaseRequestsPage = () => {
       )}
 
       {/* New Request Modal */}
-      {showModal && (
-        <Modal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          title="Новая заявка на закупку"
-        >
-          <div className="space-y-6">
-            <div className="form-control">
-              <div className="mb-2">
-                <span className="text-base font-medium">Блюдо</span>
-              </div>
-              <select
-                className="select select-bordered"
-                value={newRequest.item_name}
-                onChange={(e) =>
-                  setNewRequest({ ...newRequest, item_name: e.target.value })
-                }
-              >
-                <option value="" disabled>
-                  Выберите блюдо
-                </option>
-                {dishes.map((dish) => (
-                  <option key={dish.id} value={dish.name}>
-                    {dish.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-control">
-              <div className="mb-2">
-                <span className="text-base font-medium">Количество</span>
-              </div>
-              <input
-                type="text"
-                className="input input-bordered"
-                placeholder="3"
-                value={newRequest.quantity}
-                onChange={(e) =>
-                  setNewRequest({ ...newRequest, quantity: e.target.value })
-                }
-              />
-            </div>
-          </div>
-          <div className="modal-action">
-            <button
-              className="btn btn-ghost"
-              onClick={() => setShowModal(false)}
-            >
-              Отмена
-            </button>
-            <button
-              className={`btn btn-primary ${submitting ? "loading" : ""}`}
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
-              Создать заявку
-            </button>
-          </div>
-        </Modal>
-      )}
+      <CreatePurchaseRequestModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={handleSubmit}
+        dishes={dishes}
+        newRequest={newRequest}
+        setNewRequest={setNewRequest}
+        submitting={submitting}
+      />
     </div>
   );
 };
