@@ -5,7 +5,15 @@ import OrderCard from "../../components/common/OrderCard";
 import FilterTabs from "../../components/common/FilterTabs";
 import StatCard from "../../components/common/StatCard";
 import OrderCalendar from "../../components/common/OrderCalendar";
-import { CheckCircle, Clock, Package, Calendar, List, Sun, Moon } from "lucide-react";
+import {
+  CheckCircle,
+  Clock,
+  Package,
+  Calendar,
+  List,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -62,7 +70,7 @@ const OrdersPage = () => {
     const mealTypes = order.dish?.meal_types || [];
     const isBreakfast = mealTypes.some((mt) => mt.name === "breakfast");
     const isLunch = mealTypes.some((mt) => mt.name === "lunch");
-    
+
     if (isBreakfast && isLunch) return "both";
     if (isBreakfast) return "breakfast";
     if (isLunch) return "lunch";
@@ -85,13 +93,13 @@ const OrdersPage = () => {
 
   const aggregateOrders = () => {
     const grouped = {};
-    
+
     filteredOrders.forEach((order) => {
       const date = order.order_date
         ? new Date(order.order_date).toLocaleDateString("ru-RU")
         : new Date(order.created_at).toLocaleDateString("ru-RU");
       const mealType = getMealType(order);
-      
+
       if (!grouped[date]) {
         grouped[date] = {};
       }
@@ -100,7 +108,7 @@ const OrdersPage = () => {
       }
       grouped[date][mealType].push(order);
     });
-    
+
     return grouped;
   };
 
@@ -187,7 +195,10 @@ const OrdersPage = () => {
           ) : (
             <div className="space-y-4">
               {Object.entries(aggregatedOrders).map(([date, mealTypes]) => (
-                <div key={date} className="collapse collapse-arrow bg-base-100 shadow">
+                <div
+                  key={date}
+                  className="collapse collapse-arrow bg-base-100 shadow"
+                >
                   <input type="checkbox" />
                   <div className="collapse-title text-xl font-bold flex items-center gap-2">
                     <Calendar className="h-5 w-5" />
@@ -196,16 +207,22 @@ const OrdersPage = () => {
                   <div className="collapse-content">
                     <div className="space-y-2">
                       {Object.entries(mealTypes).map(([mealType, orders]) => {
-                        const { label: mealLabel, icon: MealIcon } = getMealTypeLabel(mealType);
+                        const { label: mealLabel, icon: MealIcon } =
+                          getMealTypeLabel(mealType);
                         return (
-                          <div key={mealType} className="collapse collapse-plus bg-base-200">
+                          <div
+                            key={mealType}
+                            className="collapse collapse-plus bg-base-200"
+                          >
                             <input type="checkbox" />
                             <div className="collapse-title font-medium flex items-center justify-between">
                               <span className="flex items-center gap-2">
                                 <MealIcon className="h-4 w-4" />
                                 {mealLabel}
                               </span>
-                              <span className="badge badge-sm">{orders.length}</span>
+                              <span className="badge badge-sm">
+                                {orders.length}
+                              </span>
                             </div>
                             <div className="collapse-content">
                               <div className="space-y-2">
@@ -220,20 +237,24 @@ const OrdersPage = () => {
                                       </div>
                                       <div>
                                         <p className="font-medium">
-                                          {order.dish?.name || `Блюдо #${order.dish_id}`}
+                                          {order.dish?.name ||
+                                            `Блюдо #${order.dish_id}`}
                                         </p>
                                         <div className="flex items-center gap-2 text-sm text-base-content/60">
                                           <span
                                             className={`badge ${order.payment_type === "subscription" ? "badge-secondary" : "badge-primary"} badge-xs`}
                                           >
-                                            {order.payment_type === "subscription"
+                                            {order.payment_type ===
+                                            "subscription"
                                               ? "Абонемент"
                                               : "Разовый"}
                                           </span>
                                           <span
                                             className={`badge ${order.is_received ? "badge-success" : "badge-warning"} badge-xs`}
                                           >
-                                            {order.is_received ? "Получено" : "Ожидает"}
+                                            {order.is_received
+                                              ? "Получено"
+                                              : "Ожидает"}
                                           </span>
                                         </div>
                                       </div>

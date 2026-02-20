@@ -8,7 +8,14 @@ import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
 import DishModal from "../../components/common/DishModal";
-import { Plus, Edit2, Trash2, UtensilsCrossed, Croissant, Sun } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  UtensilsCrossed,
+  Croissant,
+  Sun,
+} from "lucide-react";
 
 const ManageDishesPage = () => {
   const [dishes, setDishes] = useState([]);

@@ -379,9 +379,7 @@ const ProfilePage = () => {
                   Пополнение баланса
                 </h2>
                 <div className="stat bg-base-300 rounded-box mt-4">
-                  <div className="stat-title">
-                    Текущий баланс
-                  </div>
+                  <div className="stat-title">Текущий баланс</div>
                   <div className="stat-value text-sm sm:text-base">
                     {user?.balance?.toFixed(2)} ₽
                   </div>

@@ -41,7 +41,9 @@ const OrderModal = ({
           </div>
           <div>
             <div className="font-semibold">{dish.name}</div>
-            <div className="text-2xl font-bold text-primary">{dish.price} ₽</div>
+            <div className="text-2xl font-bold text-primary">
+              {dish.price} ₽
+            </div>
             {(dish.allergens ||
               (dish.allergens_rel && dish.allergens_rel.length > 0)) && (
               <div className="text-sm text-error mt-1 flex items-center gap-1 flex-wrap">
@@ -171,7 +173,10 @@ const OrderModal = ({
           </button>
         </div>
       </div>
-      <div className="modal-backdrop bg-black/50 animate-fade-in" onClick={onClose}></div>
+      <div
+        className="modal-backdrop bg-black/50 animate-fade-in"
+        onClick={onClose}
+      ></div>
     </div>
   );
 };

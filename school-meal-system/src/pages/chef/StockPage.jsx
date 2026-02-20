@@ -5,7 +5,13 @@ import StatCard from "../../components/common/StatCard";
 import DataStatsGrid from "../../components/dashboard/DataStatsGrid";
 import PageHeader from "../../components/common/PageHeader";
 import DataTable from "../../components/dashboard/DataTable";
-import { Package, AlertTriangle, CheckCircle, Croissant, Sun } from "lucide-react";
+import {
+  Package,
+  AlertTriangle,
+  CheckCircle,
+  Croissant,
+  Sun,
+} from "lucide-react";
 
 const StockPage = () => {
   const [dishes, setDishes] = useState([]);

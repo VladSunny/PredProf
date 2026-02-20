@@ -13,7 +13,7 @@ const CreatePurchaseRequestModal = ({
     <div className="modal modal-open">
       <div className="modal-box animate-scale-in">
         <h3 className="font-bold text-lg mb-4">Новая заявка на закупку</h3>
-        
+
         <div className="space-y-6">
           <div className="form-control">
             <div className="mb-2">
@@ -36,7 +36,7 @@ const CreatePurchaseRequestModal = ({
               ))}
             </select>
           </div>
-          
+
           <div className="form-control">
             <div className="mb-2">
               <span className="text-base font-medium">Количество</span>
@@ -54,10 +54,7 @@ const CreatePurchaseRequestModal = ({
         </div>
 
         <div className="modal-action">
-          <button
-            className="btn btn-ghost"
-            onClick={onClose}
-          >
+          <button className="btn btn-ghost" onClick={onClose}>
             Отмена
           </button>
           <button
@@ -69,7 +66,10 @@ const CreatePurchaseRequestModal = ({
           </button>
         </div>
       </div>
-      <div className="modal-backdrop bg-black/50 animate-fade-in" onClick={onClose}></div>
+      <div
+        className="modal-backdrop bg-black/50 animate-fade-in"
+        onClick={onClose}
+      ></div>
     </div>
   );
 };

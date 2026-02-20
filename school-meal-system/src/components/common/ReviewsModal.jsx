@@ -12,9 +12,7 @@ const ReviewsModal = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box max-w-2xl animate-scale-in">
-        <h3 className="font-bold text-lg mb-4">
-          Отзывы о {dish.name}
-        </h3>
+        <h3 className="font-bold text-lg mb-4">Отзывы о {dish.name}</h3>
 
         {/* Add Review */}
         <div className="py-4 border-b border-base-200">
@@ -55,9 +53,7 @@ const ReviewsModal = ({
         {/* Reviews List */}
         <div className="py-4 space-y-4 max-h-64 overflow-y-auto">
           {reviews.length === 0 ? (
-            <p className="text-center text-base-content/60">
-              Пока нет отзывов
-            </p>
+            <p className="text-center text-base-content/60">Пока нет отзывов</p>
           ) : (
             reviews.map((review) => (
               <div key={review.id} className="p-3 bg-base-200 rounded-lg">
@@ -91,7 +87,10 @@ const ReviewsModal = ({
           </button>
         </div>
       </div>
-      <div className="modal-backdrop bg-black/50 animate-fade-in" onClick={onClose}></div>
+      <div
+        className="modal-backdrop bg-black/50 animate-fade-in"
+        onClick={onClose}
+      ></div>
     </div>
   );
 };

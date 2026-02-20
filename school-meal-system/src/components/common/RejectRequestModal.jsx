@@ -30,16 +30,11 @@ const RejectRequestModal = ({
           />
         </div>
         <div className="modal-action">
-          <button
-            className="btn"
-            onClick={onClose}
-          >
+          <button className="btn" onClick={onClose}>
             Отмена
           </button>
           <button
-            className={`btn btn-error ${
-              processing ? "loading" : ""
-            }`}
+            className={`btn btn-error ${processing ? "loading" : ""}`}
             onClick={onSubmit}
             disabled={processing}
           >
@@ -49,9 +44,7 @@ const RejectRequestModal = ({
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={onClose}>
-          close
-        </button>
+        <button onClick={onClose}>close</button>
       </form>
     </dialog>
   );

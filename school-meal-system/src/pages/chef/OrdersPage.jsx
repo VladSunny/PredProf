@@ -141,7 +141,8 @@ const ChefOrdersPage = () => {
       result = result.filter((order) => isTomorrow(getOrderDate(order)));
     } else if (dateGroupFilter === "future") {
       result = result.filter(
-        (order) => !isToday(getOrderDate(order)) && !isTomorrow(getOrderDate(order)),
+        (order) =>
+          !isToday(getOrderDate(order)) && !isTomorrow(getOrderDate(order)),
       );
     }
 
@@ -252,9 +253,7 @@ const ChefOrdersPage = () => {
                     </div>
                   </div>
                   <p className="text-sm text-base-content/60">
-                    {dish.count === 1
-                      ? "1 порция"
-                      : `${dish.count} порции`}
+                    {dish.count === 1 ? "1 порция" : `${dish.count} порции`}
                   </p>
                 </div>
               ))}
@@ -329,9 +328,7 @@ const ChefOrdersPage = () => {
             <div className="text-center py-12 bg-base-100 rounded-box">
               <Package className="h-16 w-16 mx-auto text-base-content/30 mb-4" />
               <p className="text-base-content/60">
-                {searchQuery
-                  ? "Заказов не найдено"
-                  : "Заказов нет"}
+                {searchQuery ? "Заказов не найдено" : "Заказов нет"}
               </p>
               {searchQuery && (
                 <button
@@ -356,10 +353,8 @@ const ChefOrdersPage = () => {
                       <div className="space-y-4">
                         {groupedOrders.today
                           .filter((order) => {
-                            if (filter === "pending")
-                              return !order.is_received;
-                            if (filter === "received")
-                              return order.is_received;
+                            if (filter === "pending") return !order.is_received;
+                            if (filter === "received") return order.is_received;
                             return true;
                           })
                           .map((order) => (
@@ -381,10 +376,8 @@ const ChefOrdersPage = () => {
                       <div className="space-y-4">
                         {groupedOrders.tomorrow
                           .filter((order) => {
-                            if (filter === "pending")
-                              return !order.is_received;
-                            if (filter === "received")
-                              return order.is_received;
+                            if (filter === "pending") return !order.is_received;
+                            if (filter === "received") return order.is_received;
                             return true;
                           })
                           .map((order) => (
@@ -402,10 +395,8 @@ const ChefOrdersPage = () => {
                       <div className="space-y-4">
                         {groupedOrders.future
                           .filter((order) => {
-                            if (filter === "pending")
-                              return !order.is_received;
-                            if (filter === "received")
-                              return order.is_received;
+                            if (filter === "pending") return !order.is_received;
+                            if (filter === "received") return order.is_received;
                             return true;
                           })
                           .map((order) => (

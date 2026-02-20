@@ -36,7 +36,9 @@ const DishModal = ({
               className="input input-bordered"
               placeholder="Название блюда"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
 
@@ -194,10 +196,7 @@ const DishModal = ({
           </button>
         </div>
       </div>
-      <div
-        className="modal-backdrop bg-black/50"
-        onClick={onClose}
-      ></div>
+      <div className="modal-backdrop bg-black/50" onClick={onClose}></div>
     </div>
   );
 };

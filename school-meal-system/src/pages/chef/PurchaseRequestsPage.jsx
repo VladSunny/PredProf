@@ -4,13 +4,7 @@ import toast from "react-hot-toast";
 import StatCard from "../../components/common/StatCard";
 import FilterTabs from "../../components/common/FilterTabs";
 import CreatePurchaseRequestModal from "../../components/common/CreatePurchaseRequestModal";
-import {
-  Plus,
-  Clock,
-  CheckCircle,
-  XCircle,
-  ClipboardList,
-} from "lucide-react";
+import { Plus, Clock, CheckCircle, XCircle, ClipboardList } from "lucide-react";
 
 const PurchaseRequestsPage = () => {
   const [requests, setRequests] = useState([]);
