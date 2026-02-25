@@ -88,7 +88,7 @@ const OrdersPage = () => {
     //   default:
     //     return { label: "Другое", icon: Package };
     // }
-    return { label: "Блюда на сегодня", icon: Package };
+    return { label: "Блюда", icon: Package };
   };
 
   const aggregateOrders = () => {
